@@ -413,3 +413,10 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
 .timer-return-btn.hidden {
     display: none;
 }
+
+
+@media(max-width:850px) {
+    .timer-return-btn {
+        margin-top: 8px;
+    }
+}
