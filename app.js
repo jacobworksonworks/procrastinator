@@ -1458,3 +1458,19 @@ if (document.readyState === "loading") {
 } else {
   init();
 }
+
+
+if ("mediaSession" in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: "Procrastinator",
+        artist: "MaroonDaLimited",
+        album: "https://jacobworksonworks.github.io/procrastinator/",
+        artwork: [
+            {
+                src: "https://www.heartofthedreaming.com/wp-content/uploads/2012/04/procrastination.jpg",
+                sizes: "512x512",
+                type: "image/jpg"
+            }
+        ]
+    });
+}
