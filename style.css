@@ -370,3 +370,46 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
     font-size: 0.75em;
   }
 }
+
+/* RETURN TO TIMER */
+.timer-return-btn {
+    font-family: Tahoma, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: url("cursors/default_link.cur"), pointer;
+
+    border: 2px outset #ddd;
+    border-radius: 0;
+
+    background: linear-gradient(
+        #fff,
+        #d7d7d7 45%,
+        #aaa 46%,
+        #eee
+    );
+
+    color: #111;
+    padding: 7px 12px;
+
+    box-shadow: 3px 3px 0 rgba(0,0,0,.25);
+    text-shadow: none;
+}
+
+.timer-return-btn:hover {
+    background: linear-gradient(
+        #fff,
+        #e8f5ff 45%,
+        #77b9ed 46%,
+        #dceeff
+    );
+}
+
+.timer-return-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 rgba(0,0,0,.25);
+    border-style: inset;
+}
+
+.timer-return-btn.hidden {
+    display: none;
+}
