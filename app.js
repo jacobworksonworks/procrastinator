@@ -468,7 +468,8 @@ const musicTracks = [
   { name: "XP DESKTOP", file: "music/xp.mp3" },
   { name: "RETRO ARCADE", file: "music/arcade.mp3" },
   { name: "2000s INTERNET", file: "music/internet.mp3" },
-  { name: "CHAOS MODE", file: "music/chaos.mp3" }
+  { name: "TEMPTATION", file: "music/chaos.mp3" },
+   { name: "RAKUICHI BUSTER", file: "music/buster.mp3" }
 ];
 
 let audio = null;
