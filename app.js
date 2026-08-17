@@ -469,7 +469,12 @@ const musicTracks = [
   { name: "RETRO ARCADE", file: "music/arcade.mp3" },
   { name: "2000s INTERNET", file: "music/internet.mp3" },
   { name: "TEMPTATION", file: "music/chaos.mp3" },
-   { name: "RAKUICHI BUSTER", file: "music/buster.mp3" }
+  { name: "RAKUICHI BUSTER", file: "music/buster.mp3" },
+  { name: "windows breakcore", file: "music/breakcore.mp3" },
+  { name: "THE MISSION", file: "music/mission.mp3" },
+  { name: "THE CENTER", file: "music/center.mp3" },
+  { name: "Mice on Venus.", file: "music/mice.mp3" },
+  { name: "Down the Shore", file: "music/galdin.mp3" }
 ];
 
 let audio = null;
