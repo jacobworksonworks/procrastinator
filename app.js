@@ -217,7 +217,7 @@ const excuses = [
 ["You have reached a level of procrastination previously thought impossible. Mission accomplished. Get it? Cause it's impossible?","JACKPOT"],
 ["THE MACHINE HAS SPOKEN. GO DO LITERALLY ANYTHING ELSE.","JACKPOT"],
 ["Are you a big spoon or a small spoon? Come find out with me haha. Alr bro I mean I guess","JACKPOT"],
-["Get ready for school in any other way.","JACKPOT"],
+["Get ready for school in any other way. like HOPPING ON ROOOOBLOOOX","JACKPOT"],
 ["HAUUUGGHH.","JACKPOT"],
 ["ABSOLUTE VICTORY. WATCH SKIBIDI TOILET.","JACKPOT"],
 ["67 :LAUGH:","JACKPOT"],
