@@ -12,6 +12,10 @@ wheelSpinSound.loop = true;
 wheelSpinSound.volume = 0.6;
 wheelSpinSound.playbackRate = 2.0;
 
+const alarmSound = new Audio("alarm/alarm.mp3");
+alarmSound.volume = 0.8;
+alarmSound.preload = "auto";
+
 /* =========================================================
    EXCUSES
    ========================================================= */
@@ -934,6 +938,22 @@ function finishTimer(completed) {
 
   stopMusic();
 
+if (completed) {
+  alarmSound.currentTime = 0;
+
+  if ($("#musicToggle")?.checked) {
+    alarmSound.volume = getVolume();
+  } else {
+    alarmSound.volume = 0.8;
+  }
+
+  alarmSound.play().catch(() => {
+    console.warn("Could not play alarm ringtone.");
+  });
+}
+
+const spent =
+
   const spent =
     Math.max(0, totalSession - remaining);
 
@@ -1336,7 +1356,20 @@ function init() {
   /*
    * Accept
    */
-  $("#acceptBtn")?.addEventListener("click", startTimer);
+  $("#acceptBtn")?.addEventListener("click", () => {
+  if (timer && current && !sessionEnded) {
+    toast("ERROR — A SESSION IS ALREADY ONGOING.");
+    flash("SESSION ACTIVE");
+    return;
+  }
+
+  if (!current) {
+    toast("ERROR — SPIN THE WHEEL FIRST.");
+    return;
+  }
+
+  startTimer();
+});
 
   /*
    * Timer controls
