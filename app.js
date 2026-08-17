@@ -365,6 +365,7 @@ function save() {
   updateUI();
 }
 
+
 /* =========================================================
    HELPERS
    ========================================================= */
@@ -1190,6 +1191,15 @@ function updateUI() {
   const spins = Number(data.spins) || 0;
   const jackpots = Number(data.jackpots) || 0;
   const longest = Number(data.longest) || 0;
+  const returnTimerBtn = $("#returnTimerBtn");
+
+  if (returnTimerBtn) {
+    returnTimerBtn.classList.toggle(
+      "hidden",
+      !(timer && current && !sessionEnded)
+    );
+  }
+
 
   const counts = data.counts || {};
 
@@ -1358,6 +1368,12 @@ function init() {
     "click",
     () => finishTimer(false)
   );
+   
+$("#returnTimerBtn")?.addEventListener("click", () => {
+  if (timer && current && !sessionEnded) {
+    location.hash = "timer";
+  }
+});
 
   /*
    * Reset
@@ -1462,11 +1478,18 @@ function init() {
     }
   });
 
+     $("#returnTimerBtn")?.addEventListener("click", () => {
+    if (timer && current && !sessionEnded) {
+      location.hash = "timer";
+    }
+  });
   /*
    * Final UI refresh
    */
   updateUI();
 }
+
+
 
 /* =========================================================
    START APP
