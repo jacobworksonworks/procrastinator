@@ -53,7 +53,7 @@ const excuses = [
 ["You have achieved maximum productivity. Trust me bro, you're already productive. Do absolutely nothing.","LEGENDARY"],
 ["Future You has explicitly requested that you stop. Otherwise, you'll die, or something.","LEGENDARY"],
 ["I, (JACOB MYRON B. RODRIGUEZA) formally ask you to stop.","LEGENDARY"],
-["YOU HAVE WON. THERE IS NO NEED TO CONTINUE.","JACKPOT"],
+["Gotta practice for Glee Club!.","JACKPOT"],
 ["Check your phone. There might be something important. There probably isn't.","COMMON"],
 
 ["Drink water. Hydration is basically productivity, right?","COMMON"],
@@ -159,8 +159,8 @@ const excuses = [
 ["Open the window. The outside world has updates.","RARE"],
 ["Close the window. Actually, it's probably too hot.","RARE"],
 ["The temperature is slightly wrong. Fix it.","RARE"],
-["You need better lighting before you can possibly work.","RARE"],
-["Your desk setup isn't aesthetically pleasing enough yet.","RARE"],
+["Sing out your heart, preferably about your current love!","RARE"],
+["Make a site about procrastination to procrastinate.","RARE"],
 
 ["Rearrange your entire setup. This is DEFINITELY the solution.","EPIC"],
 ["You should totally redesign your workspace before continuing.","EPIC"],
