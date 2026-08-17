@@ -90,7 +90,7 @@ const excuses = [
 ["Make sure your headphones aren't secretly broken.","COMMON"],
 ["Test every key on your keyboard. You never know... Hahaha..","COMMON"],
 ["Clean your mousepad. It's seen things.","COMMON"],
-["Wipe your screen. You can't work through all those fingerprints.","COMMON"],
+["Wipe your screen. You can't work through all those fingerprints. Unless you're on PC, why do you have fingerprints?","COMMON"],
 
 ["Organize your folders. Future You will absolutely not thank you.","UNCOMMON"],
 ["Make a folder for your folders. This is organization.","UNCOMMON"],
@@ -98,7 +98,7 @@ const excuses = [
 ["Make a new desktop wallpaper. Your current one is getting old.","UNCOMMON"],
 ["Find a better wallpaper. This may take several hours.","UNCOMMON"],
 ["Look through your old wallpapers. Nostalgia is important.","UNCOMMON"],
-["Sort your music library. It's probably a disaster.","UNCOMMON"],
+["Take digicam pics! Lest you're Gwen, you've had enough.","UNCOMMON"],
 ["Find that one song you haven't heard in years.","UNCOMMON"],
 ["Listen to one song before working. Just one.","UNCOMMON"],
 ["Build a playlist for working. Set up some Linkin Park.","UNCOMMON"],
