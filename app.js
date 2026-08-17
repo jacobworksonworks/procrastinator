@@ -142,7 +142,7 @@ const excuses = [
 ["Look up the world's smallest country. Geography can't hurt.","RARE"],
 ["Find the weirdest Wikipedia page. You have been chosen.","RARE"],
 ["You need to know why the sky is blue. Immediately.","RARE"],
-["You should investigate why keyboards aren't alphabetical.","RARE"],
+["Try making music on Bandlab then post it on the internet for everyone to criticize you. Nice one.","RARE"],
 ["You need to know who invented the keyboard. This cannot wait.","RARE"],
 ["Investigate why QWERTY is the way it is. Society has questions. But you prolly seen it on a reel or something.","RARE"],
 ["Research the history of the chair you're sitting on.","RARE"],
@@ -238,7 +238,7 @@ const prefixes = [
   "BREAKING: ",
   "IMPORTANT: ",
   "LOCAL NEWS: ",
-  "⚠ ",
+  " ",
   "CLASSIFIED: ",
   "EMERGENCY: "
 ];
