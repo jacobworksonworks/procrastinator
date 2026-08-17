@@ -1,0 +1,1460 @@
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+const KEY = "procrastinator_exe_v1";
+
+/* =========================================================
+   WHEEL SOUND
+   ========================================================= */
+
+const wheelSpinSound = new Audio("music/wheel-spin.mp3");
+wheelSpinSound.loop = true;
+wheelSpinSound.volume = 0.6;
+wheelSpinSound.playbackRate = 2.0;
+
+/* =========================================================
+   EXCUSES
+   ========================================================= */
+
+const excuses = [
+["Get a snack first.","COMMON"],
+["Get some water.","COMMON"],
+["Stretch for five minutes.","COMMON"],
+["Check your notifs.","COMMON"],
+["Take a tiiiiiiny mental break.","COMMON"],
+["Your brain needs a reboot, go to sleep.","COMMON"],
+["Look out the window, might see something cool.","COMMON"],
+["Fix your posture first, for maybe this long:","COMMON"],
+["Check the weather, maybe you can't work.","COMMON"],
+["Organize your desktop. Prolly a mess, amiright?","UNCOMMON"],
+["Clean your keyboard, that s*** staaaank.","UNCOMMON"],
+["Rename a few files, absolutely essential","UNCOMMON"],
+["Make a new playlist, with that one new album (i dunno).","UNCOMMON"],
+["Check whether your headphones work by watching 10 Things I Hate About You.","UNCOMMON"],
+["Research a completely unrelated topic, I personally recommend Kurzgesagt and their videos on cancer.","UNCOMMON"],
+["Scroll on shorts, you're not motivated enough.","UNCOMMON"],
+["Your mouse deserves attention, hop on RIVALS with JacobMyron.","UNCOMMON"],
+["Open Task Manager. You haven't today, and you might have malware, who knows.","UNCOMMON"],
+["The viiiibes aren't aligned, wait a bit.","RARE"],
+["You need to investigate penguins. Check out Penguin Highway!","RARE"],
+["You should contemplate the concept of Tuesday.","RARE"],
+["Your chair has been suspiciously quiet.","RARE"],
+["The universe has requested a break. For you specifically.","RARE"],
+["This is clearly the time for a side quest, go out NOW.","RARE"],
+["Your computer needs emotional support. Probably physical too, if you're a student.","RARE"],
+["You haven't blinked enough today. Unless you're Shylah, you can skip this.","RARE"],
+["Mercury is probably doing something. Rent a telescope.","EPIC"],
+["The moon has authorized a break. It was the first waterbender afterall.","EPIC"],
+["Your keyboard has filed a formal complaint. Stop typing, and I dunno, go scroll maybe.","EPIC"],
+["A productivity anomaly has been detected. Avoid productivity for a bit.","EPIC"],
+["You must first determine whether cereal is soup. Search it up on Google.","EPIC"],
+["The ancient internet demands tribute. Watch a VSauce video.","EPIC"],
+["Your task has entered a temporary dimension. Can't work for:","LEGENDARY"],
+["You have achieved maximum productivity. Trust me bro, you're already productive. Do absolutely nothing.","LEGENDARY"],
+["Future You has explicitly requested that you stop. Otherwise, you'll die, or something.","LEGENDARY"],
+["I, (JACOB MYRON B. RODRIGUEZA) formally ask you to stop.","LEGENDARY"],
+["YOU HAVE WON. THERE IS NO NEED TO CONTINUE.","JACKPOT"],
+["Check your phone. There might be something important. There probably isn't.","COMMON"],
+
+["Drink water. Hydration is basically productivity, right?","COMMON"],
+["Get a blanket. It's probably too cold to think.","COMMON"],
+["Check the time. You need to know how much time you're wasting.","COMMON"],
+["Open a new tab. The current tab feels wrong.","COMMON"],
+["Close some tabs. You have way too many open.","COMMON"],
+["Open the tabs again. You might need those.","COMMON"],
+["Take a five minute break. Make sure it lasts at least twenty.","COMMON"],
+["Check your messages. What if someone needs you right now?","COMMON"],
+["Look at the ceiling for a second. Very important.","COMMON"],
+["Get comfortable first. You can't work while uncomfortable.","COMMON"],
+["Your chair isn't at the correct angle. Fix it.","COMMON"],
+["Adjust your monitor. Something about it feels off. Actually though you lwk prolly haven't cleaned it. ","COMMON"],
+["Move your keyboard slightly to the left. Muuuuuuch better.","COMMON"],
+["Move it back. Actually, the first position was lowkey better.","COMMON"],
+["Your desk looks weird. Fix that before anything else.","COMMON"],
+["You should probably eat something. Your brain needs fuel. Before you, yknow.","COMMON"],
+["Maybe you're hungry. Check the kitchen just in case.","COMMON"],
+["Maybe you're tired. Lie down for a minute. Maaaybe 5.","COMMON"],
+["You haven't checked YouTube today. That's duper concerning.","COMMON"],
+["Check your downloads folder. You might have forgotten something.","COMMON"],
+["Check your recycling bin. Maybe there's something important in there. Or you could clear it.","COMMON"],
+["Sort your screenshots. Future You will appreciate it.","COMMON"],
+["Take a trillion screenshot of something. You haven't taken one in a while.","COMMON"],
+["Check your storage. You might be running out of space.","COMMON"],
+["Update something. Anything. Updates are productive. Oh wait,","COMMON"],
+["Check if your computer needs an update. This is lowkey maintenance.","COMMON"],
+["Restart your computer. That usually fixes things.","COMMON"],
+["Send 5 trillion USD to Israel.","COMMON"],
+["Check your internet speed. This could be affecting super productivity.","COMMON"],
+["Your Wi-Fi deserves a little attention. Connect ethernet or something.","COMMON"],
+["Check the cables. One of them might be suspicious.","COMMON"],
+["Make sure your headphones aren't secretly broken.","COMMON"],
+["Test every key on your keyboard. You never know.","COMMON"],
+["Clean your mousepad. It's seen things.","COMMON"],
+["Wipe your screen. You can't work through all those fingerprints.","COMMON"],
+
+["Organize your folders. Future You will absolutely not thank you.","UNCOMMON"],
+["Make a folder for your folders. This is organization.","UNCOMMON"],
+["Rename your desktop files so they look professional.","UNCOMMON"],
+["Make a new desktop wallpaper. Your current one is getting old.","UNCOMMON"],
+["Find a better wallpaper. This may take several hours.","UNCOMMON"],
+["Look through your old wallpapers. Nostalgia is important.","UNCOMMON"],
+["Sort your music library. It's probably a disaster.","UNCOMMON"],
+["Find that one song you haven't heard in years.","UNCOMMON"],
+["Listen to one song before working. Just one.","UNCOMMON"],
+["Build a playlist for working. Set up some Linkin Park.","UNCOMMON"],
+["Just chill here and listen to the fire music.","UNCOMMON"],
+["Check what your friends are listening to.","UNCOMMON"],
+["See what everyone else is doing. Research.","UNCOMMON"],
+["Open Discord for one second. Nothing bad will happen.","UNCOMMON"],
+["Check one Discord channel. Just one.","UNCOMMON"],
+["You should probably reply to that message from three days ago.","UNCOMMON"],
+["Check your notifications. Might be your  ex.","UNCOMMON"],
+["Look at your old conversations. Maybe your ex.","UNCOMMON"],
+["Check your browser history. You forgot what you were doing anyway.","UNCOMMON"],
+["Google something random. Curiosity is good for the brain, maybe whales.","UNCOMMON"],
+["Look up the most useless Wikipedia article you can find, maybe whales.","UNCOMMON"],
+["Read about something completely unrelated. Education is education.","UNCOMMON"],
+["Watch a documentary. That's basically studying.","UNCOMMON"],
+["Watch a video essay. Those are educational too.","UNCOMMON"],
+["Watch ONE video. You have incredible self-control.","UNCOMMON"],
+["Watch another video to make sure the first one wasn't misleading.","UNCOMMON"],
+["Check the comments. The real information is always in the comments.","UNCOMMON"],
+["Read the replies. Someone probably said something stupid.","UNCOMMON"],
+["Scroll for a bit. You need inspiration.","UNCOMMON"],
+["Scroll until you find something interesting. This could take a while.","UNCOMMON"],
+["Buy a Steam game, maybe Hollow Knight. Gabe needs another yacht.","UNCOMMON"],
+["Thy algorithm has been waiting for you.","UNCOMMON"],
+["Look at shorts. Laughter improves productivity. Probably.","UNCOMMON"],
+["Find a sick reel. Your mental health depends on it.","UNCOMMON"],
+["Send a reel to someone. This is social productivity.","UNCOMMON"],
+["Check if anyone sent you a reel.","UNCOMMON"],
+["Open Google Maps and look around somewhere you've never been. Maybe Wales.","UNCOMMON"],
+["Look at your old saved places. Why did you save those?","UNCOMMON"],
+["Check the weather somewhere completely different. Maybe in Wales.","UNCOMMON"],
+["Find out what time it is in another country. Maybe Wales.","UNCOMMON"],
+["See what people are eating in another country. Maybe Wales.","UNCOMMON"],
+["Look up a random animal. Animals are important. Maybe whales.","UNCOMMON"],
+["Research an animal you know nothing about. Maybe whales.","UNCOMMON"],
+
+["Find out how fast a penguin can run. Then watch Penguin Highway.","RARE"],
+["Find out whether frogs have teeth. You deserve to know.","RARE"],
+["Research why cats do that weird thing with their heads.","RARE"],
+["Look up the world's smallest country. Geography can't hurt.","RARE"],
+["Find the weirdest Wikipedia page. You have been chosen.","RARE"],
+["You need to know why the sky is blue. Immediately.","RARE"],
+["You should investigate why keyboards aren't alphabetical.","RARE"],
+["You need to know who invented the keyboard. This cannot wait.","RARE"],
+["Investigate why QWERTY is the way it is. Society has questions. But you prolly seen it on a reel or something.","RARE"],
+["Research the history of the chair you're sitting on.","RARE"],
+["Your chair has lore. Find it.","RARE"],
+["Your desk has been hiding secrets from you.","RARE"],
+["The room feels different today. Investigate.","RARE"],
+["Something is slightly out of place. Find it.","RARE"],
+["There is probably a missing sock somewhere. Begin the search.","RARE"],
+["You haven't checked underneath your bed recently. Not that you need to.","RARE"],
+["Look behind your monitor. Something might be there.","RARE"],
+["Check the other side of the room. You never know.","RARE"],
+["The lighting isn't optimal. Spend twenty minutes fixing it.","RARE"],
+["Your room could use a new atmosphere.","RARE"],
+["Open the window. The outside world has updates.","RARE"],
+["Close the window. Actually, it's probably too hot.","RARE"],
+["The temperature is slightly wrong. Fix it.","RARE"],
+["You need better lighting before you can possibly work.","RARE"],
+["Your desk setup isn't aesthetically pleasing enough yet.","RARE"],
+
+["Rearrange your entire setup. This is obviously the solution.","EPIC"],
+["You should redesign your workspace before continuing.","EPIC"],
+["Make your computer setup look like those ones on Pinterest.","EPIC"],
+["Watch setup videos until you figure out the perfect setup.","EPIC"],
+["Research mechanical keyboards. You don't need one, but still.","EPIC"],
+["Research mice. There are apparently a lot of them.","EPIC"],
+["Research monitors. You probably need a new one.","EPIC"],
+["Research desk mats. This is somehow important.","EPIC"],
+["Research ergonomic chairs. Your chair has failed you.","EPIC"],
+["Build your dream PC in a spreadsheet. You don't have to buy it.","EPIC"],
+["Design your dream room. This is basically planning.","EPIC"],
+["Make a completely unnecessary tier list.","EPIC"],
+["Rank your favorite snacks. This requires serious consideration.","EPIC"],
+["Rank every browser you have ever used.","EPIC"],
+["Rank your old profile pictures. Historical research.","EPIC"],
+["Make a tier list of your own procrastination methods.","EPIC"],
+["Calculate how much time you've spent procrastinating. Then procrastinate more.","EPIC"],
+["PLAY RED DEAD REDEMPTION 2.","EPIC"],
+["Take a personality quiz. You need to understand yourself first.","EPIC"],
+["Play literally any Final Fantasy, all of them are awesome.","EPIC"],
+["Find out which fictional character you are. This is urgent.","EPIC"],
+["Play Clair Obscur Expedition 33.","EPIC"],
+["Play Assasins Creed Black Flag.","EPIC"],
+["Rewatch a movie you already know. New discoveries are possible.","EPIC"],
+["Watch the first episode of a show. You can stop after that.","EPIC"],
+["Start a new show. Your current task will still be there later.","EPIC"],
+["Read the entire plot of a movie you aren't going to watch.","EPIC"],
+["Look up the ending of something. Spoilers build character.","EPIC"],
+["Read random trivia until something becomes relevant.","EPIC"],
+["You need to learn a completely unnecessary skill.","EPIC"],
+
+["Learn how to solve a Rubik's Cube. You have time. Ask Brien or something he used to cube.","LEGENDARY"],
+["Learn a new language. This should only take a few years.","LEGENDARY"],
+["Learn how to play an instrument. Your task can wait.","LEGENDARY"],
+["Become weirdly knowledgeable about something nobody asked about.","LEGENDARY"],
+["Read an entire Wikipedia rabbit hole. Start with anything.","LEGENDARY"],
+["Research the history of the internet. You may be gone for a while.","LEGENDARY"],
+["Find the oldest thing currently on your computer.","LEGENDARY"],
+["Investigate every file on your desktop. Leave no file behind.","LEGENDARY"],
+["You need to discover what your computer has been doing while you were away.","LEGENDARY"],
+["Your productivity has reached dangerous levels. Shut it down.","LEGENDARY"],
+["STOP. You are becoming productive. This cannot continue.","LEGENDARY"],
+["EMERGENCY: You were about to start working. Crisis averted.","LEGENDARY"],
+["The machine has detected productivity. Please remain calm.","LEGENDARY"],
+["YOUR TASK CAN WAIT. IT HAS BEEN WAITING THIS WHOLE TIME.","LEGENDARY"],
+["You were going to work? That's crazy.","LEGENDARY"],
+["Absolutely not. Try again tomorrow.","LEGENDARY"],
+["The Green Lantern Corps have reviewed your case. You are free to do nothing.","LEGENDARY"],
+["The council has determined that another break is necessary.","LEGENDARY"],
+["Your deadline has been temporarily relocated. I knows where.","LEGENDARY"],
+["The deadline is a social construct. Like gender! Haugh!","LEGENDARY"],
+
+["You have reached a level of procrastination previously thought impossible.","JACKPOT"],
+["THE MACHINE HAS SPOKEN. GO DO LITERALLY ANYTHING ELSE.","JACKPOT"],
+["Are you a big spoon or a small spoon? Come find out with me haha. Alr bro I mean I guess","JACKPOT"],
+["I JUST HIT THE","JACKPOT"],
+["HAUUUGGHH.","JACKPOT"],
+["ABSOLUTE VICTORY. WATCH SKIBIDI TOILET.","JACKPOT"],
+["67 :LAUGH:","JACKPOT"],
+["your assignment b liek: Fairs >-<.","JACKPOT"],
+["I-I mean, it's not like I w-want you to leave and do your assignment or anything.. :3.","JACKPOT"],
+["MAXIMUM PROCRASTINATION ACHIEVED. PLEASE DO NOT IMPROVE.","JACKPOT"]
+];
+
+/* =========================================================
+   EXPAND TO 527
+   ========================================================= */
+
+const bases = [...excuses];
+
+const prefixes = [
+  "URGENT: ",
+  "SYSTEM: ",
+  "BREAKING: ",
+  "IMPORTANT: ",
+  "LOCAL NEWS: ",
+  "⚠ ",
+  "CLASSIFIED: ",
+  "EMERGENCY: "
+];
+
+const suffixes = [
+  " Probably.",
+  " Obviously.",
+  " For legal reasons.",
+  " According to science.",
+  " This is important.",
+  " Trust the process.",
+  " Do not question it.",
+  " It is what it is.",
+  " Immediately.",
+  " Before proceeding.",
+  " For research purposes.",
+  " Because reasons.",
+  " This cannot wait.",
+  " The data is clear.",
+  " Your future self agrees."
+];
+
+while (excuses.length < 527) {
+  const b = bases[(excuses.length * 7) % bases.length];
+  const p = prefixes[(excuses.length * 3) % prefixes.length];
+  const s = suffixes[(excuses.length * 5) % suffixes.length];
+
+  const rarity = [
+    "COMMON",
+    "COMMON",
+    "COMMON",
+    "UNCOMMON",
+    "UNCOMMON",
+    "RARE",
+    "RARE",
+    "EPIC",
+    "LEGENDARY"
+  ][(excuses.length * 11) % 9];
+
+  excuses.push([p + b[0] + s, rarity]);
+}
+
+/* =========================================================
+   GAME DATA
+   ========================================================= */
+
+const rarityWeight = {
+  COMMON: 55,
+  UNCOMMON: 25,
+  RARE: 12,
+  EPIC: 6,
+  LEGENDARY: 1.8,
+  JACKPOT: 0.2
+};
+
+const timeRanges = {
+  COMMON: [5, 15],
+  UNCOMMON: [10, 30],
+  RARE: [20, 45],
+  EPIC: [30, 90],
+  LEGENDARY: [60, 180],
+  JACKPOT: [180, 360]
+};
+
+const defaultData = {
+  spins: 0,
+  total: 0,
+  longest: 0,
+  sessions: 0,
+  jackpots: 0,
+  counts: {},
+  history: [],
+  achievements: {}
+};
+
+let data = loadData();
+
+let current = null;
+let timer = null;
+let remaining = 0;
+let totalSession = 0;
+let paused = false;
+let sessionEnded = false;
+
+/* =========================================================
+   SAFE DATA LOADING
+   ========================================================= */
+
+function loadData() {
+  try {
+    const saved = localStorage.getItem(KEY);
+
+    if (!saved) {
+      return structuredClone(defaultData);
+    }
+
+    const parsed = JSON.parse(saved);
+
+    return {
+      ...defaultData,
+      ...parsed,
+      counts: parsed.counts || {},
+      history: Array.isArray(parsed.history) ? parsed.history : [],
+      achievements: parsed.achievements || {}
+    };
+  } catch (e) {
+    console.warn("Save data could not be loaded:", e);
+
+    try {
+      localStorage.removeItem(KEY);
+    } catch (_) {}
+
+    return structuredClone(defaultData);
+  }
+}
+
+function save() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn("Could not save data:", e);
+  }
+
+  updateUI();
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function fmt(sec) {
+  sec = Math.max(0, Math.floor(Number(sec) || 0));
+
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+
+  return [
+    String(h).padStart(2, "0"),
+    String(m).padStart(2, "0"),
+    String(s).padStart(2, "0")
+  ].join(":");
+}
+
+function weightedPick() {
+  const total = Object.values(rarityWeight)
+    .reduce((a, b) => a + b, 0);
+
+  let r = Math.random() * total;
+
+  for (const [rarity, weight] of Object.entries(rarityWeight)) {
+    r -= weight;
+
+    if (r <= 0) {
+      return rarity;
+    }
+  }
+
+  return "COMMON";
+}
+
+function pick() {
+  const rarity = weightedPick();
+
+  const candidates = excuses
+    .map((x, i) => [x, i])
+    .filter(([x]) => x[1] === rarity);
+
+  return candidates[
+    Math.floor(Math.random() * candidates.length)
+  ] || [excuses[0], 0];
+}
+
+function randomTime(rarity) {
+  const [a, b] = timeRanges[rarity];
+
+  const minutes =
+    Math.floor(a + Math.random() * (b - a + 1));
+
+  const seconds =
+    Math.floor(Math.random() * 60);
+
+  return minutes * 60 + seconds;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function setHashPage() {
+  const id = location.hash.slice(1) || "home";
+
+  const page = document.getElementById(id) ||
+    document.getElementById("home");
+
+  $$(".page").forEach(p => {
+    p.classList.toggle("active", p === page);
+  });
+
+  /*
+   * TEMP FIX:
+   * If we're leaving the timer/home flow, refresh the relevant
+   * UI instead of destroying application state.
+   */
+  if (page.id === "inventory") {
+    renderInventory();
+  }
+
+  if (page.id === "stats") {
+    renderStats();
+    requestAnimationFrame(drawChart);
+  }
+
+  if (page.id === "home") {
+    updateUI();
+  }
+}
+
+window.addEventListener("hashchange", setHashPage);
+
+/* =========================================================
+   MUSIC
+   ========================================================= */
+
+const musicTracks = [
+  { name: "MLG MONTAGE", file: "music/mlg.mp3" },
+  { name: "XP DESKTOP", file: "music/xp.mp3" },
+  { name: "RETRO ARCADE", file: "music/arcade.mp3" },
+  { name: "2000s INTERNET", file: "music/internet.mp3" },
+  { name: "CHAOS MODE", file: "music/chaos.mp3" }
+];
+
+let audio = null;
+let currentTrack = null;
+let lobbyAudio = null;
+let musicStarted = false;
+
+function getVolume() {
+  const slider = $("#volume");
+
+  return Number(slider?.value || 40) / 100;
+}
+
+function startLobbyMusic() {
+  const musicLabel = $("#musicLabel");
+
+  if (!lobbyAudio) {
+    lobbyAudio = new Audio("music/lobby.mp3");
+
+    lobbyAudio.loop = true;
+    lobbyAudio.preload = "auto";
+    lobbyAudio.volume = getVolume();
+
+    lobbyAudio.addEventListener("error", () => {
+      console.warn("Could not load music/lobby.mp3");
+
+      if (musicLabel) {
+        musicLabel.textContent =
+          "♪ LOBBY.MP3 // FILE NOT FOUND";
+      }
+
+      musicStarted = false;
+    });
+  }
+
+  lobbyAudio.volume = getVolume();
+
+  if (!$("#musicToggle")?.checked) {
+    return;
+  }
+
+  if (!lobbyAudio.paused) {
+    musicStarted = true;
+
+    if (musicLabel) {
+      musicLabel.textContent =
+        "♪ LOBBY MUSIC // PLAYING";
+    }
+
+    return;
+  }
+
+  lobbyAudio.play()
+    .then(() => {
+      musicStarted = true;
+
+      if (musicLabel) {
+        musicLabel.textContent =
+          "♪ LOBBY MUSIC // PLAYING";
+      }
+    })
+    .catch(() => {
+      /*
+       * Browser autoplay policy.
+       * Not a fatal error.
+       */
+    });
+}
+
+function stopLobbyMusic() {
+  if (!lobbyAudio) {
+    return;
+  }
+
+  lobbyAudio.pause();
+  lobbyAudio.currentTime = 0;
+  musicStarted = false;
+}
+
+function chooseMusic() {
+  const toggle = $("#musicToggle");
+
+  if (!toggle?.checked) {
+    stopMusic();
+    return;
+  }
+
+  const choices = musicTracks.filter(
+    t => t.file !== currentTrack?.file
+  );
+
+  currentTrack =
+    choices[Math.floor(Math.random() * choices.length)] ||
+    musicTracks[0];
+
+  if (!audio) {
+    audio = new Audio();
+  }
+
+  audio.src = currentTrack.file;
+  audio.loop = true;
+  audio.preload = "auto";
+  audio.volume = getVolume();
+
+  audio.onerror = () => {
+    const label = $("#musicLabel");
+
+    if (label) {
+      label.textContent =
+        `♪ ${currentTrack.name} // FILE NOT FOUND`;
+    }
+  };
+
+  audio.play()
+    .then(() => {
+      const label = $("#musicLabel");
+
+      if (label) {
+        label.textContent =
+          `♪ ${currentTrack.name} // PLAYING`;
+      }
+    })
+    .catch(() => {
+      const label = $("#musicLabel");
+
+      if (label) {
+        label.textContent =
+          "♪ CLICK ACCEPT FATE AGAIN TO START MUSIC";
+      }
+    });
+}
+
+function pauseMusic() {
+  if (audio) {
+    audio.pause();
+  }
+}
+
+function resumeMusic() {
+  if (audio && currentTrack && $("#musicToggle")?.checked) {
+    audio.play().catch(() => {});
+  }
+}
+
+function stopMusic() {
+  if (audio) {
+    audio.pause();
+    audio.currentTime = 0;
+  }
+
+  const label = $("#musicLabel");
+
+  if (label) {
+    label.textContent = "♪ SILENT MODE";
+  }
+}
+
+/*
+ * Start lobby music from an actual user gesture.
+ * This avoids autoplay killing the rest of the application.
+ */
+function tryStartLobbyMusic() {
+  if (timer && !paused) {
+    return;
+  }
+
+  if (!$("#musicToggle")?.checked) {
+    return;
+  }
+
+  if (lobbyAudio && !lobbyAudio.paused) {
+    return;
+  }
+
+  startLobbyMusic();
+}
+
+/* =========================================================
+   SPIN
+   ========================================================= */
+
+function spin() {
+  const btn = $("#spinBtn");
+
+  if (!btn || btn.disabled) {
+    return;
+  }
+
+  try {
+    btn.disabled = true;
+    btn.classList.add("spinning");
+
+    const status = $("#spinStatus");
+
+    if (status) {
+      status.textContent = "CALCULATING...";
+    }
+
+    const task =
+      ($("#taskInput")?.value || "").trim() ||
+      "your responsibilities";
+
+    const homeTask = $("#homeTask");
+
+    if (homeTask) {
+      homeTask.textContent = task.toUpperCase();
+    }
+
+    data.spins = (Number(data.spins) || 0) + 1;
+
+    const result = pick();
+
+    if (!result || !result[0]) {
+      throw new Error("Could not select an excuse");
+    }
+
+    const x = result[0];
+    const index = result[1];
+    const seconds = randomTime(x[1]);
+
+    current = {
+      text: x[0],
+      rarity: x[1],
+      index,
+      time: seconds,
+      task
+    };
+
+    data.counts = data.counts || {};
+
+    data.counts[index] =
+      (Number(data.counts[index]) || 0) + 1;
+
+    if (x[1] === "JACKPOT") {
+      data.jackpots =
+        (Number(data.jackpots) || 0) + 1;
+    }
+
+    data.history = data.history || [];
+
+    data.history.push({
+      date: Date.now(),
+      seconds
+    });
+
+    if (data.history.length > 30) {
+      data.history.shift();
+    }
+
+    save();
+
+    const wheel = $("#wheel");
+    const wheelText = $("#wheelText");
+
+    if (wheelText) {
+      wheelText.textContent = "CALCULATING";
+    }
+
+    if (wheel) {
+      wheel.style.transition = "none";
+      wheel.offsetHeight;
+
+      const turns =
+        6 + Math.floor(Math.random() * 5);
+
+      const deg =
+        turns * 360 +
+        Math.floor(Math.random() * 360);
+
+      wheel.style.transition =
+        "transform 5s cubic-bezier(.08,.72,.08,1)";
+
+      wheelSpinSound.currentTime = 0;
+      wheelSpinSound.play().catch(() => {});
+
+      wheel.style.transform =
+        `rotate(${deg}deg)`;
+    }
+
+    if ($("#shakeToggle")?.checked) {
+      document.body.classList.add("shaking");
+    }
+
+    window.setTimeout(() => {
+      document.body.classList.remove("shaking");
+
+      wheelSpinSound.pause();
+      wheelSpinSound.currentTime = 0;
+
+      showResult();
+
+      btn.disabled = false;
+      btn.classList.remove("spinning");
+
+      if (status) {
+        status.textContent = "READY";
+      }
+    }, 5100);
+
+  } catch (err) {
+    console.error("Spin failed:", err);
+
+    document.body.classList.remove("shaking");
+
+    btn.disabled = false;
+    btn.classList.remove("spinning");
+
+    const status = $("#spinStatus");
+
+    if (status) {
+      status.textContent = "ERROR - TRY AGAIN";
+    }
+
+    toast("SPIN ERROR — TRY AGAIN");
+  }
+}
+
+function showResult() {
+  if (!current) {
+    return;
+  }
+
+  if ($("#wheelText")) {
+    $("#wheelText").textContent = "YOUR EXCUSE";
+  }
+
+  $("#result")?.classList.remove("hidden");
+
+  if ($("#resultRarity")) {
+    $("#resultRarity").textContent =
+      current.rarity;
+  }
+
+  if ($("#resultExcuse")) {
+    $("#resultExcuse").textContent =
+      `"${current.text}"`;
+  }
+
+  if ($("#resultTime")) {
+    $("#resultTime").textContent =
+      fmt(current.time).slice(3);
+  }
+
+  if ($("#resultReason")) {
+    $("#resultReason").textContent =
+      `Task detected: ${current.task}. The machine has determined that this can wait.`;
+  }
+
+  if (current.rarity === "JACKPOT") {
+    flash("JACKPOT");
+  }
+}
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+function startTimer() {
+  if (!current || timer) {
+    return;
+  }
+
+  stopLobbyMusic();
+
+  remaining = totalSession = current.time;
+  paused = false;
+  sessionEnded = false;
+
+  if ($("#timerExcuse")) {
+    $("#timerExcuse").textContent =
+      `"${current.text}"`;
+  }
+
+  if ($("#timerRarity")) {
+    $("#timerRarity").textContent =
+      current.rarity;
+  }
+
+  if ($("#finishBtn")) {
+    $("#finishBtn").disabled = false;
+  }
+
+  location.hash = "timer";
+
+  updateTimer();
+
+  if ($("#musicToggle")?.checked) {
+    chooseMusic();
+  }
+
+  clearInterval(timer);
+
+  timer = setInterval(() => {
+    if (paused) {
+      return;
+    }
+
+    remaining--;
+
+    updateTimer();
+
+    if (remaining <= 0) {
+      finishTimer(true);
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  if (!$("#timerDisplay")) {
+    return;
+  }
+
+  $("#timerDisplay").textContent =
+    fmt(remaining).slice(3);
+
+  if ($("#timerBar")) {
+    const percent =
+      totalSession > 0
+        ? (remaining / totalSession) * 100
+        : 0;
+
+    $("#timerBar").style.width =
+      Math.max(0, percent) + "%";
+  }
+
+  if ($("#pauseBtn")) {
+    $("#pauseBtn").textContent =
+      paused ? "RESUME" : "PAUSE";
+  }
+}
+
+function finishTimer(completed) {
+  if (sessionEnded) {
+    return;
+  }
+
+  sessionEnded = true;
+
+  clearInterval(timer);
+  timer = null;
+
+  stopMusic();
+
+  const spent =
+    Math.max(0, totalSession - remaining);
+
+  data.total =
+    (Number(data.total) || 0) + spent;
+
+  data.longest =
+    Math.max(Number(data.longest) || 0, spent);
+
+  data.sessions =
+    (Number(data.sessions) || 0) + 1;
+
+  save();
+
+  if ($("#systemMessage")) {
+    $("#systemMessage").textContent =
+      completed
+        ? "PROCRASTINATION COMPLETE. CONGRATULATIONS."
+        : "SESSION TERMINATED. PRODUCTIVITY MAY RESUME.";
+  }
+
+  if ($("#finishBtn")) {
+    $("#finishBtn").disabled = true;
+  }
+
+  /*
+   * Give the UI a moment before moving to stats.
+   */
+  setTimeout(() => {
+    if ($("#finishBtn")) {
+      $("#finishBtn").disabled = false;
+    }
+
+    location.hash = "stats";
+  }, 1200);
+}
+
+/* =========================================================
+   INVENTORY
+   ========================================================= */
+
+function renderInventory() {
+  const grid = $("#inventoryGrid");
+
+  if (!grid) {
+    return;
+  }
+
+  grid.innerHTML = "";
+
+  excuses.forEach((x, i) => {
+    const count =
+      Number(data.counts?.[i]) || 0;
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "card " + (count ? "found" : "locked");
+
+    card.innerHTML = `
+      <span class="card-rarity">${x[1]}</span>
+      <span class="num">×${count}</span>
+      <p>${count ? x[0] : "????????????????"}</p>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+/* =========================================================
+   ACHIEVEMENTS
+   ========================================================= */
+
+const achievements = [
+  [
+    "FIRST MISTAKE",
+    "Spin the wheel once.",
+    () => data.spins >= 1
+  ],
+  [
+    "PROPROCRASTINATOR",
+    "Waste an hour.",
+    () => data.total >= 3600
+  ],
+  [
+    "YOU COULD HAVE FINISHED",
+    "Tend to say this a lot. Waste 5 hours.",
+    () => data.total >= 18000
+  ],
+  [
+    "FUTURE YOU HATES YOU",
+    "I already do. Waste 24 hours.",
+    () => data.total >= 86400
+  ],
+  [
+    "GENSHIN ADDICTION",
+    "Well, least I'm not one of those. Spin 100 times.",
+    () => data.spins >= 100
+  ],
+  [
+    "BRAIN RACH",
+    "Collect 100 unique excuses. Just like him.",
+    () => Object.keys(data.counts).length >= 100
+  ],
+  [
+    "LEGEND VANQUISED",
+    "Find a legendary excuse.",
+    () =>
+      Object.keys(data.counts)
+        .some(i => excuses[i]?.[1] === "LEGENDARY")
+  ],
+  [
+    "WINDOWS 98",
+    "Complete a 3-hour session.",
+    () => data.longest >= 10800
+  ],
+  [
+    "HIT THE JACKPOT",
+    "HEY! HEY! HEY! HEY! HEY! HEY!",
+    () => data.jackpots >= 1
+  ],
+  [
+    "EXCUSE MACHINE",
+    "Collect 250 unique excuses.",
+    () => Object.keys(data.counts).length >= 250
+  ]
+];
+
+function renderAchievements() {
+  const grid = $("#achievementGrid");
+
+  if (!grid) {
+    return;
+  }
+
+  grid.innerHTML = "";
+
+  achievements.forEach(([name, description, check]) => {
+    let unlocked = false;
+
+    try {
+      unlocked = !!check();
+    } catch (e) {
+      console.warn("Achievement check failed:", name, e);
+    }
+
+    const element =
+      document.createElement("div");
+
+    element.className =
+      "achievement " +
+      (unlocked ? "unlocked" : "");
+
+    element.innerHTML = `
+      <b>${unlocked ? "✓ " : "□ "}${name}</b>
+      <p>${description}</p>
+    `;
+
+    grid.appendChild(element);
+  });
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+function renderStats() {
+  updateUI();
+}
+
+function drawChart() {
+  const canvas = $("#chart");
+
+  if (!canvas) {
+    return;
+  }
+
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) {
+    return;
+  }
+
+  const cssWidth =
+    canvas.clientWidth || 900;
+
+  const dpr =
+    window.devicePixelRatio || 1;
+
+  canvas.width = cssWidth * dpr;
+  canvas.height = 250 * dpr;
+
+  const w = canvas.width;
+  const h = canvas.height;
+
+  ctx.clearRect(0, 0, w, h);
+
+  ctx.strokeStyle = "#333";
+  ctx.lineWidth = 3 * dpr;
+
+  for (let y = 60 * dpr; y < h; y += 80 * dpr) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y);
+    ctx.stroke();
+  }
+
+  const hist = Array.isArray(data.history)
+    ? data.history
+    : [];
+
+  if (!hist.length) {
+    return;
+  }
+
+  const max =
+    Math.max(
+      ...hist.map(a => Number(a.seconds) || 0),
+      1
+    );
+
+  ctx.strokeStyle = "#66ff00";
+  ctx.lineWidth = 7 * dpr;
+  ctx.beginPath();
+
+  hist.forEach((p, i) => {
+    const x =
+      i /
+      Math.max(hist.length - 1, 1) *
+      w;
+
+    const y =
+      h -
+      60 * dpr -
+      ((Number(p.seconds) || 0) / max) *
+      (h - 120 * dpr);
+
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  });
+
+  ctx.stroke();
+}
+
+/* =========================================================
+   UI
+   ========================================================= */
+
+function updateUI() {
+  const total = Number(data.total) || 0;
+  const spins = Number(data.spins) || 0;
+  const jackpots = Number(data.jackpots) || 0;
+  const longest = Number(data.longest) || 0;
+
+  const counts = data.counts || {};
+
+  const unique =
+    Object.keys(counts).length;
+
+  const collected =
+    Object.values(counts)
+      .reduce(
+        (a, b) => a + (Number(b) || 0),
+        0
+      );
+
+  const formattedTotal = fmt(total);
+
+  if ($("#homeTotal")) {
+    $("#homeTotal").textContent =
+      formattedTotal;
+  }
+
+  if ($("#homeSpins")) {
+    $("#homeSpins").textContent =
+      String(spins).padStart(3, "0");
+  }
+
+  if ($("#homeFound")) {
+    $("#homeFound").textContent =
+      String(unique).padStart(3, "0");
+  }
+
+  if ($("#homeJackpots")) {
+    $("#homeJackpots").textContent =
+      String(jackpots).padStart(3, "0");
+  }
+
+  if ($("#spinCount")) {
+    $("#spinCount").textContent =
+      String(spins).padStart(3, "0");
+  }
+
+  if ($("#statTotal")) {
+    $("#statTotal").textContent =
+      formattedTotal;
+  }
+
+  if ($("#statLongest")) {
+    $("#statLongest").textContent =
+      fmt(longest);
+  }
+
+  if ($("#statSpins")) {
+    $("#statSpins").textContent =
+      spins;
+  }
+
+  if ($("#statUnique")) {
+    $("#statUnique").textContent =
+      `${unique} / ${excuses.length}`;
+  }
+
+  if ($("#statJackpots")) {
+    $("#statJackpots").textContent =
+      jackpots;
+  }
+
+  if ($("#statSessions")) {
+    $("#statSessions").textContent =
+      Number(data.sessions) || 0;
+  }
+
+  if ($("#uniqueCount")) {
+    $("#uniqueCount").textContent =
+      `${unique} / ${excuses.length}`;
+  }
+
+  if ($("#inventoryTotal")) {
+    $("#inventoryTotal").textContent =
+      collected;
+  }
+
+  renderAchievements();
+}
+
+/* =========================================================
+   VISUAL EFFECTS
+   ========================================================= */
+
+function flash(text) {
+  const element = $("#flash");
+
+  if (!element) {
+    return;
+  }
+
+  element.textContent = text;
+  element.classList.add("flash");
+
+  setTimeout(() => {
+    element.classList.remove("flash");
+  }, 700);
+}
+
+function toast(text) {
+  const element = $("#toast");
+
+  if (!element) {
+    return;
+  }
+
+  element.textContent = text;
+  element.classList.add("show");
+
+  setTimeout(() => {
+    element.classList.remove("show");
+  }, 2500);
+}
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+function init() {
+  /*
+   * Navigation
+   */
+  setHashPage();
+
+  /*
+   * Spin
+   */
+  $("#spinBtn")?.addEventListener("click", spin);
+  $("#rerollBtn")?.addEventListener("click", spin);
+
+  /*
+   * Accept
+   */
+  $("#acceptBtn")?.addEventListener("click", startTimer);
+
+  /*
+   * Timer controls
+   */
+  $("#pauseBtn")?.addEventListener("click", () => {
+    if (!timer || sessionEnded) {
+      return;
+    }
+
+    paused = !paused;
+
+    if (paused) {
+      pauseMusic();
+    } else {
+      resumeMusic();
+    }
+
+    updateTimer();
+
+    if ($("#systemMessage")) {
+      $("#systemMessage").textContent =
+        paused
+          ? "WORK DETECTED. TIMER PAUSED."
+          : "Procrastination restored.";
+    }
+  });
+
+  $("#finishBtn")?.addEventListener(
+    "click",
+    () => finishTimer(false)
+  );
+
+  /*
+   * Reset
+   */
+  $("#resetBtn")?.addEventListener("click", () => {
+    if (!confirm("Delete ALL procrastination progress?")) {
+      return;
+    }
+
+    try {
+      localStorage.removeItem(KEY);
+    } catch (_) {}
+
+    location.reload();
+  });
+
+  /*
+   * Task input
+   */
+  $("#taskInput")?.addEventListener("input", e => {
+    const text =
+      e.target.value || "NOTHING YET";
+
+    if ($("#homeTask")) {
+      $("#homeTask").textContent =
+        text.toUpperCase();
+    }
+  });
+
+  /*
+   * CRT
+   */
+  $("#crtToggle")?.addEventListener("change", e => {
+    document.body.style.setProperty(
+      "--crt",
+      e.target.checked ? "1" : "0"
+    );
+  });
+
+  /*
+   * Shake
+   */
+  $("#shakeToggle")?.addEventListener("change", e => {
+    document.body.classList.toggle(
+      "no-shake",
+      !e.target.checked
+    );
+  });
+
+  /*
+   * Volume
+   */
+  $("#volume")?.addEventListener("input", e => {
+    const volume =
+      Number(e.target.value) / 100;
+
+    if (audio) {
+      audio.volume = volume;
+    }
+
+    if (lobbyAudio) {
+      lobbyAudio.volume = volume;
+    }
+  });
+
+  /*
+   * Music toggle
+   */
+  $("#musicToggle")?.addEventListener(
+    "change",
+    e => {
+      if (!e.target.checked) {
+        stopMusic();
+        stopLobbyMusic();
+        return;
+      }
+
+      if (timer && !paused) {
+        chooseMusic();
+      } else {
+        startLobbyMusic();
+      }
+    }
+  );
+
+  /*
+   * Start lobby music only after a real click.
+   * ONE listener. No duplicate pointer/mouse/touch listeners.
+   */
+  document.addEventListener(
+    "click",
+    tryStartLobbyMusic,
+    true
+  );
+
+  /*
+   * Resize chart
+   */
+  window.addEventListener("resize", () => {
+    if (location.hash === "#stats") {
+      drawChart();
+    }
+  });
+
+  /*
+   * Final UI refresh
+   */
+  updateUI();
+}
+
+/* =========================================================
+   START APP
+   ========================================================= */
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init, {
+    once: true
+  });
+} else {
+  init();
+}

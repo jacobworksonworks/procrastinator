@@ -1,0 +1,372 @@
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#08080a;color:#e8ffe8;font-family:"VT323",monospace;font-size:22px;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 4px);z-index:1000;mix-blend-mode:screen}.topbar{position:sticky;top:0;z-index:900;display:flex;justify-content:space-between;align-items:center;padding:14px 28px;border-bottom:3px solid #66ff00;background:#0c0c10;box-shadow:0 4px 0 #17171d}.brand{font-family:"Press Start 2P";font-size:15px;color:#66ff00;text-decoration:none;text-shadow:3px 3px #25115e}.brand span{color:#00e5ff}nav{display:flex;gap:18px;flex-wrap:wrap}nav a{font-family:"Press Start 2P";font-size:10px;color:#ddd;text-decoration:none;padding:8px 4px}nav a:hover{color:#ffea00;text-shadow:2px 2px #ff00ff}.page{display:none;min-height:calc(100vh - 70px);padding:60px 6vw}.page.active{display:block}.hero{text-align:center;max-width:1050px;margin:auto;padding:60px 0}.eyebrow{font-family:"Press Start 2P";font-size:11px;color:#00e5ff;margin-bottom:22px}.glitch{font-family:"Press Start 2P";font-size:clamp(35px,7vw,90px);line-height:1.15;color:#fff;margin:0;text-shadow:5px 5px #ff00aa,-5px -3px #00e5ff;animation:glitch 3s infinite}.tagline{font-size:28px;color:#b9b9c2}.terminal{display:inline-block;text-align:left;border:3px solid #66ff00;background:#030703;padding:18px 24px;line-height:1.25;box-shadow:8px 8px #25115e;margin:25px 0}.terminal span{color:#00e5ff}.terminal b{color:#ffea00}.blink{animation:blink 1s steps(2) infinite}.mega-btn,.secondary-btn,.danger-btn{font-family:"Press Start 2P";cursor:pointer;border:0;position:relative;transition:.12s;clip-path:polygon(0 0,96% 0,100% 22%,100% 100%,4% 100%,0 78%)}.mega-btn{display:inline-block;background:#66ff00;color:#050505;padding:18px 25px;font-size:12px;box-shadow:7px 7px #ff00aa,12px 12px #00e5ff;text-decoration:none}.mega-btn:hover{transform:translate(4px,4px) rotate(-1deg);box-shadow:3px 3px #ff00aa,6px 6px #00e5ff}.mega-btn:active{transform:translate(10px,10px);box-shadow:none}.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);max-width:1000px;margin:30px auto;border:3px solid #33333d;background:#111116}.stat-strip div{padding:22px;text-align:center;border-right:2px solid #33333d}.stat-strip div:last-child{border:0}.stat-strip b{display:block;color:#66ff00;font-family:"Press Start 2P";font-size:18px}.stat-strip small,.inventory-top span,.big-stat span{display:block;color:#777;font-family:"Press Start 2P";font-size:8px;margin-top:10px}.section-head{text-align:center;border-bottom:3px dashed #333;padding-bottom:25px}.section-head h2{font-family:"Press Start 2P";font-size:clamp(25px,5vw,55px);margin:0;color:#fff;text-shadow:4px 4px #25115e}.spin-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:60px;max-width:1150px;margin:55px auto;align-items:center}.wheel-stage{position:relative;text-align:center}.wheel{width:min(470px,75vw);height:min(470px,75vw);margin:auto;border:14px solid #ddd;border-radius:50%;background:conic-gradient(#ff00aa 0 12.5%,#00e5ff 12.5% 25%,#66ff00 25% 37.5%,#ffea00 37.5% 50%,#ff5a00 50% 62.5%,#7b2cff 62.5% 75%,#00a86b 75% 87.5%,#ff3344 87.5%);box-shadow:0 0 0 5px #111,12px 12px 0 #25115e;display:grid;place-items:center;transition:transform 5s cubic-bezier(.08,.72,.08,1)}.wheel-inner{width:55%;height:55%;border-radius:50%;background:#08080a;border:5px solid #fff;display:grid;place-items:center;font-family:"Press Start 2P";font-size:13px;color:#fff;text-align:center;padding:20px}.pointer{position:absolute;z-index:5;top:-10px;left:50%;transform:translateX(-50%);font-size:50px;color:#ffea00;text-shadow:3px 3px #ff00aa}.wheel-base{font-family:"Press Start 2P";font-size:9px;margin-top:25px;color:#777}.control-panel,.result,.chart-panel,.settings-panel{border:3px solid #444;background:#0f0f14;padding:28px;box-shadow:9px 9px #1c123b}.control-panel label{display:block;font-family:"Press Start 2P";font-size:10px;color:#00e5ff;margin-bottom:12px}.control-panel input{width:100%;background:#020202;border:3px solid #66ff00;color:#fff;padding:16px;font:24px "VT323";outline:none}.small-note{color:#666;font-size:17px;margin:10px 0 25px}.control-panel .mega-btn{width:100%}.mini-grid{display:grid;grid-template-columns:1fr 1fr;margin-top:30px;border-top:2px solid #333}.mini-grid div{padding:15px;border-right:2px solid #333}.mini-grid span{font-family:"Press Start 2P";font-size:8px;color:#777;display:block}.mini-grid b{color:#ffea00}.result{max-width:900px;margin:30px auto;text-align:center;border-color:#ff00aa}.result.hidden{display:none}.rarity{font-family:"Press Start 2P";font-size:12px;color:#ffea00;margin-bottom:18px}.result h3{font-size:36px;color:#fff;margin:10px}.result-time{border-top:2px dashed #555;border-bottom:2px dashed #555;margin:25px 0;padding:20px}.result-time span{font-family:"Press Start 2P";font-size:8px;color:#777;display:block}.result-time b{font-family:"Press Start 2P";font-size:34px;color:#66ff00}.result-actions{display:flex;justify-content:center;gap:20px}.secondary-btn{background:#24242d;color:#fff;border:2px solid #777;padding:15px;font-size:10px}.secondary-btn:hover{background:#66ff00;color:#000}.timer-wrap{text-align:center;max-width:1000px;margin:auto;padding-top:35px}.timer-display{font-family:"Press Start 2P";font-size:clamp(45px,12vw,120px);color:#66ff00;text-shadow:5px 5px #25115e;margin:35px 0}.timer-bar{height:25px;border:3px solid #fff;background:#111;margin:0 auto 30px;max-width:800px}.timer-bar i{display:block;height:100%;width:100%;background:#66ff00;transition:width .2s}.current-excuse{border:2px solid #444;padding:20px;max-width:800px;margin:auto}.current-excuse span{font-family:"Press Start 2P";font-size:8px;color:#777;display:block;margin-bottom:10px}.current-excuse strong{font-size:27px}.music-label{margin:25px;color:#00e5ff;font-family:"Press Start 2P";font-size:10px}.timer-buttons{display:flex;justify-content:center;gap:15px}.system-message{margin:40px;color:#ffea00;animation:blink 2s steps(2) infinite}.inventory-top{display:flex;justify-content:center;gap:70px;text-align:center;margin:35px}.inventory-top b{font-family:"Press Start 2P";color:#66ff00;font-size:25px;display:block}.inventory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;max-width:1200px;margin:auto}.card{border:2px solid #333;padding:18px;background:#0c0c10;min-height:145px}.card.found{border-color:#555}.card .card-rarity{font-family:"Press Start 2P";font-size:7px;color:#ffea00}.card .num{float:right;color:#66ff00}.card p{font-size:20px}.card.locked{opacity:.28}.analytics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;max-width:1100px;margin:40px auto}.big-stat{border:2px solid #333;padding:25px;background:#0d0d11}.big-stat b{font-family:"Press Start 2P";font-size:19px;color:#66ff00}.chart-panel{max-width:1100px;margin:30px auto}.chart-title{font-family:"Press Start 2P";font-size:11px;color:#ffea00;margin-bottom:15px}.chart-title span{color:#777}.chart-panel canvas{width:100%;height:250px}.achievements{max-width:1100px;margin:40px auto}.achievements h3{font-family:"Press Start 2P"}.achievement-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.achievement{border:2px solid #333;padding:18px;background:#0d0d11}.achievement.unlocked{border-color:#66ff00}.achievement b{font-family:"Press Start 2P";font-size:9px}.achievement p{color:#777;margin:8px 0;font-size:18px}.settings-panel{max-width:700px;margin:40px auto}.settings-panel label{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-bottom:1px solid #333;font-family:"Press Start 2P";font-size:10px}.settings-panel input[type=range]{accent-color:#66ff00}.danger-btn{margin-top:30px;background:#ff3344;color:#fff;padding:15px;font-size:9px}.settings-panel p{color:#777}.toast{position:fixed;right:20px;bottom:20px;background:#66ff00;color:#000;border:3px solid #fff;padding:15px 20px;font-family:"Press Start 2P";font-size:9px;transform:translateX(150%);transition:.25s;z-index:2000}.toast.show{transform:none}footer{text-align:center;padding:30px;color:#444;font-family:"Press Start 2P";font-size:7px;border-top:2px solid #222}@keyframes glitch{0%,90%,100%{transform:none}92%{transform:skewX(10deg) translateX(3px)}94%{transform:skewX(-12deg) translateX(-4px)}96%{transform:translateY(2px)}}@keyframes blink{50%{opacity:.2}}@media(max-width:850px){.topbar{display:block}.topbar nav{margin-top:15px}.spin-layout{grid-template-columns:1fr;gap:35px}.stat-strip{grid-template-columns:1fr 1fr}.analytics-grid{grid-template-columns:1fr 1fr}}@media(max-width:520px){.page{padding:40px 18px}.stat-strip,.analytics-grid{grid-template-columns:1fr}.result-actions{flex-direction:column}.wheel{width:310px;height:310px}.brand{font-size:11px}nav{gap:8px}nav a{font-size:8px}}
+
+#flash{position:fixed;inset:0;z-index:3000;pointer-events:none;display:grid;place-items:center;font-family:"Press Start 2P";font-size:clamp(30px,8vw,100px);color:#fff;text-shadow:7px 7px #ff00aa,-7px -5px #00e5ff;opacity:0}.flash{animation:flash .7s steps(2)}.shaking .page.active{animation:shake .08s infinite}.no-shake .page.active{animation:none}@keyframes flash{0%{opacity:0;transform:scale(.3)}20%{opacity:1;transform:scale(1.1)}75%{opacity:1}100%{opacity:0;transform:scale(1.4)}}@keyframes shake{0%{transform:translate(0)}25%{transform:translate(4px,-3px)}50%{transform:translate(-4px,3px)}75%{transform:translate(3px,2px)}100%{transform:translate(-2px,-2px)}}
+
+/* =========================================================
+   WINDOWS XP CURSOR PACK
+   Folder: /cursors/
+   ========================================================= */
+
+/* NORMAL */
+html, body {
+    cursor: url("cursors/default_arrow.cur"), auto;
+}
+
+/* LINKS / CLICKABLE THINGS */
+a,
+button,
+.btn,
+.clickable,
+[role="button"] {
+    cursor: url("cursors/default_link.cur"), pointer;
+}
+
+/* TEXT */
+input,
+textarea,
+[contenteditable="true"] {
+    cursor: url("cursors/default_ibeam.cur"), text;
+}
+
+/* WAITING */
+.waiting,
+.loading,
+.loading-screen {
+    cursor: url("cursors/default_wait.cur"), wait;
+}
+
+/* BUSY */
+.busy {
+    cursor: url("cursors/default_busy.cur"), wait;
+}
+
+/* CROSSHAIR */
+.crosshair,
+.target {
+    cursor: url("cursors/cross.cur"), crosshair;
+}
+
+/* PEN */
+.pen {
+    cursor: url("cursors/default_pen.cur"), crosshair;
+}
+
+/* CANNOT DROP / NOT ALLOWED */
+.no-drop,
+.disabled,
+button:disabled {
+    cursor: url("cursors/default_no.cur"), not-allowed;
+}
+
+/* MOVE */
+.move,
+[draggable="true"] {
+    cursor: url("cursors/default_move.cur"), move;
+}
+
+/* RESIZE — NORTHWEST/SOUTHEAST */
+.resize-nwse {
+    cursor: url("cursors/default_size1.cur"), nwse-resize;
+}
+
+/* RESIZE — NORTHEAST/SOUTHWEST */
+.resize-nesw {
+    cursor: url("cursors/default_size2.cur"), nesw-resize;
+}
+
+/* RESIZE — NORTH/SOUTH */
+.resize-ns {
+    cursor: url("cursors/default_size3.cur"), ns-resize;
+}
+
+/* RESIZE — EAST/WEST */
+.resize-ew {
+    cursor: url("cursors/default_size4.cur"), ew-resize;
+}
+
+/* SCROLLING */
+.scroll-ns {
+    cursor: url("cursors/default_scroll_ns.cur"), ns-resize;
+}
+
+.scroll-ew {
+    cursor: url("cursors/default_scroll_ew.cur"), ew-resize;
+}
+
+.scroll-move {
+    cursor: url("cursors/default_scroll_move.cur"), move;
+}
+
+/* UP */
+.up {
+    cursor: url("cursors/default_up.cur"), n-resize;
+}
+
+/* BOX */
+.box {
+    cursor: url("cursors/default_box.cur"), default;
+}
+
+/* DVD */
+.dvd {
+    cursor: url("cursors/default_dvd.cur"), default;
+}
+
+/* INDIVIDUAL SCROLL DIRECTIONS */
+.scroll-n {
+    cursor: url("cursors/default_scroll_n.cur"), n-resize;
+}
+
+.scroll-ne {
+    cursor: url("cursors/default_scroll_ne.cur"), ne-resize;
+}
+
+.scroll-e {
+    cursor: url("cursors/default_scroll_e.cur"), e-resize;
+}
+
+.scroll-se {
+    cursor: url("cursors/default_scroll_se.cur"), se-resize;
+}
+
+.scroll-s {
+    cursor: url("cursors/default_scroll_s.cur"), s-resize;
+}
+
+.scroll-sw {
+    cursor: url("cursors/default_scroll_sw.cur"), sw-resize;
+}
+
+.scroll-w {
+    cursor: url("cursors/default_scroll_w.cur"), w-resize;
+}
+
+.scroll-nw {
+    cursor: url("cursors/default_scroll_nw.cur"), nw-resize;
+}
+
+/* =========================================================
+   XP ALTERNATE CURSORS
+   Use these classes when you specifically want a variant.
+   ========================================================= */
+
+/* Arrow variants */
+.cursor-arrow-m {
+    cursor: url("cursors/arrow_m.cur"), auto;
+}
+
+.cursor-arrow-l {
+    cursor: url("cursors/arrow_l.cur"), auto;
+}
+
+.cursor-arrow-r {
+    cursor: url("cursors/arrow_r.cur"), auto;
+}
+
+.cursor-arrow-rm {
+    cursor: url("cursors/arrow_rm.cur"), auto;
+}
+
+.cursor-arrow-rl {
+    cursor: url("cursors/arrow_rl.cur"), auto;
+}
+
+.cursor-arrow-i {
+    cursor: url("cursors/arrow_i.cur"), auto;
+}
+
+.cursor-arrow-im {
+    cursor: url("cursors/arrow_im.cur"), auto;
+}
+
+.cursor-arrow-il {
+    cursor: url("cursors/arrow_il.cur"), auto;
+}
+
+/* Help */
+.cursor-help {
+    cursor: url("cursors/default_helpsel.cur"), help;
+}
+
+/* I-beam variants */
+.cursor-beam {
+    cursor: url("cursors/beam_m.cur"), text;
+}
+
+/* Pen variants */
+.cursor-pen {
+    cursor: url("cursors/pen_m.cur"), crosshair;
+}
+
+/* No-drop variants */
+.cursor-no {
+    cursor: url("cursors/no_m.cur"), not-allowed;
+}
+
+/* Move variants */
+.cursor-move {
+    cursor: url("cursors/move_m.cur"), move;
+}
+
+/* Link variants */
+.cursor-link {
+    cursor: url("cursors/link_m.cur"), pointer;
+}
+
+/* =========================================================
+   3D XP CURSORS
+   ========================================================= */
+
+.cursor-3d-arrow-white {
+    cursor: url("cursors/3dwarro.cur"), auto;
+}
+
+.cursor-3d-arrow-gray {
+    cursor: url("cursors/3dgarro.cur"), auto;
+}
+
+.cursor-3d-arrow-shadow {
+    cursor: url("cursors/3dsarro.cur"), auto;
+}
+
+.cursor-3d-help-white {
+    cursor: url("cursors/3dwhelpsel.cur"), help;
+}
+
+.cursor-3d-help-gray {
+    cursor: url("cursors/3dghelpsel.cur"), help;
+}
+
+.cursor-3d-help-shadow {
+    cursor: url("cursors/3dshelpsel.cur"), help;
+}
+
+.cursor-3d-cross-white {
+    cursor: url("cursors/3dwwcross.cur"), crosshair;
+}
+
+.cursor-3d-cross-gray {
+    cursor: url("cursors/3dgcross.cur"), crosshair;
+}
+
+.cursor-3d-cross-shadow {
+    cursor: url("cursors/3dscross.cur"), crosshair;
+}
+
+.cursor-3d-no-white {
+    cursor: url("cursors/3dwno.cur"), not-allowed;
+}
+
+.cursor-3d-no-gray {
+    cursor: url("cursors/3dgno.cur"), not-allowed;
+}
+
+.cursor-3d-no-shadow {
+    cursor: url("cursors/3dsno.cur"), not-allowed;
+}
+
+.cursor-3d-move-white {
+    cursor: url("cursors/3dwmove.cur"), move;
+}
+
+.cursor-3d-move-gray {
+    cursor: url("cursors/3dgmove.cur"), move;
+}
+
+.cursor-3d-move-shadow {
+    cursor: url("cursors/3dsmove.cur"), move;
+}
+
+.cursor-3d-link-white {
+    cursor: url("cursors/3dwlink.ani"), pointer;
+}
+
+.cursor-3d-link-gray {
+    cursor: url("cursors/3dglink.ani"), pointer;
+}
+
+.cursor-3d-link-shadow {
+    cursor: url("cursors/3dslink.ani"), pointer;
+}
+
+/* =========================================================
+   SPECIAL XP CURSORS
+   ========================================================= */
+
+/* These are static versions of the animated XP states */
+.cursor-starting {
+    cursor: url("cursors/appstar1_st.cur"), wait;
+}
+
+.cursor-starting-2 {
+    cursor: url("cursors/appstar2_st.cur"), wait;
+}
+
+.cursor-starting-3 {
+    cursor: url("cursors/appstar3_st.cur"), wait;
+}
+
+.cursor-hourglass {
+    cursor: url("cursors/hourglas_st.cur"), wait;
+}
+
+.cursor-hourglass-2 {
+    cursor: url("cursors/hourgla2_st.cur"), wait;
+}
+
+.cursor-hourglass-3 {
+    cursor: url("cursors/hourgla3_st.cur"), wait;
+}
+
+/* =========================================================
+   DRAG / DROP
+   ========================================================= */
+
+.drag {
+    cursor: url("cursors/default_move.cur"), move;
+}
+
+.drag-copy {
+    cursor: url("cursors/default_link.cur"), copy;
+}
+
+.drag-no {
+    cursor: url("cursors/default_no.cur"), not-allowed;
+}
+
+/* XP / 2000s INTERNET OVERRIDE */
+body{font-family:Tahoma,Arial,sans-serif;font-size:14px;background:#2f70ad;color:#111;}
+body:before{background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0,rgba(255,255,255,.035) 1px,transparent 1px,transparent 3px);opacity:.55}
+.topbar{position:sticky;top:0;background:linear-gradient(#3f93e8 0,#0a61b6 45%,#07529e 46%,#4b9bea 100%);border-bottom:2px solid #063b78;box-shadow:0 2px 0 #8fc7f7;padding:7px 10px;}
+.brand{font-family:Tahoma,Arial,sans-serif;font-weight:bold;font-style:italic;font-size:21px;color:#fff;text-shadow:1px 1px #174d83;letter-spacing:-1px}
+.brand span{color:#d9edff}
+nav{gap:4px}nav a{font-family:Tahoma,Arial,sans-serif;font-size:12px;font-weight:bold;color:#fff;background:linear-gradient(#5fa8ed,#1269b7);border:1px solid #06447f;border-top-color:#a9d5fa;padding:5px 10px;box-shadow:inset 1px 1px #8ec7f2;text-shadow:1px 1px #245b8d}nav a:hover{color:#fff;background:linear-gradient(#82c3ff,#287bc7);text-shadow:1px 1px #174d83}
+.page{min-height:calc(100vh - 50px);padding:35px 5vw;background:linear-gradient(#4e94ca,#b8d8eb 35%,#d7e8f2);}
+.hero{background:linear-gradient(#f9fcff,#d9e9f4);border:1px solid #174f80;outline:1px solid #fff;box-shadow:4px 4px 0 rgba(0,0,0,.35);padding:35px 25px;max-width:1050px}
+.eyebrow{font-family:Tahoma,Arial,sans-serif;font-size:11px;font-weight:bold;color:#07559d;margin-bottom:12px}
+.glitch{font-family:Impact,Arial Black,sans-serif;font-size:clamp(38px,7vw,88px);color:#073f75;text-shadow:2px 2px #fff,-2px -2px #00e5ff;animation:glitch 4s infinite;letter-spacing:-2px}
+.tagline{font-family:Arial,sans-serif;font-size:20px;color:#333}
+.terminal,.control-panel,.result,.chart-panel,.settings-panel{border:2px solid #5c5c5c;background:#f0f0f0;padding:20px;box-shadow:inset 1px 1px #fff,inset -1px -1px #777,5px 5px 0 rgba(0,0,0,.28)}
+.terminal{font-family:"Courier New",monospace;background:#111;color:#00ff00;border-color:#888;box-shadow:inset 2px 2px #000,5px 5px 0 rgba(0,0,0,.3)}
+.terminal b{color:#ffff00}.terminal span{color:#00ffff}
+.mega-btn,.secondary-btn,.danger-btn{font-family:Tahoma,Arial,sans-serif;font-weight:bold;clip-path:none;border:2px outset #ddd;border-radius:0;background:linear-gradient(#fff,#d7d7d7 45%,#aaa 46%,#eee);color:#111;padding:9px 16px;box-shadow:none;text-shadow:none}
+.mega-btn{font-size:13px;box-shadow:4px 4px 0 #111;outline:1px solid #fff}.mega-btn:hover{transform:none;background:linear-gradient(#fff,#e8f5ff 45%,#77b9ed 46%,#dceeff);box-shadow:4px 4px 0 #111}.mega-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;border-style:inset}
+.stat-strip{border:2px outset #ddd;background:#e8e8e8;box-shadow:4px 4px rgba(0,0,0,.25)}.stat-strip div{border-right:1px solid #aaa}.stat-strip b{font-family:Tahoma,Arial,sans-serif;color:#073f75;font-size:20px}.stat-strip small,.inventory-top span,.big-stat span{font-family:Tahoma,Arial,sans-serif;font-size:9px;color:#555}
+.section-head{border-bottom:2px solid #6c9fc7}.section-head h2{font-family:Impact,Arial Black,sans-serif;font-size:clamp(30px,5vw,58px);color:#073f75;text-shadow:2px 2px #fff;letter-spacing:-1px}
+.spin-layout{gap:40px}.wheel{border:10px solid #d0d0d0;box-shadow:0 0 0 3px #444,8px 8px 0 rgba(0,0,0,.4)}.wheel-inner{background:#e9e9e9;border:4px outset #fff;color:#073f75}.wheel-base{font-family:Tahoma,Arial,sans-serif;font-weight:bold;color:#555}
+.control-panel label{font-family:Tahoma,Arial,sans-serif;color:#073f75;font-size:11px}.control-panel input{font-family:Tahoma,Arial,sans-serif;background:#fff;border:2px inset #ccc;color:#111;padding:9px}.small-note{font-family:Arial,sans-serif;color:#666}.mini-grid{border-top:1px solid #aaa}.mini-grid div{border-right:1px solid #aaa}.mini-grid span{font-family:Tahoma,Arial,sans-serif;color:#555}.mini-grid b{color:#073f75}
+.result{border-color:#777}.result h3{font-family:Arial,sans-serif;color:#111}.rarity{font-family:Tahoma,Arial,sans-serif;color:#9b0000}.result-time{border-color:#aaa}.result-time span,.current-excuse span{font-family:Tahoma,Arial,sans-serif;color:#555}.result-time b{font-family:Impact,Arial Black,sans-serif;color:#075da8}
+.timer-wrap{background:#eef6fb;border:2px outset #ddd;max-width:1000px;padding:30px;box-shadow:5px 5px rgba(0,0,0,.3)}.timer-display{font-family:"Courier New",monospace;color:#00aa00;text-shadow:2px 2px #fff}.timer-bar{border:2px inset #aaa;background:#fff}.timer-bar i{background:linear-gradient(#7dff7d,#00a000)}.current-excuse{background:#fff;border:2px inset #aaa}.music-label{font-family:Tahoma,Arial,sans-serif;color:#075da8}.system-message{color:#9b0000}
+.card,.big-stat,.achievement{border:2px outset #ddd;background:linear-gradient(#fff,#e9e9e9);box-shadow:2px 2px rgba(0,0,0,.2)}.card .card-rarity{font-family:Tahoma,Arial,sans-serif;color:#075da8}.card .num{color:#087c08}.card p{font-family:Arial,sans-serif;font-size:16px}.card.locked{opacity:.45}
+.chart-panel{background:#f4f4f4}.chart-title{font-family:Tahoma,Arial,sans-serif;color:#075da8}.achievement b{font-family:Tahoma,Arial,sans-serif}.achievement p{color:#555}
+.settings-panel label{font-family:Tahoma,Arial,sans-serif}.settings-panel{font-family:Arial,sans-serif}.danger-btn{background:linear-gradient(#ffb0b0,#d00);color:#fff;border-color:#fff}
+.toast{background:#ffffcc;color:#111;border:2px solid #555;box-shadow:3px 3px #111;font-family:Tahoma,Arial,sans-serif;font-size:12px}
+footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Tahoma,Arial,sans-serif;font-size:9px}
+
+
+/* Smaller wheel status text for mobile */
+@media (max-width: 600px) {
+  #wheelText {
+    font-size: 0.75em;
+  }
+}

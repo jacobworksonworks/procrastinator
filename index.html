@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PROCRASTINATOR.EXE</title>
+  <meta name="description" content="A completely unnecessary procrastination machine.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="crt"></div>
+  <div id="flash"></div>
+  <header class="topbar">
+    <a class="brand" href="#home">PROCRASTINATOR<span>.EXE</span></a>
+    <nav>
+      <a href="#home">HOME</a><a href="#spin">SPIN</a><a href="#inventory">INVENTORY</a><a href="#stats">STATS</a><a href="#settings">SETTINGS</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+      <div class="hero glitch-wrap">
+        <div class="eyebrow">[ PRODUCTIVITY FAILURE SYSTEM v1.0 ]</div>
+        <h1 class="glitch" data-text="WHY WORK NOW?">WHY WORK NOW?</h1>
+        <p class="tagline">WHY DO TODAY WHAT YOU CAN ABSOLUTELY NOT DO TODAY?</p>
+        <div class="terminal">
+          <span>&gt;</span> TASK DETECTED: <b id="homeTask">NOTHING YET</b><br>
+          <span>&gt;</span> RECOMMENDATION: <b>AVOID IT</b><br>
+          <span>&gt;</span> SYSTEM STATUS: <b class="blink">DUDE JUST PRESS THE BUTTON --></b>
+        </div>
+        <a class="mega-btn" href="#spin">[ ENTER THE PROCRASTINATION MACHINE ]</a>
+      </div>
+
+      <div class="stat-strip">
+        <div><b id="homeTotal">00:00:00</b><small>TOTAL TIME WASTED</small></div>
+        <div><b id="homeSpins">000</b><small>TOTAL SPINS</small></div>
+        <div><b id="homeFound">000</b><small>EXCUSES FOUND</small></div>
+        <div><b id="homeJackpots">000</b><small>JACKPOTS</small></div>
+      </div>
+    </section>
+
+    <section id="spin" class="page">
+      <div class="section-head">
+        <div class="eyebrow">[ wheel of all time ]</div>
+        <h2>SPIN THE WHEEL</h2>
+      </div>
+
+      <div class="spin-layout">
+        <div class="wheel-stage">
+          <div class="pointer">▼</div>
+          <div id="wheel" class="wheel">
+            <div class="wheel-inner"><span id="wheelText">READY</span></div>
+          </div>
+          <div class="wheel-base">PROCRASTINATION<br>AND JACOB CO™</div>
+        </div>
+
+        <div class="control-panel">
+          <label>WHAT ARE YOU SUPPOSED TO BE DOING?</label>
+          <input id="taskInput" maxlength="120" placeholder="Finish my homework..." autocomplete="off">
+          <div class="small-note">The system (me) will use this information responsibly. Probably.</div>
+          <button id="spinBtn" class="mega-btn">🎰 SPIN FOR AN EXCUSE</button>
+          <div class="mini-grid">
+            <div><span>SPINS</span><b id="spinCount">000</b></div>
+            <div><span>STATUS</span><b id="spinStatus">READY</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="result" class="result hidden">
+        <div class="rarity" id="resultRarity">COMMON</div>
+        <h3 id="resultExcuse">You should get a snack.</h3>
+        <div class="result-time"><span>AUTHORIZED PROCRASTINATION</span><b id="resultTime">15:00</b></div>
+        <p id="resultReason"></p>
+        <div class="result-actions">
+          <button id="acceptBtn" class="mega-btn">[ ACCEPT FATE ]</button>
+          <button id="rerollBtn" class="secondary-btn">REROLL</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="timer" class="page">
+      <div class="timer-wrap">
+        <div class="eyebrow">[ PROCRASTINATION IN PROGRESS ]</div>
+        <div id="timerRarity" class="rarity">COMMON</div>
+        <h2 id="timerTitle">YOU ARE NOT WORKING</h2>
+        <div id="timerDisplay" class="timer-display">00:00</div>
+        <div class="timer-bar"><i id="timerBar"></i></div>
+        <div class="current-excuse">
+          <span>CURRENT EXCUSE:</span>
+          <strong id="timerExcuse">Nothing. You are already procrastinating.</strong>
+        </div>
+        <div id="musicLabel" class="music-label">♪ SILENT MODE</div>
+        <div class="timer-buttons">
+          <button id="pauseBtn" class="secondary-btn">PAUSE</button>
+          <button id="finishBtn" class="secondary-btn">END SESSION</button>
+        </div>
+        <div id="systemMessage" class="system-message">Your future self has been notified.</div>
+      </div>
+    </section>
+
+    <section id="inventory" class="page">
+      <div class="section-head"><div class="eyebrow">[ COLLECTIBLES ]</div><h2>INVENTORY</h2></div>
+      <div class="inventory-top">
+        <div><b id="uniqueCount">0 / 527</b><span>UNIQUE DISCOVERED</span></div>
+        <div><b id="inventoryTotal">0</b><span>TOTAL COLLECTED</span></div>
+      </div>
+      <div id="inventoryGrid" class="inventory-grid"></div>
+    </section>
+
+    <section id="stats" class="page">
+      <div class="section-head"><div class="eyebrow">[ ANALYTICS ]</div><h2>PROCRASTINATION ANALYTICS</h2></div>
+      <div class="analytics-grid">
+        <div class="big-stat"><b id="statTotal">00:00:00</b><span>TOTAL TIME WASTED</span></div>
+        <div class="big-stat"><b id="statLongest">00:00:00</b><span>LONGEST SESSION</span></div>
+        <div class="big-stat"><b id="statSpins">0</b><span>SPINS</span></div>
+        <div class="big-stat"><b id="statUnique">0 / 527</b><span>EXCUSES FOUND</span></div>
+        <div class="big-stat"><b id="statJackpots">0</b><span>JACKPOTS</span></div>
+        <div class="big-stat"><b id="statSessions">0</b><span>SESSIONS COMPLETED</span></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">PRODUCTIVITY <span>(THE LINE GOES DOWN)</span></div>
+        <canvas id="chart" width="900" height="250"></canvas>
+      </div>
+      <div class="achievements">
+        <h3>ACHIEVEMENTS</h3>
+        <div id="achievementGrid" class="achievement-grid"></div>
+      </div>
+    </section>
+
+    <section id="settings" class="page">
+      <div class="section-head"><div class="eyebrow">[ CONFIGURATION ]</div><h2>SETTINGS</h2></div>
+      <div class="settings-panel">
+        <label>VOLUME <input id="volume" type="range" min="0" max="100" value="40"></label>
+        <label>SCREEN SHAKE <input id="shakeToggle" type="checkbox" checked></label>
+        <label>CRT SCANLINES <input id="crtToggle" type="checkbox" checked></label>
+        <label>RANDOM MUSIC <input id="musicToggle" type="checkbox" checked></label>
+        <button id="resetBtn" class="danger-btn">RESET ALL LOCAL DATA</button>
+        <p>Everything is saved locally in this browser. No account. No server. No excuses.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <footer>PROCRASTINATOR.EXE // STATIC SITE // YOUR FUTURE SELF (and me) IS (or are idfk) DISAPPOINTED</footer>
+  <script src="app.js"></script>
+</body>
+
+</html>
