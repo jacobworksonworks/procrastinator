@@ -483,6 +483,11 @@ function getVolume() {
 }
 
 function startLobbyMusic() {
+  // NEVER play lobby music during or after a timer session.
+  if (timer || current) {
+    return;
+  }
+
   const musicLabel = $("#musicLabel");
 
   if (!lobbyAudio) {
@@ -522,14 +527,21 @@ function startLobbyMusic() {
   }
 
   lobbyAudio.play()
-    .then(() => {
-      musicStarted = true;
-
-      if (musicLabel) {
-        musicLabel.textContent =
-          "♪ LOBBY MUSIC // PLAYING";
-      }
-    })
+   .then(() => {
+     // Timer/session started while audio was loading.
+     // Kill lobby music immediately.
+     if (timer || current) {
+       stopLobbyMusic();
+       return;
+     }
+   
+     musicStarted = true;
+   
+     if (musicLabel) {
+       musicLabel.textContent =
+         "♪ LOBBY MUSIC // PLAYING";
+     }
+   })
     .catch(() => {
       /*
        * Browser autoplay policy.
@@ -631,7 +643,10 @@ function stopMusic() {
  * This avoids autoplay killing the rest of the application.
  */
 function tryStartLobbyMusic() {
-  if (timer && !paused) {
+  // HARD BLOCK:
+  // Never allow lobby music while a timer is running
+  // OR while a timer session still exists.
+  if (timer || current) {
     return;
   }
 
