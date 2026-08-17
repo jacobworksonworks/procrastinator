@@ -78,7 +78,7 @@ const excuses = [
 ["Check your downloads folder. You might have forgotten something.","COMMON"],
 ["Check your recycling bin. Maybe there's something important in there. Or you could clear it.","COMMON"],
 ["Sort your screenshots. Future You will appreciate it.","COMMON"],
-["Take a trillion screenshot of something. You haven't taken one in a while.","COMMON"],
+["Take a trillion screenshots of something. You haven't taken one in a while.","COMMON"],
 ["Check your storage. You might be running out of space.","COMMON"],
 ["Update something. Anything. Updates are productive. Oh wait,","COMMON"],
 ["Check if your computer needs an update. This is lowkey maintenance.","COMMON"],
