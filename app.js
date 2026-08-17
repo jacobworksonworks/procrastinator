@@ -486,7 +486,7 @@ function startLobbyMusic() {
   const musicLabel = $("#musicLabel");
 
   if (!lobbyAudio) {
-    lobbyAudio = new Audio("music/lobby.mp3");
+    lobbyAudio = new Audio("lobby/lobby.mp3");
 
     lobbyAudio.loop = true;
     lobbyAudio.preload = "auto";
