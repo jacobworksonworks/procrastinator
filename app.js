@@ -202,7 +202,7 @@ const excuses = [
 ["Find the oldest thing currently on your computer.","LEGENDARY"],
 ["Investigate every file on your desktop. Leave no file behind.","LEGENDARY"],
 ["You need to discover what your computer has been doing while you were away.","LEGENDARY"],
-["Your productivity has reached dangerous levels. Shut it down.","LEGENDARY"],
+["Just sleep bro.","LEGENDARY"],
 ["STOP. You are becoming productive. This cannot continue.","LEGENDARY"],
 ["EMERGENCY: You were about to start working. Crisis averted.","LEGENDARY"],
 ["The machine has detected productivity. Please remain calm.","LEGENDARY"],
