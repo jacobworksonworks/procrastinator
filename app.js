@@ -369,7 +369,28 @@ function save() {
   updateUI();
 }
 
+function prepareAudio() {
+  if (!audio) {
+    audio = new Audio();
+    audio.loop = true;
+    audio.preload = "auto";
+  }
 
+  audio.volume = getVolume();
+
+  /*
+   * Create/resume Web Audio while we're still
+   * inside the user's click gesture.
+   */
+  setupBeatSync();
+
+  if (
+    beatAudioContext &&
+    beatAudioContext.state === "suspended"
+  ) {
+    beatAudioContext.resume().catch(() => {});
+  }
+}
 /* =========================================================
    HELPERS
    ========================================================= */
