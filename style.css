@@ -1194,3 +1194,21 @@ body {
         padding-top: calc(7px + env(safe-area-inset-top));
     }
 }
+
+.music-picker {
+  margin-top: 8px;
+}
+
+.music-picker.hidden {
+  display: none;
+}
+
+#musicTrackSelect {
+  width: 100%;
+  padding: 8px 10px;
+  background: #111;
+  color: #66ff00;
+  border: 1px solid #66ff00;
+  font-family: inherit;
+  font-size: 14px;
+}
