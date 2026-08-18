@@ -619,7 +619,7 @@ function chooseMusic() {
 
       if (label) {
         label.textContent =
-          "♪ CLICK ACCEPT FATE AGAIN TO START MUSIC";
+          "♪ CLICK ACCEPT FATE AGAIN TO START MUSIC IF IT DOESN'T START IN THE NEXT MINUTE";
       }
     });
 }
