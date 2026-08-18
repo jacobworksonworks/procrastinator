@@ -1706,27 +1706,8 @@ function chooseMusic() {
     }
   };
 
-  audio.play()
-    .then(() => {
-      const label = $("#musicLabel");
+playSelectedMusic();
 
-      if (label) {
-        label.textContent =
-          `♪ ${currentTrack.name} // PLAYING`;
-      }
-
-      if (timer && !paused) {
-        startBeatSync();
-      }
-    })
-    .catch(() => {
-      const label = $("#musicLabel");
-
-      if (label) {
-        label.textContent =
-          "♪ CLICK ACCEPT FATE AGAIN TO START MUSIC IF IT DOESN'T START IN THE NEXT MINUTE";
-      }
-    });
 }
 
 function pauseMusic() {
