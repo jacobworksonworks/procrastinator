@@ -1,10 +1,10 @@
 html {
-    background: #07529e;
+    background: #06457f;
 }
 
 body {
     margin: 0;
-    background: #07529e;
+    background: #06457f;
     min-height: 100vh;
     min-height: 100dvh;
 }
@@ -1182,11 +1182,11 @@ body.beat-heavy #timerDisplay {
 
 /* iPhone 12 / iOS notch */
 html {
-    background: #07529e;
+    background: #06457f;
 }
 
 body {
-    background: #07529e;
+    background: #06457f;
 }
 
 @supports (padding-top: env(safe-area-inset-top)) {
