@@ -1169,6 +1169,7 @@ body.beat-heavy #timerDisplay {
     }
 }
 
+/* iPhone 12 / iOS notch */
 html {
     background: #07529e;
 }
@@ -1178,11 +1179,7 @@ body {
 }
 
 @supports (padding-top: env(safe-area-inset-top)) {
-    body {
-        padding-top: env(safe-area-inset-top);
-    }
-
     .topbar {
-        margin-top: calc(-1 * env(safe-area-inset-top));
+        padding-top: calc(7px + env(safe-area-inset-top));
     }
 }
