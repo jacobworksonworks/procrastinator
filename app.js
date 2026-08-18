@@ -485,7 +485,17 @@ const musicTracks = [
   { name: "HYPER", file: "music/hyper.mp3" },
   { name: "TRIAL BY FIRE", file: "music/trial.mp3" },
   { name: "SCOURGE OF THE UNIVERSE", file: "music/scourge.mp3" },
-  { name: "DEATH BY GLAMOUR", file: "music/glamour.mp3" }
+  { name: "DEATH BY GLAMOUR", file: "music/glamour.mp3" },
+  { name: "NO MORE", file: "music/nomore.mp3" },
+  { name: "UNBREAKABLE TIE", file: "music/UNBREAKABLE TIE.mp3" },
+  { name: "GREENPATH", file: "music/greenpath.mp3" },
+  { name: "CEREBRAWL", file: "music/cerebrawl.mp3" },
+  { name: "RESPITE", file: "music/respite.mp3" },
+  { name: "A TALE OF ETERNITY", file: "music/tale.mp3" },
+  { name: "DREAM AVENUE", file: "music/dream.mp3" },
+  { name: "ON OUR WAY", file: "music/way.mp3" },
+  { name: "COLOR YOUR NIGHT", file: "music/coloryournight.mp3" },
+  { name: "AZNANA", file: "music/aznana.mp3" },
 ];
 
 let audio = null;
