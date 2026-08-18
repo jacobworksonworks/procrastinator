@@ -639,19 +639,27 @@ function beatLoop() {
         )
       );
 
-    document.body.style.setProperty(
-      "--beat-strength",
-      strength.toFixed(2)
-    );
+document.body.style.setProperty(
+  "--beat-strength",
+  strength.toFixed(2)
+);
 
-    document.body.classList.remove("beat-pulse");
+document.body.classList.remove("beat-pulse", "beat-heavy");
 
-    void document.body.offsetWidth;
+// Force the browser to reset the animation
+void document.body.offsetWidth;
 
-    document.body.classList.add("beat-pulse");
+// Add the appropriate beat animation
+if (strength > 0.55) {
+  document.body.classList.add("beat-heavy");
+} else {
+  document.body.classList.add("beat-pulse");
+}
 
-    if (strength > 0.55) {
-      document.body.classList.add("beat-heavy");
+// Remove it after the animation finishes
+setTimeout(() => {
+  document.body.classList.remove("beat-pulse", "beat-heavy");
+}, 250);
     } else {
       document.body.classList.remove("beat-heavy");
     }
