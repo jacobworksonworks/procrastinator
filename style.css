@@ -1178,17 +1178,24 @@ body {
     background: #3f93e8;
 }
 
-/* Extend the XP topbar into the iPhone safe area */
 @supports (padding-top: env(safe-area-inset-top)) {
-    .topbar {
-        margin-top: calc(-1 * env(safe-area-inset-top));
-        padding-top: calc(7px + env(safe-area-inset-top));
-        
+
+    body::after {
+        content: "";
+        position: fixed;
+        z-index: 899;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: env(safe-area-inset-top);
+
         background: linear-gradient(
-            #3f93e8 0,
-            #0a61b6 45%,
-            #07529e 46%,
-            #4b9bea 100%
+            to bottom,
+            #07529e 0%,
+            #064681 100%
         );
+
+        pointer-events: none;
     }
+
 }
