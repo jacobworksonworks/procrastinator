@@ -784,7 +784,7 @@ function chooseMusic() {
     }
   };
 
-audio.play()
+  audio.play()
     .then(() => {
       const label = $("#musicLabel");
 
@@ -797,14 +797,6 @@ audio.play()
         startBeatSync();
       }
     })
-    .catch(() => {
-      const label = $("#musicLabel");
-
-      if (label) {
-        label.textContent =
-          "♪ CLICK ACCEPT FATE AGAIN TO START MUSIC";
-      }
-    });
     .catch(() => {
       const label = $("#musicLabel");
 
