@@ -921,3 +921,55 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
         transform: scale(1.05);
     }
 }
+
+
+/* =========================================================
+   TIMER — SHUFFLE MUSIC BUTTON
+   ========================================================= */
+
+.timer-secondary-btn {
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    padding: 7px 14px;
+
+    border: 1px solid #666;
+    background: #111;
+    color: #aaa;
+
+    cursor: pointer;
+
+    box-shadow:
+        2px 2px 0 #000;
+
+    transition:
+        color 0.1s ease,
+        border-color 0.1s ease,
+        background 0.1s ease,
+        transform 0.1s ease;
+}
+
+.timer-secondary-btn:hover {
+    color: #fff;
+    border-color: #aaa;
+    background: #1c1c1c;
+
+    transform: translate(-1px, -1px);
+
+    box-shadow:
+        3px 3px 0 #000;
+}
+
+.timer-secondary-btn:active {
+    transform: translate(1px, 1px);
+
+    box-shadow:
+        1px 1px 0 #000;
+}
+
+.timer-secondary-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
