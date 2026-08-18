@@ -565,7 +565,7 @@ const VISUALIZER_SMOOTHING = 0.82;
 /*
  * Overall visualizer opacity.
  */
-const VISUALIZER_OPACITY = 0.28;
+const VISUALIZER_OPACITY = 0.45;
 
 /*
  * How strongly bass influences the visualizer.
