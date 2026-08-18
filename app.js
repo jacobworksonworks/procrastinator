@@ -951,9 +951,7 @@ if (completed) {
     console.warn("Could not play alarm ringtone.");
   });
 }
-
-const spent =
-
+   
   const spent =
     Math.max(0, totalSession - remaining);
 
