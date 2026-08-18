@@ -495,7 +495,7 @@ const musicTracks = [
   { name: "DREAM AVENUE", file: "music/dream.mp3" },
   { name: "ON OUR WAY", file: "music/way.mp3" },
   { name: "COLOR YOUR NIGHT", file: "music/coloryournight.mp3" },
-  { name: "AZNANA", file: "music/aznana.mp3" },
+  { name: "AZNANA", file: "music/aznana.mp3" }
 ];
 
 let audio = null;
