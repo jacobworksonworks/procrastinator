@@ -15,7 +15,8 @@
 
 
 const terminalOutput = document.getElementById("terminalOutput");
-const commandInput = document.getElementById("commandInput");
+const commandInput = document.getElementById("
+commandInput");
 
 
 
@@ -89,7 +90,7 @@ const ARCHIVE = {
   "A-143": {
     type: "subject",
     title: "SUBJECT FILES — A-143",
-    content: `
+    content: ``
 SUBJECT A-143
 Name: Ashley ████████
 Age: 15
@@ -561,12 +562,12 @@ RELATED RECORDS: 7
 CROSS-REFERENCE: MATERNAL / A-00 / INCIDENT ████
 
 ACCESS: RESTRICTED
-`
+
   }
 
 };
 
-
+`
 
 // ============================================================
 // TERMINAL FUNCTIONS
