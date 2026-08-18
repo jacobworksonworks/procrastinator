@@ -1698,13 +1698,19 @@ function chooseMusic() {
   audio.volume = getVolume();
 
   audio.onerror = () => {
-    const label = $("#musicLabel");
+  console.error(
+    "AUDIO LOAD ERROR:",
+    currentTrack.file,
+    audio.error
+  );
 
-    if (label) {
-      label.textContent =
-        `♪ ${currentTrack.name} // FILE NOT FOUND`;
-    }
-  };
+  const label = $("#musicLabel");
+
+  if (label) {
+    label.textContent =
+      `♪ ${currentTrack.name} // LOAD ERROR`;
+  }
+};
 
 playSelectedMusic();
 
