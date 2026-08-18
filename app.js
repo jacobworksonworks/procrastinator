@@ -1010,7 +1010,9 @@ function renderInventory() {
       document.createElement("div");
 
     card.className =
-      "card " + (count ? "found" : "locked");
+     "card " +
+     (count ? "found " : "locked ") +
+     x[1].toLowerCase();
 
     card.innerHTML = `
       <span class="card-rarity">${x[1]}</span>
