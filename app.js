@@ -513,43 +513,120 @@ let lobbyAudio = null;
 let musicStarted = false;
 
 /* =========================================================
-   BPM + AUDIO-REACTIVE BEAT SYNC
+   SMART BPM + AUDIO-REACTIVE BEAT SYNC
    ========================================================= */
 
 let beatAudioContext = null;
 let beatAnalyser = null;
 let beatSource = null;
+
 let beatData = null;
+let previousSpectrum = null;
+
 let beatFrame = null;
 
-let beatBpm = 120;
+/*
+ * Current tempo estimate.
+ */
+let currentBPM = 120;
+let targetBPM = 120;
+
 let beatInterval = 500;
 let nextBeatTime = 0;
 
-let beatEnergyHistory = [];
-let beatFluxHistory = [];
+/*
+ * Detected transient timestamps.
+ */
+let detectedPeaks = [];
 
+/*
+ * Recent BPM estimates.
+ */
+let bpmHistory = [];
+
+/*
+ * Recent energy history.
+ */
+let energyHistory = [];
+let fluxHistory = [];
+
+/*
+ * Last actual/predicted beat.
+ */
+let lastBeatTime = 0;
 let lastBeatStrength = 0;
-let lastBeatTrigger = 0;
 
-let bpmDetectionStarted = false;
-let bpmDetectionStartTime = 0;
+/*
+ * Startup BPM analysis.
+ */
+let bpmAnalysisStart = 0;
 
-const BPM_MIN = 70;
-const BPM_MAX = 180;
-
-const BPM_ANALYSIS_TIME = 5000;
-
-// How strongly audio needs to react around a predicted beat.
-const AUDIO_SENSITIVITY = 1.15;
-
-// Prevent double triggering.
+/*
+ * Prevent duplicate beats.
+ */
 const MIN_BEAT_GAP = 220;
 
-// How far around the predicted beat we search for
-// the actual audio transient.
-const BEAT_LOOK_AHEAD = 110;
-const BEAT_LOOK_BEHIND = 100;
+/*
+ * BPM limits.
+ */
+const BPM_MIN = 65;
+const BPM_MAX = 180;
+
+/*
+ * Analyze roughly this long before
+ * trusting the first BPM estimate.
+ */
+const INITIAL_ANALYSIS_TIME = 5000;
+
+/*
+ * How often we allow the BPM estimate
+ * to update.
+ */
+const BPM_UPDATE_INTERVAL = 1200;
+
+let lastBPMUpdate = 0;
+
+
+/* =========================================================
+   TUNING
+   ========================================================= */
+
+/*
+ * Overall onset sensitivity.
+ *
+ * LOWER = more sensitive
+ * HIGHER = fewer detected transients
+ */
+const ONSET_SENSITIVITY = 1.15;
+
+
+/*
+ * How strongly BPM corrections are applied.
+ *
+ * Small = very smooth
+ * Large = reacts quickly
+ */
+const BPM_SMOOTHING = 0.08;
+
+
+/*
+ * How quickly we react to a genuine
+ * tempo change.
+ */
+const BPM_CHANGE_SMOOTHING = 0.25;
+
+
+/*
+ * How close an audio transient needs
+ * to be to the predicted beat.
+ */
+const BEAT_SEARCH_WINDOW = 120;
+
+
+/*
+ * Minimum transient strength.
+ */
+const MIN_FLUX = 4;
 
 
 /* =========================================================
@@ -557,30 +634,43 @@ const BEAT_LOOK_BEHIND = 100;
    ========================================================= */
 
 function setupBeatSync() {
+
   if (!audio || beatAnalyser) {
     return;
   }
 
   try {
+
     beatAudioContext =
-      new (window.AudioContext ||
-        window.webkitAudioContext)();
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
 
     beatAnalyser =
       beatAudioContext.createAnalyser();
 
     /*
-     * 1024 gives us better time resolution than 2048
-     * for detecting kicks and transients.
+     * 1024 gives us better timing resolution
+     * for beat/onset detection.
      */
     beatAnalyser.fftSize = 1024;
 
-    beatAnalyser.smoothingTimeConstant = 0.12;
+    /*
+     * Low smoothing is important.
+     *
+     * Too much smoothing makes kicks disappear.
+     */
+    beatAnalyser.smoothingTimeConstant = 0.08;
 
     beatSource =
-      beatAudioContext.createMediaElementSource(audio);
+      beatAudioContext.createMediaElementSource(
+        audio
+      );
 
-    beatSource.connect(beatAnalyser);
+    beatSource.connect(
+      beatAnalyser
+    );
 
     beatAnalyser.connect(
       beatAudioContext.destination
@@ -591,12 +681,20 @@ function setupBeatSync() {
         beatAnalyser.frequencyBinCount
       );
 
+    previousSpectrum =
+      new Float32Array(
+        beatAnalyser.frequencyBinCount
+      );
+
   } catch (err) {
+
     console.warn(
       "Beat sync could not start:",
       err
     );
+
   }
+
 }
 
 
@@ -605,6 +703,7 @@ function setupBeatSync() {
    ========================================================= */
 
 function startBeatSync() {
+
   if (
     !$("#beatSyncToggle")?.checked ||
     !audio ||
@@ -612,33 +711,69 @@ function startBeatSync() {
     paused ||
     sessionEnded
   ) {
+
     return;
+
   }
 
   setupBeatSync();
 
-  if (!beatAudioContext || !beatAnalyser) {
+  if (
+    !beatAudioContext ||
+    !beatAnalyser
+  ) {
+
     return;
+
   }
 
   if (
-    beatAudioContext.state === "suspended"
+    beatAudioContext.state ===
+    "suspended"
   ) {
-    beatAudioContext.resume().catch(() => {});
+
+    beatAudioContext
+      .resume()
+      .catch(() => {});
+
   }
 
-  cancelAnimationFrame(beatFrame);
+  cancelAnimationFrame(
+    beatFrame
+  );
 
-  beatEnergyHistory = [];
-  beatFluxHistory = [];
+  /*
+   * Reset analysis.
+   */
+  detectedPeaks = [];
 
-  bpmDetectionStarted = false;
-  bpmDetectionStartTime = performance.now();
+  bpmHistory = [];
 
+  energyHistory = [];
+
+  fluxHistory = [];
+
+  currentBPM = 120;
+  targetBPM = 120;
+
+  beatInterval = 60000 / currentBPM;
+
+  lastBeatTime = 0;
+  lastBeatStrength = 0;
+
+  lastBPMUpdate = 0;
+
+  bpmAnalysisStart =
+    performance.now();
+
+  /*
+   * First predicted beat.
+   */
   nextBeatTime =
     performance.now() + 500;
 
   beatLoop();
+
 }
 
 
@@ -647,14 +782,20 @@ function startBeatSync() {
    ========================================================= */
 
 function stopBeatSync() {
-  cancelAnimationFrame(beatFrame);
+
+  cancelAnimationFrame(
+    beatFrame
+  );
 
   beatFrame = null;
 
-  beatEnergyHistory = [];
-  beatFluxHistory = [];
+  detectedPeaks = [];
 
-  bpmDetectionStarted = false;
+  bpmHistory = [];
+
+  energyHistory = [];
+
+  fluxHistory = [];
 
   document.body.classList.remove(
     "beat-pulse",
@@ -665,43 +806,56 @@ function stopBeatSync() {
     "--beat-strength",
     "0"
   );
+
 }
 
 
 /* =========================================================
-   VISUAL BEAT
+   VISUAL PULSE
    ========================================================= */
 
 function triggerBeat(strength) {
-  strength = Math.max(
-    0,
-    Math.min(1, strength)
-  );
+
+  strength =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        strength
+      )
+    );
 
   document.body.style.setProperty(
     "--beat-strength",
     strength.toFixed(2)
   );
 
+  /*
+   * Restart animation.
+   */
   document.body.classList.remove(
     "beat-pulse",
     "beat-heavy"
   );
 
-  /*
-   * Force the animation to restart.
-   */
   void document.body.offsetWidth;
 
-  if (strength >= 0.65) {
+  if (
+    strength >= 0.65
+  ) {
+
     document.body.classList.add(
       "beat-heavy"
     );
+
   } else {
+
     document.body.classList.add(
       "beat-pulse"
     );
+
   }
+
 }
 
 
@@ -710,6 +864,7 @@ function triggerBeat(strength) {
    ========================================================= */
 
 function average(arr) {
+
   if (!arr.length) {
     return 0;
   }
@@ -718,46 +873,300 @@ function average(arr) {
     (a, b) => a + b,
     0
   ) / arr.length;
+
 }
 
 
 /*
- * Get bass energy from the analyser.
+ * Convert analyser bin into a rough
+ * frequency.
  */
-function getBassEnergy() {
-  if (!beatAnalyser || !beatData) {
+function binFrequency(bin) {
+
+  if (!beatAudioContext) {
     return 0;
   }
+
+  return (
+    bin *
+    beatAudioContext.sampleRate /
+    beatAnalyser.fftSize
+  );
+
+}
+
+
+/* =========================================================
+   SPECTRAL ANALYSIS
+   ========================================================= */
+
+function analyzeSpectrum() {
 
   beatAnalyser.getByteFrequencyData(
     beatData
   );
 
-  let energy = 0;
-
   /*
-   * Focus mostly on kick/bass frequencies.
+   * Frequency bands.
+   *
+   * These aren't meant to perfectly represent
+   * instruments. They simply make detection
+   * much more robust.
    */
-  const startBin = 2;
 
-  const endBin = Math.min(
-    30,
-    beatData.length
-  );
+  let bass = 0;
+  let lowMid = 0;
+  let mid = 0;
+  let high = 0;
+
+  let bassFlux = 0;
+  let lowMidFlux = 0;
+  let midFlux = 0;
+  let highFlux = 0;
 
   for (
-    let i = startBin;
-    i < endBin;
+    let i = 1;
+    i < beatData.length;
     i++
   ) {
-    energy += beatData[i];
+
+    const value =
+      beatData[i];
+
+    const previous =
+      previousSpectrum[i];
+
+    /*
+     * Spectral flux:
+     *
+     * Only count increases.
+     */
+    const flux =
+      Math.max(
+        0,
+        value - previous
+      );
+
+    const freq =
+      binFrequency(i);
+
+    if (freq < 140) {
+
+      bass += value;
+      bassFlux += flux;
+
+    } else if (
+      freq < 400
+    ) {
+
+      lowMid += value;
+      lowMidFlux += flux;
+
+    } else if (
+      freq < 2000
+    ) {
+
+      mid += value;
+      midFlux += flux;
+
+    } else if (
+      freq < 8000
+    ) {
+
+      high += value;
+      highFlux += flux;
+
+    }
+
+    previousSpectrum[i] =
+      value;
+
   }
 
-  return energy /
-    Math.max(
-      1,
-      endBin - startBin
+  /*
+   * Normalize each band.
+   */
+  bass /= 12;
+  lowMid /= 20;
+  mid /= 40;
+  high /= 70;
+
+  bassFlux /= 12;
+  lowMidFlux /= 20;
+  midFlux /= 40;
+  highFlux /= 70;
+
+  /*
+   * Weighted onset score.
+   *
+   * Bass gets the most importance because
+   * kicks are usually our best beat indicator.
+   *
+   * Low-mid catches snares/body.
+   *
+   * Mid catches piano/synth/percussion attacks.
+   */
+  const onset =
+    bassFlux * 0.40 +
+    lowMidFlux * 0.30 +
+    midFlux * 0.20 +
+    highFlux * 0.10;
+
+  const energy =
+    bass * 0.40 +
+    lowMid * 0.30 +
+    mid * 0.20 +
+    high * 0.10;
+
+  return {
+    energy,
+    onset,
+    bass,
+    lowMid,
+    mid,
+    high
+  };
+
+}
+
+
+/* =========================================================
+   ONSET DETECTION
+   ========================================================= */
+
+function detectOnset(
+  analysis,
+  now
+) {
+
+  const onset =
+    analysis.onset;
+
+  fluxHistory.push(
+    onset
+  );
+
+  energyHistory.push(
+    analysis.energy
+  );
+
+  /*
+   * Roughly several seconds of history.
+   */
+  if (
+    fluxHistory.length > 220
+  ) {
+
+    fluxHistory.shift();
+
+  }
+
+  if (
+    energyHistory.length > 220
+  ) {
+
+    energyHistory.shift();
+
+  }
+
+  if (
+    fluxHistory.length < 15
+  ) {
+
+    return false;
+
+  }
+
+  const fluxAverage =
+    average(
+      fluxHistory
     );
+
+  const fluxVariance =
+    average(
+      fluxHistory.map(
+        x =>
+          Math.pow(
+            x - fluxAverage,
+            2
+          )
+      )
+    );
+
+  const fluxStd =
+    Math.sqrt(
+      fluxVariance
+    );
+
+  /*
+   * Adaptive threshold.
+   */
+  const threshold =
+    fluxAverage +
+    fluxStd *
+    ONSET_SENSITIVITY;
+
+  /*
+   * Require this frame to be a local peak.
+   */
+  const len =
+    fluxHistory.length;
+
+  const current =
+    fluxHistory[len - 1];
+
+  const previous =
+    fluxHistory[len - 2] || 0;
+
+  const previousPrevious =
+    fluxHistory[len - 3] || 0;
+
+  const localPeak =
+    current >= previous &&
+    previous >= previousPrevious;
+
+  /*
+   * Don't let the same kick create
+   * several peaks.
+   */
+  const enoughTime =
+    now -
+    lastBeatTime >
+    MIN_BEAT_GAP;
+
+  if (
+    localPeak &&
+    current >
+      threshold &&
+    current >
+      MIN_FLUX &&
+    enoughTime
+  ) {
+
+    /*
+     * Save this as a real transient.
+     */
+    detectedPeaks.push(
+      now
+    );
+
+    /*
+     * Keep the last ~15 seconds.
+     */
+    const cutoff =
+      now - 15000;
+
+    detectedPeaks =
+      detectedPeaks.filter(
+        t => t >= cutoff
+      );
+
+    return true;
+
+  }
+
+  return false;
+
 }
 
 
@@ -765,242 +1174,340 @@ function getBassEnergy() {
    BPM ESTIMATION
    ========================================================= */
 
-/*
- * This doesn't simply count every loud sound.
- *
- * It records transient intervals and looks for
- * repeating timing patterns.
- */
-function estimateBPM() {
+function estimateBPMFromPeaks() {
+
   if (
-    beatFluxHistory.length < 12
+    detectedPeaks.length < 4
   ) {
+
     return null;
+
   }
+
+  const candidates = [];
 
   /*
-   * Find significant transients.
+   * Compare peak-to-peak intervals.
    */
-  const peaks = [];
-
-  const avg =
-    average(beatFluxHistory);
-
-  const variance =
-    average(
-      beatFluxHistory.map(
-        x =>
-          Math.pow(
-            x - avg,
-            2
-          )
-      )
-    );
-
-  const std =
-    Math.sqrt(variance);
-
-  const threshold =
-    avg + std * 0.8;
-
-  for (
-    let i = 2;
-    i < beatFluxHistory.length - 2;
-    i++
-  ) {
-    const value =
-      beatFluxHistory[i];
-
-    if (
-      value > threshold &&
-      value >= beatFluxHistory[i - 1] &&
-      value >= beatFluxHistory[i + 1]
-    ) {
-      peaks.push(i);
-    }
-  }
-
-  if (peaks.length < 3) {
-    return null;
-  }
-
-  /*
-   * Calculate intervals between peaks.
-   *
-   * Each analyser frame is approximately
-   * 1024 / sampleRate seconds.
-   */
-  const frameDuration =
-    1024 /
-    (beatAudioContext?.sampleRate || 44100);
-
-  const intervals = [];
-
   for (
     let i = 1;
-    i < peaks.length;
+    i < detectedPeaks.length;
     i++
   ) {
-    const seconds =
-      (peaks[i] - peaks[i - 1]) *
-      frameDuration;
 
-    const bpm =
-      60 / seconds;
+    const interval =
+      detectedPeaks[i] -
+      detectedPeaks[i - 1];
+
+    if (
+      interval < 250 ||
+      interval > 1500
+    ) {
+
+      continue;
+
+    }
+
+    let bpm =
+      60000 /
+      interval;
+
+    /*
+     * Try musically equivalent tempos.
+     *
+     * Example:
+     *
+     * 60 BPM
+     * 120 BPM
+     * 240 BPM
+     *
+     * can represent related subdivisions.
+     */
+    while (
+      bpm < BPM_MIN
+    ) {
+
+      bpm *= 2;
+
+    }
+
+    while (
+      bpm > BPM_MAX
+    ) {
+
+      bpm /= 2;
+
+    }
 
     if (
       bpm >= BPM_MIN &&
       bpm <= BPM_MAX
     ) {
-      intervals.push(bpm);
+
+      candidates.push(
+        bpm
+      );
+
     }
 
-    /*
-     * Sometimes the detector catches every
-     * second beat instead of every beat.
-     *
-     * Try dividing/doubling where appropriate.
-     */
-    const half = bpm / 2;
-    const double = bpm * 2;
-
-    if (
-      half >= BPM_MIN &&
-      half <= BPM_MAX
-    ) {
-      intervals.push(half);
-    }
-
-    if (
-      double >= BPM_MIN &&
-      double <= BPM_MAX
-    ) {
-      intervals.push(double);
-    }
   }
 
-  if (!intervals.length) {
+  if (
+    candidates.length < 2
+  ) {
+
     return null;
+
   }
 
   /*
-   * Histogram-like clustering.
+   * Cluster nearby BPM estimates.
    *
-   * This finds the BPM that appears most consistently
-   * instead of blindly averaging everything.
+   * This prevents one weird transient
+   * from completely changing the BPM.
    */
   const clusters = [];
 
-  intervals.forEach(bpm => {
+  for (
+    const bpm of candidates
+  ) {
+
     let cluster =
       clusters.find(
         c =>
-          Math.abs(c.bpm - bpm) < 3
+          Math.abs(
+            c.average -
+            bpm
+          ) < 3
       );
 
     if (!cluster) {
+
       cluster = {
-        bpm,
+        average: bpm,
         count: 0,
         total: 0
       };
 
-      clusters.push(cluster);
+      clusters.push(
+        cluster
+      );
+
     }
 
-    cluster.count++;
     cluster.total += bpm;
+    cluster.count++;
 
-    cluster.bpm =
+    cluster.average =
       cluster.total /
       cluster.count;
-  });
+
+  }
 
   clusters.sort(
     (a, b) =>
-      b.count - a.count
+      b.count -
+      a.count
   );
 
-  if (!clusters.length) {
+  if (
+    !clusters.length
+  ) {
+
     return null;
+
   }
 
   /*
-   * Round to a useful tempo.
+   * Require the winning cluster
+   * to have some consistency.
    */
-  return Math.round(
-    clusters[0].bpm * 10
-  ) / 10;
+  const winner =
+    clusters[0];
+
+  if (
+    winner.count < 2
+  ) {
+
+    return null;
+
+  }
+
+  return winner.average;
+
 }
 
 
 /* =========================================================
-   BEAT STRENGTH
+   CONTINUOUS BPM TRACKING
    ========================================================= */
 
-function calculateBeatStrength(
-  energy,
-  flux
-) {
+function updateBPM(now) {
+
+  /*
+   * Don't constantly recalculate every frame.
+   */
   if (
-    beatEnergyHistory.length < 8
+    now -
+    lastBPMUpdate <
+    BPM_UPDATE_INTERVAL
   ) {
-    return 0.2;
+
+    return;
+
   }
 
-  const energyAverage =
-    average(
-      beatEnergyHistory
-    );
+  lastBPMUpdate =
+    now;
 
-  const fluxAverage =
-    average(
-      beatFluxHistory
-    );
+  const detected =
+    estimateBPMFromPeaks();
 
-  /*
-   * How much louder this moment is than
-   * the recent song.
-   */
-  const energyRatio =
-    energy /
-    Math.max(
-      energyAverage,
-      1
-    );
+  if (!detected) {
+    return;
+  }
 
-  /*
-   * How sudden the change is.
-   */
-  const fluxRatio =
-    flux /
-    Math.max(
-      fluxAverage,
-      1
+  targetBPM =
+    detected;
+
+  const difference =
+    Math.abs(
+      targetBPM -
+      currentBPM
     );
 
   /*
-   * Combine both.
+   * Small changes:
    *
-   * Energy keeps quiet songs from being ignored.
-   * Flux keeps sustained loud bass from triggering
-   * constantly.
+   * Slowly correct the clock.
+   */
+  if (
+    difference < 8
+  ) {
+
+    currentBPM +=
+      (
+        targetBPM -
+        currentBPM
+      ) *
+      BPM_SMOOTHING;
+
+  }
+
+  /*
+   * Large change:
+   *
+   * Could be a genuine tempo change.
+   *
+   * React faster, but still don't jump
+   * instantly.
+   */
+  else {
+
+    currentBPM +=
+      (
+        targetBPM -
+        currentBPM
+      ) *
+      BPM_CHANGE_SMOOTHING;
+
+  }
+
+  currentBPM =
+    Math.max(
+      BPM_MIN,
+      Math.min(
+        BPM_MAX,
+        currentBPM
+      )
+    );
+
+  beatInterval =
+    60000 /
+    currentBPM;
+
+}
+
+
+/* =========================================================
+   AUDIO-CONFIRMED BEAT
+   ========================================================= */
+
+function getBeatStrength(
+  analysis
+) {
+
+  if (
+    energyHistory.length < 10 ||
+    fluxHistory.length < 10
+  ) {
+
+    return 0.2;
+
+  }
+
+  const averageEnergy =
+    average(
+      energyHistory
+    );
+
+  const averageFlux =
+    average(
+      fluxHistory
+    );
+
+  const energyRatio =
+    analysis.energy /
+    Math.max(
+      averageEnergy,
+      1
+    );
+
+  const fluxRatio =
+    analysis.onset /
+    Math.max(
+      averageFlux,
+      1
+    );
+
+  /*
+   * Combine:
+   *
+   * overall musical energy
+   * +
+   * sudden spectral change
    */
   let strength =
     (
-      (energyRatio - 1) * 0.45 +
-      (fluxRatio - 1) * 0.55
+      (energyRatio - 1) *
+      0.40
+    ) +
+    (
+      (fluxRatio - 1) *
+      0.60
     );
 
-  strength *= AUDIO_SENSITIVITY;
+  /*
+   * Normalize.
+   */
+  strength =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        strength
+      )
+    );
 
-  return Math.max(
-    0,
-    Math.min(
-      1,
-      strength
-    )
-  );
+  /*
+   * Smooth consecutive pulses.
+   */
+  strength =
+    lastBeatStrength * 0.20 +
+    strength * 0.80;
+
+  return strength;
+
 }
 
 
@@ -1009,6 +1516,7 @@ function calculateBeatStrength(
    ========================================================= */
 
 function beatLoop() {
+
   if (
     !$("#beatSyncToggle")?.checked ||
     !audio ||
@@ -1016,192 +1524,186 @@ function beatLoop() {
     paused ||
     sessionEnded
   ) {
+
     stopBeatSync();
+
     return;
+
   }
 
   const now =
     performance.now();
 
-  const energy =
-    getBassEnergy();
+  /*
+   * Analyze actual audio.
+   */
+  const analysis =
+    analyzeSpectrum();
 
   /*
-   * -----------------------------------------
-   * Build energy history
-   * -----------------------------------------
+   * Look for genuine audio transients.
    */
-
-  const previous =
-    beatEnergyHistory.length
-      ? beatEnergyHistory[
-          beatEnergyHistory.length - 1
-        ]
-      : energy;
-
-  const flux =
-    Math.max(
-      0,
-      energy - previous
+  const onsetDetected =
+    detectOnset(
+      analysis,
+      now
     );
 
-  beatEnergyHistory.push(
-    energy
-  );
+  /*
+   * Continuously update BPM.
+   */
+  updateBPM(now);
 
-  beatFluxHistory.push(
-    flux
-  );
+
+  /* =======================================================
+     PHASE LOCKING
+     ======================================================= */
 
   /*
-   * Keep roughly 5 seconds of history.
+   * If we found a real transient near the expected
+   * beat, use it to correct our beat clock.
    */
   if (
-    beatEnergyHistory.length > 220
+    onsetDetected
   ) {
-    beatEnergyHistory.shift();
-  }
 
-  if (
-    beatFluxHistory.length > 220
-  ) {
-    beatFluxHistory.shift();
-  }
+    const distance =
+      now -
+      nextBeatTime;
 
-
-  /* -----------------------------------------
-     Estimate BPM during startup
-     ----------------------------------------- */
-
-  if (
-    !bpmDetectionStarted
-  ) {
-    bpmDetectionStarted = true;
-
-    bpmDetectionStartTime =
-      now;
-  }
-
-  const detectionElapsed =
-    now -
-    bpmDetectionStartTime;
-
-  if (
-    detectionElapsed >=
-      BPM_ANALYSIS_TIME
-  ) {
-    const detectedBPM =
-      estimateBPM();
-
-    if (detectedBPM) {
-      beatBpm =
-        detectedBPM;
-
-      beatInterval =
-        60000 /
-        beatBpm;
+    /*
+     * If the transient is reasonably close
+     * to where the BPM clock expected a beat,
+     * treat it as the actual beat.
+     */
+    if (
+      Math.abs(distance) <=
+      BEAT_SEARCH_WINDOW
+    ) {
 
       /*
-       * Start beat clock from now.
+       * Pull the predicted beat toward
+       * the actual transient.
        */
       nextBeatTime =
-        now + beatInterval;
-
-      console.log(
-        `Beat Sync: ${beatBpm} BPM`
-      );
+        now +
+        beatInterval;
 
       /*
-       * Don't repeatedly estimate.
+       * Audio confirmed beat.
        */
-      bpmDetectionStarted =
-        true;
+      if (
+        now -
+        lastBeatTime >
+        MIN_BEAT_GAP
+      ) {
 
-      bpmDetectionStartTime =
-        Infinity;
+        const strength =
+          getBeatStrength(
+            analysis
+          );
+
+        lastBeatTime =
+          now;
+
+        lastBeatStrength =
+          strength;
+
+        triggerBeat(
+          strength
+        );
+
+      }
+
     }
+
   }
 
 
-  /* -----------------------------------------
-     BPM clock
-     ----------------------------------------- */
+  /* =======================================================
+     PREDICTED BEAT
+     ======================================================= */
 
   /*
-   * Once we reach the expected beat,
-   * inspect the audio around it.
+   * If the BPM clock reaches the expected beat
+   * but we didn't detect a transient exactly there,
+   * don't immediately create a giant pulse.
+   *
+   * Give the audio a chance to confirm it.
    */
+
   if (
-    now >= nextBeatTime -
-      BEAT_LOOK_BEHIND
+    now >=
+    nextBeatTime
   ) {
 
     /*
-     * Don't fire repeatedly during the same
-     * beat window.
+     * Move forward without accumulating drift.
      */
+    do {
+
+      nextBeatTime +=
+        beatInterval;
+
+    } while (
+      nextBeatTime <
+      now
+    );
+
+  }
+
+
+  /* =======================================================
+     STARTUP FALLBACK
+     ======================================================= */
+
+  /*
+   * During the first few seconds, BPM may not
+   * be reliable yet.
+   *
+   * Allow strong actual transients to create
+   * subtle pulses anyway.
+   */
+  const startupElapsed =
+    now -
+    bpmAnalysisStart;
+
+  if (
+    startupElapsed <
+    INITIAL_ANALYSIS_TIME
+  ) {
+
     if (
-      now >= nextBeatTime -
-        BEAT_LOOK_BEHIND &&
-      now <= nextBeatTime +
-        BEAT_LOOK_AHEAD
+      onsetDetected &&
+      now -
+      lastBeatTime >
+      MIN_BEAT_GAP
     ) {
 
       const strength =
-        calculateBeatStrength(
-          energy,
-          flux
+        getBeatStrength(
+          analysis
         );
 
       /*
-       * A beat doesn't need to be huge.
-       *
-       * This makes quiet sections still move,
-       * while loud sections can hit harder.
+       * Keep startup pulses weaker so the
+       * detector doesn't look chaotic.
        */
-      const minimumStrength =
-        0.08;
+      const startupStrength =
+        strength * 0.55;
 
-      if (
-        strength >=
-          minimumStrength &&
-        now - lastBeatTrigger >
-          MIN_BEAT_GAP
-      ) {
-        lastBeatTrigger =
-          now;
+      lastBeatTime =
+        now;
 
-        /*
-         * Don't allow tiny variations
-         * between consecutive beats.
-         */
-        const smoothedStrength =
-          lastBeatStrength * 0.25 +
-          strength * 0.75;
+      lastBeatStrength =
+        startupStrength;
 
-        lastBeatStrength =
-          smoothedStrength;
+      triggerBeat(
+        startupStrength
+      );
 
-        triggerBeat(
-          smoothedStrength
-        );
-      }
     }
 
-    /*
-     * Move to the next beat.
-     *
-     * This is important: we don't set this
-     * to "now + interval", which would slowly
-     * drift with the animation.
-     */
-    do {
-      nextBeatTime +=
-        beatInterval;
-    } while (
-      nextBeatTime <
-      now - 50
-    );
   }
 
 
@@ -1209,6 +1711,7 @@ function beatLoop() {
     requestAnimationFrame(
       beatLoop
     );
+
 }
 
 function getVolume() {
