@@ -2197,29 +2197,56 @@ function renderAchievements() {
 
   grid.innerHTML = "";
 
-  achievements.forEach(([name, description, check]) => {
-    let unlocked = false;
+  achievements.forEach(
+    ([name, description, check, secret]) => {
 
-    try {
-      unlocked = !!check();
-    } catch (e) {
-      console.warn("Achievement check failed:", name, e);
+      let unlocked = false;
+
+      try {
+        unlocked = !!check();
+      } catch (e) {
+        console.warn(
+          "Achievement check failed:",
+          name,
+          e
+        );
+      }
+
+      const element =
+        document.createElement("div");
+
+      element.className =
+        "achievement " +
+        (unlocked ? "unlocked" : "");
+
+      /*
+       * SECRET ACHIEVEMENT
+       *
+       * Before unlocking:
+       * ??? / ????????
+       *
+       * After unlocking:
+       * Normal achievement name + description
+       */
+      if (secret && !unlocked) {
+
+        element.innerHTML = `
+          <b>□ ???</b>
+          <p>????????????????</p>
+        `;
+
+      } else {
+
+        element.innerHTML = `
+          <b>${unlocked ? "✓ " : "□ "}${name}</b>
+          <p>${description}</p>
+        `;
+
+      }
+
+      grid.appendChild(element);
     }
-
-    const element =
-      document.createElement("div");
-
-    element.className =
-      "achievement " +
-      (unlocked ? "unlocked" : "");
-
-    element.innerHTML = `
-      <b>${unlocked ? "✓ " : "□ "}${name}</b>
-      <p>${description}</p>
-    `;
-
-    grid.appendChild(element);
-  });
+  );
 }
 
 /* =========================================================
