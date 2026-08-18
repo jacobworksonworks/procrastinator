@@ -1400,6 +1400,19 @@ function init() {
     }
   });
 
+$("#shuffleMusicBtn")?.addEventListener("click", () => {
+    if (!timer || !current || sessionEnded) {
+        return;
+    }
+
+    if (!$("#musicToggle")?.checked) {
+        toast("MUSIC IS CURRENTLY OFF.");
+        return;
+    }
+
+    chooseMusic();
+});
+   
   $("#finishBtn")?.addEventListener(
     "click",
     () => finishTimer(false)
