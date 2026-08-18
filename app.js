@@ -2177,7 +2177,15 @@ const achievements = [
     "EXCUSE MACHINE",
     "Collect 250 unique excuses.",
     () => Object.keys(data.counts).length >= 250
-  ]
+  ],
+  
+  [
+  "I GUESS BRO",
+  'Set "Ashley" as your task.',
+  () => data.achievements?.ashley === true,
+  true
+]
+
 ];
 
 function renderAchievements() {
