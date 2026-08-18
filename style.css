@@ -420,3 +420,218 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
         margin-top: 8px;
     }
 }
+
+
+/* =========================================================
+   RARITY EFFECTS
+   ========================================================= */
+
+/* COMMON */
+.card.common {
+    border-color: #66ff66;
+    color: #66ff66;
+}
+
+.card.common .card-rarity {
+    color: #66ff66;
+}
+
+
+/* UNCOMMON */
+.card.uncommon {
+    border-color: #4da6ff;
+    color: #4da6ff;
+    box-shadow: 0 0 10px rgba(77, 166, 255, 0.25);
+    animation: uncommonPulse 2s ease-in-out infinite;
+}
+
+.card.uncommon .card-rarity {
+    color: #4da6ff;
+}
+
+@keyframes uncommonPulse {
+    0%, 100% {
+        box-shadow: 0 0 6px rgba(77, 166, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 18px rgba(77, 166, 255, 0.55);
+    }
+}
+
+
+/* RARE */
+.card.rare {
+    border-color: #b266ff;
+    color: #b266ff;
+    box-shadow: 0 0 12px rgba(178, 102, 255, 0.35);
+    animation: rareGlow 1.8s ease-in-out infinite;
+}
+
+.card.rare .card-rarity {
+    color: #b266ff;
+}
+
+@keyframes rareGlow {
+    0%, 100% {
+        box-shadow:
+            0 0 8px rgba(178, 102, 255, 0.25);
+    }
+
+    50% {
+        box-shadow:
+            0 0 25px rgba(178, 102, 255, 0.8);
+    }
+}
+
+
+/* EPIC */
+.card.epic {
+    border-color: #ff66cc;
+    color: #ff66cc;
+    box-shadow:
+        0 0 12px rgba(255, 102, 204, 0.4);
+    animation: epicPulse 1.2s ease-in-out infinite;
+}
+
+.card.epic .card-rarity {
+    color: #ff66cc;
+}
+
+@keyframes epicPulse {
+    0%, 100% {
+        transform: translateY(0);
+        box-shadow:
+            0 0 10px rgba(255, 102, 204, 0.3);
+    }
+
+    50% {
+        transform: translateY(-2px);
+        box-shadow:
+            0 0 28px rgba(255, 102, 204, 0.9);
+    }
+}
+
+
+/* LEGENDARY */
+.card.legendary {
+    border-color: #ffd700;
+    color: #ffd700;
+    background:
+        linear-gradient(
+            120deg,
+            rgba(255, 215, 0, 0.05),
+            rgba(255, 255, 255, 0.12),
+            rgba(255, 215, 0, 0.05)
+        );
+    background-size: 200% 100%;
+    box-shadow:
+        0 0 15px rgba(255, 215, 0, 0.45);
+    animation:
+        legendaryGlow 1.5s ease-in-out infinite,
+        legendaryShimmer 3s linear infinite;
+}
+
+.card.legendary .card-rarity {
+    color: #ffd700;
+    text-shadow:
+        0 0 5px #ffd700,
+        0 0 15px rgba(255, 215, 0, 0.8);
+}
+
+@keyframes legendaryGlow {
+    0%, 100% {
+        box-shadow:
+            0 0 10px rgba(255, 215, 0, 0.3);
+    }
+
+    50% {
+        box-shadow:
+            0 0 35px rgba(255, 215, 0, 1);
+    }
+}
+
+@keyframes legendaryShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+
+/* JACKPOT */
+.card.jackpot {
+    border-color: #ffffff;
+    color: #ffffff;
+    animation:
+        jackpotGlow 0.8s ease-in-out infinite,
+        jackpotRainbow 3s linear infinite;
+}
+
+.card.jackpot .card-rarity {
+    font-weight: bold;
+    animation: jackpotText 1s linear infinite;
+}
+
+@keyframes jackpotGlow {
+    0%, 100% {
+        box-shadow:
+            0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    50% {
+        box-shadow:
+            0 0 35px rgba(255, 255, 255, 1);
+    }
+}
+
+@keyframes jackpotRainbow {
+    0% {
+        border-color: #ff0000;
+    }
+
+    20% {
+        border-color: #ffff00;
+    }
+
+    40% {
+        border-color: #00ff00;
+    }
+
+    60% {
+        border-color: #00ffff;
+    }
+
+    80% {
+        border-color: #0088ff;
+    }
+
+    100% {
+        border-color: #ff00ff;
+    }
+}
+
+@keyframes jackpotText {
+    0% {
+        text-shadow: 0 0 5px #ff0000;
+    }
+
+    25% {
+        text-shadow: 0 0 10px #ffff00;
+    }
+
+    50% {
+        text-shadow: 0 0 10px #00ffff;
+    }
+
+    75% {
+        text-shadow: 0 0 10px #ff00ff;
+    }
+
+    100% {
+        text-shadow: 0 0 5px #ff0000;
+    }
+}
