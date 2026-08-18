@@ -2708,17 +2708,19 @@ $("#taskInput")?.addEventListener("input", e => {
   const text =
     e.target.value || "NOTHING YET";
 
+  const normalized =
+    text.trim().toLowerCase();
+
   if ($("#homeTask")) {
     $("#homeTask").textContent =
       text.toUpperCase();
   }
 
   /*
-   * SECRET ACHIEVEMENT:
-   * Type "Ashley" as the task.
+   * SECRET ACHIEVEMENT — ASHLEY
    */
   if (
-    text.trim().toLowerCase() === "ashley" &&
+    normalized === "ashley" &&
     !data.achievements?.ashley
   ) {
     data.achievements =
@@ -2730,6 +2732,44 @@ $("#taskInput")?.addEventListener("input", e => {
 
     flash("I GUESS BRO");
     toast("SECRET ACHIEVEMENT UNLOCKED");
+  }
+
+  /*
+   * SECRET ACHIEVEMENT — POOP
+   *
+   * Achievement unlocks only once.
+   */
+  if (
+    normalized === "poop" &&
+    !data.achievements?.poop
+  ) {
+    data.achievements =
+      data.achievements || {};
+
+    data.achievements.poop = true;
+
+    save();
+
+    flash("POOP");
+    toast("SECRET ACHIEVEMENT UNLOCKED");
+  }
+
+  /*
+   * POOP SOUND
+   *
+   * This is deliberately OUTSIDE the achievement
+   * condition, so it plays every time the task
+   * becomes exactly "poop".
+   */
+  if (normalized === "poop") {
+    poopSound.currentTime = 0;
+
+    poopSound.play().catch(err => {
+      console.warn(
+        "Could not play poop.mp3:",
+        err
+      );
+    });
   }
 });
 
