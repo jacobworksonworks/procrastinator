@@ -2600,18 +2600,70 @@ if (paused) {
     }
   });
 
-$("#shuffleMusicBtn")?.addEventListener("click", () => {
-    if (!timer || !current || sessionEnded) {
-        return;
-    }
+const shuffleBtn =
+  $("#shuffleMusicBtn");
 
-    if (!$("#musicToggle")?.checked) {
-        toast("MUSIC IS CURRENTLY OFF.");
-        return;
-    }
+const musicPicker =
+  $("#musicPicker");
 
-    chooseMusic();
+const musicTrackSelect =
+  $("#musicTrackSelect");
+
+/*
+ * Normal click = random song
+ */
+shuffleBtn?.addEventListener("click", () => {
+
+  if (!timer || !current || sessionEnded) {
+    return;
+  }
+
+  if (!$("#musicToggle")?.checked) {
+    toast("MUSIC IS CURRENTLY OFF.");
+    return;
+  }
+
+  chooseMusic();
+
+  /*
+   * Keep picker synchronized.
+   */
+  populateMusicPicker();
 });
+
+
+/*
+ * Double-click = show/hide manual song picker
+ */
+shuffleBtn?.addEventListener("dblclick", e => {
+
+  e.preventDefault();
+
+  if (!timer || !current || sessionEnded) {
+    return;
+  }
+
+  if (!$("#musicToggle")?.checked) {
+    toast("MUSIC IS CURRENTLY OFF.");
+    return;
+  }
+
+  populateMusicPicker();
+
+  musicPicker?.classList.toggle("hidden");
+
+});
+
+
+/*
+ * Selecting a song = immediately play it
+ */
+musicTrackSelect?.addEventListener(
+  "change",
+  e => {
+    playManualTrack(e.target.value);
+  }
+);
    
   $("#finishBtn")?.addEventListener(
     "click",
