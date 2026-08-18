@@ -513,7 +513,7 @@ let lobbyAudio = null;
 let musicStarted = false;
 
 /* =========================================================
-   BEAT SYNC
+   IMPROVED BEAT SYNC
    ========================================================= */
 
 let beatAudioContext = null;
@@ -523,8 +523,24 @@ let beatData = null;
 let beatFrame = null;
 
 let beatLastTime = 0;
-let beatAverage = 0;
-let beatCooldown = 110;
+
+let beatEnergyHistory = [];
+let beatFluxHistory = [];
+
+let beatCooldown = 180;
+
+// How sensitive the detector is.
+// Lower = more beats.
+// Higher = fewer beats.
+const BEAT_SENSITIVITY = 1.55;
+
+// Minimum time between detected beats.
+const BEAT_COOLDOWN = 180;
+
+// Bass frequency range.
+// This focuses much more on kick/bass transients.
+const BASS_START_BIN = 2;
+const BASS_END_BIN = 35;
 
 function setupBeatSync() {
   if (!audio || beatAnalyser) {
@@ -538,23 +554,29 @@ function setupBeatSync() {
     beatAnalyser =
       beatAudioContext.createAnalyser();
 
-    // Higher resolution = better beat detection
-    beatAnalyser.fftSize = 2048;
+    beatAnalyser.fftSize = 1024;
 
-    // Don't smooth too aggressively or beats disappear
-    beatAnalyser.smoothingTimeConstant = 0.35;
+    // Less smoothing = better transient detection
+    beatAnalyser.smoothingTimeConstant = 0.15;
 
     beatSource =
       beatAudioContext.createMediaElementSource(audio);
 
     beatSource.connect(beatAnalyser);
-    beatAnalyser.connect(beatAudioContext.destination);
+    beatAnalyser.connect(
+      beatAudioContext.destination
+    );
 
     beatData =
-      new Uint8Array(beatAnalyser.frequencyBinCount);
+      new Uint8Array(
+        beatAnalyser.frequencyBinCount
+      );
 
   } catch (err) {
-    console.warn("Beat sync could not start:", err);
+    console.warn(
+      "Beat sync could not start:",
+      err
+    );
   }
 }
 
@@ -575,21 +597,29 @@ function startBeatSync() {
     return;
   }
 
-  if (beatAudioContext.state === "suspended") {
+  if (
+    beatAudioContext.state === "suspended"
+  ) {
     beatAudioContext.resume().catch(() => {});
   }
 
   cancelAnimationFrame(beatFrame);
 
   beatLastTime = 0;
-  beatAverage = 0;
+
+  beatEnergyHistory = [];
+  beatFluxHistory = [];
 
   beatLoop();
 }
 
 function stopBeatSync() {
   cancelAnimationFrame(beatFrame);
+
   beatFrame = null;
+
+  beatEnergyHistory = [];
+  beatFluxHistory = [];
 
   document.body.classList.remove(
     "beat-pulse",
@@ -613,28 +643,33 @@ function triggerBeat(strength) {
     strength.toFixed(2)
   );
 
-  /*
-   * Remove the previous animation.
-   * This allows EVERY beat to restart the animation,
-   * even if beats happen repeatedly.
-   */
   document.body.classList.remove(
     "beat-pulse",
     "beat-heavy"
   );
 
-  /*
-   * Force browser reflow.
-   * Without this, adding the same class again may
-   * NOT restart the CSS animation.
-   */
   void document.body.offsetWidth;
 
-  if (strength >= 0.55) {
-    document.body.classList.add("beat-heavy");
+  if (strength >= 0.65) {
+    document.body.classList.add(
+      "beat-heavy"
+    );
   } else {
-    document.body.classList.add("beat-pulse");
+    document.body.classList.add(
+      "beat-pulse"
+    );
   }
+}
+
+function average(arr) {
+  if (!arr.length) {
+    return 0;
+  }
+
+  return arr.reduce(
+    (a, b) => a + b,
+    0
+  ) / arr.length;
 }
 
 function beatLoop() {
@@ -649,22 +684,25 @@ function beatLoop() {
     return;
   }
 
-  beatAnalyser.getByteFrequencyData(beatData);
+  beatAnalyser.getByteFrequencyData(
+    beatData
+  );
 
   /*
-   * Focus on the lower frequencies.
-   * These contain kick drums, bass hits, etc.
+   * -----------------------------------------
+   * 1. Measure bass energy
+   * -----------------------------------------
    */
+
   let bassEnergy = 0;
 
-  const startBin = 1;
   const endBin = Math.min(
-    55,
+    BASS_END_BIN,
     beatData.length
   );
 
   for (
-    let i = startBin;
+    let i = BASS_START_BIN;
     i < endBin;
     i++
   ) {
@@ -674,53 +712,147 @@ function beatLoop() {
   bassEnergy /=
     Math.max(
       1,
-      endBin - startBin
+      endBin - BASS_START_BIN
     );
 
   /*
-   * Slowly track the normal volume of the song.
+   * -----------------------------------------
+   * 2. Store recent bass levels
+   * -----------------------------------------
    */
-  beatAverage =
-    beatAverage * 0.94 +
-    bassEnergy * 0.06;
+
+  beatEnergyHistory.push(bassEnergy);
 
   /*
-   * Beat must be noticeably louder than
-   * the recent average.
+   * Roughly the last ~1 second.
    */
-const threshold = Math.max(
-  70,
-  beatAverage * 1.12
-);
-
-  const now = performance.now();
+  if (beatEnergyHistory.length > 45) {
+    beatEnergyHistory.shift();
+  }
 
   /*
-   * Prevent one kick from triggering 20 times.
+   * -----------------------------------------
+   * 3. Calculate CHANGE in bass
+   * -----------------------------------------
+   *
+   * A beat is a sudden increase,
+   * not simply loud bass.
    */
+
+  const previous =
+    beatEnergyHistory.length >= 2
+      ? beatEnergyHistory[
+          beatEnergyHistory.length - 2
+        ]
+      : bassEnergy;
+
+  const flux =
+    Math.max(
+      0,
+      bassEnergy - previous
+    );
+
+  beatFluxHistory.push(flux);
+
+  /*
+   * Keep roughly the last second of
+   * onset information.
+   */
+  if (beatFluxHistory.length > 45) {
+    beatFluxHistory.shift();
+  }
+
+  /*
+   * -----------------------------------------
+   * 4. Adaptive threshold
+   * -----------------------------------------
+   *
+   * This is the important part.
+   *
+   * Instead of asking:
+   *
+   * "Is the music loud?"
+   *
+   * we're asking:
+   *
+   * "Is this increase unusually large
+   * compared with recent increases?"
+   */
+
+  const fluxAverage =
+    average(beatFluxHistory);
+
+  const fluxVariance =
+    average(
+      beatFluxHistory.map(
+        x =>
+          Math.pow(
+            x - fluxAverage,
+            2
+          )
+      )
+    );
+
+  const fluxStd =
+    Math.sqrt(fluxVariance);
+
+  const threshold =
+    fluxAverage +
+    fluxStd * BEAT_SENSITIVITY;
+
+  /*
+   * -----------------------------------------
+   * 5. Beat cooldown
+   * -----------------------------------------
+   */
+
+  const now =
+    performance.now();
+
+  const enoughTime =
+    now - beatLastTime >
+    BEAT_COOLDOWN;
+
+  /*
+   * -----------------------------------------
+   * 6. Detect the transient
+   * -----------------------------------------
+   */
+
   if (
-    bassEnergy > threshold &&
-    now - beatLastTime > beatCooldown
+    flux > threshold &&
+    flux > 8 &&
+    enoughTime
   ) {
     beatLastTime = now;
 
     /*
-     * Convert how much stronger the bass is
-     * than the threshold into 0 → 1.
+     * Convert strength into 0 → 1.
+     *
+     * This uses the transient itself,
+     * rather than the song's overall volume.
      */
-    const strength = Math.min(
-      1,
-      Math.max(
-        0,
-        (bassEnergy - threshold) / 65
-      )
-    );
+
+    const strength =
+      Math.min(
+        1,
+        Math.max(
+          0,
+          (flux - threshold) /
+          Math.max(
+            threshold * 1.5,
+            20
+          )
+        )
+      );
 
     triggerBeat(strength);
   }
 
   beatFrame =
-    requestAnimationFrame(beatLoop);
+    requestAnimationFrame(
+      beatLoop
+    );
 }
 
 function getVolume() {
