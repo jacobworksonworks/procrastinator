@@ -495,7 +495,14 @@ const musicTracks = [
   { name: "DREAM AVENUE", file: "music/dream.mp3" },
   { name: "ON OUR WAY", file: "music/way.mp3" },
   { name: "COLOR YOUR NIGHT", file: "music/coloryournight.mp3" },
-  { name: "AZNANA", file: "music/aznana.mp3" }
+  { name: "AZNANA", file: "music/aznana.mp3" },
+  { name: "CORROSION", file: "music/corrosion.mp3" },
+  { name: "ISOLATION", file: "music/isolation.mp3" },
+  { name: "A SLICE OF FATE", file: "music/fate.mp3" },
+  { name: "VIATOR", file: "music/viator.mp3" },
+  { name: "BRAWL", file: "music/brawl.mp3" },
+  { name: "PACIFIC RIM", file: "music/pacific.mp3" },
+  { name: "SAKAI", file: "music/sakai.mp3" }
 ];
 
 let audio = null;
