@@ -524,7 +524,7 @@ let beatFrame = null;
 
 let beatLastTime = 0;
 let beatAverage = 0;
-let beatCooldown = 180;
+let beatCooldown = 110;
 
 function setupBeatSync() {
   if (!audio || beatAnalyser) {
@@ -688,10 +688,10 @@ function beatLoop() {
    * Beat must be noticeably louder than
    * the recent average.
    */
-  const threshold = Math.max(
-    105,
-    beatAverage * 1.35
-  );
+const threshold = Math.max(
+  70,
+  beatAverage * 1.12
+);
 
   const now = performance.now();
 
