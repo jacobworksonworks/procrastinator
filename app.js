@@ -2546,15 +2546,34 @@ $("#returnTimerBtn")?.addEventListener("click", () => {
   /*
    * Task input
    */
-  $("#taskInput")?.addEventListener("input", e => {
-    const text =
-      e.target.value || "NOTHING YET";
+$("#taskInput")?.addEventListener("input", e => {
+  const text =
+    e.target.value || "NOTHING YET";
 
-    if ($("#homeTask")) {
-      $("#homeTask").textContent =
-        text.toUpperCase();
-    }
-  });
+  if ($("#homeTask")) {
+    $("#homeTask").textContent =
+      text.toUpperCase();
+  }
+
+  /*
+   * SECRET ACHIEVEMENT:
+   * Type "Ashley" as the task.
+   */
+  if (
+    text.trim().toLowerCase() === "ashley" &&
+    !data.achievements?.ashley
+  ) {
+    data.achievements =
+      data.achievements || {};
+
+    data.achievements.ashley = true;
+
+    save();
+
+    flash("I GUESS BRO");
+    toast("SECRET ACHIEVEMENT UNLOCKED");
+  }
+});
 
   /*
    * CRT
