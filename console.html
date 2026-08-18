@@ -13,18 +13,36 @@
 
   <main id="console">
 
-    <div id="terminalOutput"></div>
+    <!-- Terminal header -->
+    <header id="terminalHeader">
+      <div id="systemName">ARCHIVAL TERMINAL SYSTEM</div>
+      <div id="systemVersion">FACILITY ARCHIVE // NODE 04</div>
+    </header>
 
+    <!-- Main terminal output -->
+    <section id="terminalOutput" aria-live="polite"></section>
+
+    <!-- Command input -->
     <div id="terminalInputLine">
       <span id="prompt">&gt;</span>
+
       <input
         id="commandInput"
         type="text"
         autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
         spellcheck="false"
+        aria-label="Terminal command input"
         autofocus
       >
     </div>
+
+    <!-- Status information -->
+    <footer id="terminalStatus">
+      <span id="connectionStatus">CONNECTION: LOCAL</span>
+      <span id="archiveStatus">ARCHIVE: READ-ONLY</span>
+    </footer>
 
   </main>
 
