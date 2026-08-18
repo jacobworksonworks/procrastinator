@@ -1212,3 +1212,9 @@ body {
   font-family: inherit;
   font-size: 14px;
 }
+
+#archiveTrigger {
+  color: transparent;
+  text-decoration: none;
+  cursor: default;
+}
