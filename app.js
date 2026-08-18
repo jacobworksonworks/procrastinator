@@ -1928,8 +1928,9 @@ function startTimer() {
   updateTimer();
 
   if ($("#musicToggle")?.checked) {
-    chooseMusic();
-  }
+  prepareAudio();
+  chooseMusic();
+  } 
 
   clearInterval(timer);
 
