@@ -927,7 +927,69 @@ function stopBeatSync() {
 
 }
 
+function playSelectedMusic() {
 
+  if (!audio || !currentTrack) {
+    return;
+  }
+
+  const label = $("#musicLabel");
+
+  audio.volume = getVolume();
+
+  const play = () => {
+
+    audio.play()
+      .then(() => {
+
+        if (label) {
+          label.textContent =
+            `♪ ${currentTrack.name} // PLAYING`;
+        }
+
+        if (
+          timer &&
+          !paused &&
+          $("#beatSyncToggle")?.checked
+        ) {
+          startBeatSync();
+        }
+
+      })
+      .catch(err => {
+
+        console.warn(
+          "Music playback failed:",
+          err
+        );
+
+      });
+
+  };
+
+  /*
+   * If the browser already has enough data,
+   * play immediately.
+   */
+  if (audio.readyState >= 3) {
+
+    play();
+
+    return;
+
+  }
+
+  /*
+   * Otherwise wait until enough audio has
+   * buffered.
+   */
+  audio.addEventListener(
+    "canplay",
+    play,
+    { once: true }
+  );
+
+}
 /* =========================================================
    GET AUDIO DATA
    ========================================================= */
