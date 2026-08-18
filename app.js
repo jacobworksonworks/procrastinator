@@ -524,6 +524,7 @@ let beatFrame = null;
 
 let beatLastTime = 0;
 let beatAverage = 0;
+let beatCooldown = 180;
 
 function setupBeatSync() {
   if (!audio || beatAnalyser) {
@@ -537,8 +538,11 @@ function setupBeatSync() {
     beatAnalyser =
       beatAudioContext.createAnalyser();
 
-    beatAnalyser.fftSize = 1024;
-    beatAnalyser.smoothingTimeConstant = 0.65;
+    // Higher resolution = better beat detection
+    beatAnalyser.fftSize = 2048;
+
+    // Don't smooth too aggressively or beats disappear
+    beatAnalyser.smoothingTimeConstant = 0.35;
 
     beatSource =
       beatAudioContext.createMediaElementSource(audio);
@@ -559,7 +563,8 @@ function startBeatSync() {
     !$("#beatSyncToggle")?.checked ||
     !audio ||
     !timer ||
-    paused
+    paused ||
+    sessionEnded
   ) {
     return;
   }
@@ -576,7 +581,7 @@ function startBeatSync() {
 
   cancelAnimationFrame(beatFrame);
 
-  beatLastTime = performance.now();
+  beatLastTime = 0;
   beatAverage = 0;
 
   beatLoop();
@@ -586,8 +591,50 @@ function stopBeatSync() {
   cancelAnimationFrame(beatFrame);
   beatFrame = null;
 
-  document.body.classList.remove("beat-pulse");
-  document.body.classList.remove("beat-heavy");
+  document.body.classList.remove(
+    "beat-pulse",
+    "beat-heavy"
+  );
+
+  document.body.style.setProperty(
+    "--beat-strength",
+    "0"
+  );
+}
+
+function triggerBeat(strength) {
+  strength = Math.max(
+    0,
+    Math.min(1, strength)
+  );
+
+  document.body.style.setProperty(
+    "--beat-strength",
+    strength.toFixed(2)
+  );
+
+  /*
+   * Remove the previous animation.
+   * This allows EVERY beat to restart the animation,
+   * even if beats happen repeatedly.
+   */
+  document.body.classList.remove(
+    "beat-pulse",
+    "beat-heavy"
+  );
+
+  /*
+   * Force browser reflow.
+   * Without this, adding the same class again may
+   * NOT restart the CSS animation.
+   */
+  void document.body.offsetWidth;
+
+  if (strength >= 0.55) {
+    document.body.classList.add("beat-heavy");
+  } else {
+    document.body.classList.add("beat-pulse");
+  }
 }
 
 function beatLoop() {
@@ -604,70 +651,72 @@ function beatLoop() {
 
   beatAnalyser.getByteFrequencyData(beatData);
 
-  let energy = 0;
+  /*
+   * Focus on the lower frequencies.
+   * These contain kick drums, bass hits, etc.
+   */
+  let bassEnergy = 0;
 
-  const start = 2;
-  const end = Math.min(45, beatData.length);
+  const startBin = 1;
+  const endBin = Math.min(
+    55,
+    beatData.length
+  );
 
-  for (let i = start; i < end; i++) {
-    energy += beatData[i];
+  for (
+    let i = startBin;
+    i < endBin;
+    i++
+  ) {
+    bassEnergy += beatData[i];
   }
 
-  energy /= Math.max(1, end - start);
+  bassEnergy /=
+    Math.max(
+      1,
+      endBin - startBin
+    );
 
+  /*
+   * Slowly track the normal volume of the song.
+   */
   beatAverage =
-    beatAverage * 0.92 +
-    energy * 0.08;
+    beatAverage * 0.94 +
+    bassEnergy * 0.06;
 
-  const threshold =
-    Math.max(125, beatAverage * 1.55);
+  /*
+   * Beat must be noticeably louder than
+   * the recent average.
+   */
+  const threshold = Math.max(
+    105,
+    beatAverage * 1.35
+  );
 
   const now = performance.now();
 
+  /*
+   * Prevent one kick from triggering 20 times.
+   */
   if (
-    energy > threshold &&
-    now - beatLastTime > 220
+    bassEnergy > threshold &&
+    now - beatLastTime > beatCooldown
   ) {
     beatLastTime = now;
 
-    const strength =
-      Math.min(
-        1,
-        Math.max(
-          0,
-          (energy - threshold) / 100
-        )
-      );
+    /*
+     * Convert how much stronger the bass is
+     * than the threshold into 0 → 1.
+     */
+    const strength = Math.min(
+      1,
+      Math.max(
+        0,
+        (bassEnergy - threshold) / 65
+      )
+    );
 
-document.body.style.setProperty(
-  "--beat-strength",
-  strength.toFixed(2)
-);
-
-document.body.classList.remove("beat-pulse", "beat-heavy");
-
-// Force the browser to reset the animation
-void document.body.offsetWidth;
-
-// Add the appropriate beat animation
-if (strength > 0.55) {
-  document.body.classList.add("beat-heavy");
-} else {
-  document.body.classList.add("beat-pulse");
-}
-
-// Remove it after the animation finishes
-setTimeout(() => {
-  document.body.classList.remove("beat-pulse", "beat-heavy");
-}, 250);
-    } else {
-      document.body.classList.remove("beat-heavy");
-    }
-
-    setTimeout(() => {
-      document.body.classList.remove("beat-pulse");
-      document.body.classList.remove("beat-heavy");
-    }, 180);
+    triggerBeat(strength);
   }
 
   beatFrame =
