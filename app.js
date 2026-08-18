@@ -1162,7 +1162,7 @@ function drawVisualizer(
    * Center line.
    */
   const centerY =
-    h * 0.92;
+  h;
 
   const maxBarHeight =
     h * 0.82;
