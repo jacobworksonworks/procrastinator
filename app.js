@@ -479,7 +479,13 @@ const musicTracks = [
   { name: "THE MISSION", file: "music/mission.mp3" },
   { name: "THE CENTER", file: "music/center.mp3" },
   { name: "Mice on Venus.", file: "music/mice.mp3" },
-  { name: "Down the Shore", file: "music/galdin.mp3" }
+  { name: "Down the Shore", file: "music/galdin.mp3" },
+  { name: "CONQUEST", file: "music/conquest.mp3" },
+  { name: "SLEET", file: "music/sleet.mp3" },
+  { name: "HYPER", file: "music/hyper.mp3" },
+  { name: "TRIAL BY FIRE", file: "music/trial.mp3" },
+  { name: "SCOURGE OF THE UNIVERSE", file: "music/scourge.mp3" },
+  { name: "DEATH BY GLAMOUR", file: "music/glamour.mp3" }
 ];
 
 let audio = null;
