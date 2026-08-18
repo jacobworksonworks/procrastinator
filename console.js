@@ -695,12 +695,24 @@ function handleCommand(rawCommand) {
     print("OPEN [ID]");
     print("CLEAR");
     print("EXIT");
+    print("BACK");
     print("");
 
     return;
   }
 
+if (command === "back") {
 
+  terminalOutput.innerHTML = "";
+
+  print("ARCHIVAL TERMINAL v0.7.3");
+  print("LOCAL ARCHIVE CONNECTED.");
+  print("");
+  print("TYPE 'HELP' FOR AVAILABLE COMMANDS.");
+  print("");
+
+  return;
+}
 
   // ==========================================================
   // ARCHIVE
