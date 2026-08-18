@@ -1045,3 +1045,80 @@ body.beat-heavy #timerDisplay {
         transform: scale(1);
     }
 }
+
+
+/* =========================================================
+   BEAT SYNC — TIMER PAGE
+   ========================================================= */
+
+#timer {
+    --beat-strength: 0;
+}
+
+/* Whole page — subtle movement */
+#timer.beat-pulse {
+    filter: brightness(
+        calc(1 + (var(--beat-strength, 0) * 0.08))
+    );
+
+    transform:
+        scale(calc(1 + (var(--beat-strength, 0) * 0.004)));
+}
+
+/* Main timer area — stronger movement */
+#timer .timer-wrap {
+    transition:
+        transform 0.10s ease-out,
+        filter 0.10s ease-out;
+}
+
+body.beat-pulse #timer .timer-wrap {
+    transform:
+        scale(calc(1 + (var(--beat-strength, 0) * 0.02)));
+
+    filter:
+        brightness(calc(1 + (var(--beat-strength, 0) * 0.15)));
+}
+
+/* Strong beats */
+body.beat-heavy #timer .timer-wrap {
+    transform:
+        scale(1.035)
+        translateY(-4px);
+
+    filter: brightness(1.2);
+}
+
+
+/* =========================================================
+   INDIVIDUAL ELEMENTS
+   ========================================================= */
+
+/* Big timer numbers */
+body.beat-pulse #timerDisplay {
+    transform:
+        scale(calc(1 + (var(--beat-strength, 0) * 0.035)));
+
+    text-shadow:
+        0 0 calc(8px + (var(--beat-strength, 0) * 20px))
+        currentColor;
+}
+
+/* Timer progress bar */
+body.beat-pulse #timerBar {
+    box-shadow:
+        0 0 calc(6px + (var(--beat-strength, 0) * 18px))
+        currentColor;
+}
+
+/* Music label */
+body.beat-pulse #musicLabel {
+    transform:
+        translateY(calc(var(--beat-strength, 0) * -2px));
+}
+
+/* Current excuse */
+body.beat-pulse #timerExcuse {
+    transform:
+        translateX(calc(var(--beat-strength, 0) * 3px));
+}
