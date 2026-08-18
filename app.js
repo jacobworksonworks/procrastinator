@@ -823,10 +823,13 @@ function showResult() {
 
   $("#result")?.classList.remove("hidden");
 
-  if ($("#resultRarity")) {
-    $("#resultRarity").textContent =
-      current.rarity;
-  }
+if ($("#resultRarity")) {
+  $("#resultRarity").textContent =
+    current.rarity;
+
+  $("#resultRarity").className =
+    "rarity-" + current.rarity.toLowerCase();
+}
 
   if ($("#resultExcuse")) {
     $("#resultExcuse").textContent =
