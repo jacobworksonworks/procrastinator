@@ -502,7 +502,9 @@ const musicTracks = [
   { name: "VIATOR", file: "music/viator.mp3" },
   { name: "BRAWL", file: "music/brawl.mp3" },
   { name: "PACIFIC RIM", file: "music/pacific.mp3" },
-  { name: "SAKAI", file: "music/sakai.mp3" }
+  { name: "SAKAI", file: "music/sakai.mp3" },
+  { name: "DREAM LANTERN", file: "music/dreamlantern.mp3" },
+  { name: "WATASHI WA WATASHI", file: "music/staywithme.mp3" },
 ];
 
 let audio = null;
