@@ -3,7 +3,7 @@ const commandInput = document.getElementById("commandInput");
 
 const commandHistory = [];
 let historyIndex = -1;
-
+ 
 const bootLines = [
   "ARCHIVAL TERMINAL SYSTEM",
   "FACILITY NETWORK NODE 04",
