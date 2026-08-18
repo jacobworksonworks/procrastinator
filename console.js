@@ -61,11 +61,11 @@ const DIALOGUE = {
     "I see that word less and less."
   ],
 
-        "Shut your bitch ass up": [
+        "shut your bitch ass up": [
     "You've got a mouth on you."
   ],
 
-          "Sybau": [
+          "sybau": [
     "I do not understand this phrase. Is it an acronym?"
   ],
 
