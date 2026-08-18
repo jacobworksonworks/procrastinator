@@ -1168,3 +1168,9 @@ body.beat-heavy #timerDisplay {
         transform: scale(1);
     }
 }
+
+@supports (padding-top: env(safe-area-inset-top)) {
+    .topbar {
+        padding-top: calc(7px + env(safe-area-inset-top));
+    }
+}
