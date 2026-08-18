@@ -1169,44 +1169,26 @@ body.beat-heavy #timerDisplay {
     }
 }
 
-@supports (padding-top: env(safe-area-inset-top)) {
-    .topbar {
-        padding-top: calc(7px + env(safe-area-inset-top));
-    }
-}
-
+/* iOS NOTCH / DYNAMIC ISLAND */
 html {
     background: #3f93e8;
 }
 
+body {
+    background: #3f93e8;
+}
+
+/* Extend the XP topbar into the iPhone safe area */
 @supports (padding-top: env(safe-area-inset-top)) {
     .topbar {
+        margin-top: calc(-1 * env(safe-area-inset-top));
         padding-top: calc(7px + env(safe-area-inset-top));
-        background:
-            linear-gradient(
-                #3f93e8 0,
-                #0a61b6 45%,
-                #07529e 46%,
-                #4b9bea 100%
-            );
-    }
-
-    .topbar::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: calc(-1 * env(safe-area-inset-top));
-        height: env(safe-area-inset-top);
-        background:
-            linear-gradient(
-                #3f93e8 0,
-                #0a61b6 45%,
-                #07529e 46%,
-                #4b9bea 100%
-            );
-        border-bottom: 2px solid #063b78;
-        box-shadow: 0 2px 0 #8fc7f7;
-        z-index: -1;
+        
+        background: linear-gradient(
+            #3f93e8 0,
+            #0a61b6 45%,
+            #07529e 46%,
+            #4b9bea 100%
+        );
     }
 }
