@@ -426,13 +426,24 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
    RARITY EFFECTS — INVENTORY
    ========================================================= */
 
+/* =========================
+   COMMON
+   ========================= */
+
 .card.common {
     border-color: #66ff66;
+    color: #66ff66;
 }
 
 .card.common .card-rarity {
     color: #66ff66;
+    font-weight: 600;
 }
+
+
+/* =========================
+   UNCOMMON
+   ========================= */
 
 .card.uncommon {
     border-color: #4da6ff;
@@ -443,6 +454,7 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
 
 .card.uncommon .card-rarity {
     color: #4da6ff;
+    font-weight: 700;
 }
 
 @keyframes uncommonPulse {
@@ -455,81 +467,139 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
     }
 }
 
+
+/* =========================
+   RARE
+   ========================= */
+
 .card.rare {
     border-color: #b266ff;
     color: #b266ff;
     box-shadow: 0 0 12px rgba(178, 102, 255, 0.35);
-    animation: rareGlow 1.8s ease-in-out infinite;
+    animation: rareFloat 1.8s ease-in-out infinite;
 }
 
 .card.rare .card-rarity {
     color: #b266ff;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
-@keyframes rareGlow {
+@keyframes rareFloat {
     0%, 100% {
+        transform: translateY(0);
         box-shadow: 0 0 8px rgba(178, 102, 255, 0.25);
     }
 
     50% {
+        transform: translateY(-2px);
         box-shadow: 0 0 25px rgba(178, 102, 255, 0.8);
     }
 }
+
+
+/* =========================
+   EPIC
+   ========================= */
 
 .card.epic {
     border-color: #ff66cc;
     color: #ff66cc;
     box-shadow: 0 0 12px rgba(255, 102, 204, 0.4);
-    animation: epicPulse 1.2s ease-in-out infinite;
+    animation:
+        epicFloat 1.2s ease-in-out infinite,
+        epicTilt 3s ease-in-out infinite;
 }
 
 .card.epic .card-rarity {
     color: #ff66cc;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-shadow:
+        0 0 5px #ff66cc,
+        0 0 15px rgba(255, 102, 204, 0.7);
 }
 
-@keyframes epicPulse {
+@keyframes epicFloat {
     0%, 100% {
         transform: translateY(0);
         box-shadow: 0 0 10px rgba(255, 102, 204, 0.3);
     }
 
     50% {
-        transform: translateY(-2px);
-        box-shadow: 0 0 28px rgba(255, 102, 204, 0.9);
+        transform: translateY(-4px);
+        box-shadow: 0 0 30px rgba(255, 102, 204, 0.9);
     }
 }
 
+@keyframes epicTilt {
+    0%, 100% {
+        rotate: 0deg;
+    }
+
+    50% {
+        rotate: 1deg;
+    }
+}
+
+
+/* =========================
+   LEGENDARY
+   ========================= */
+
 .card.legendary {
+    position: relative;
+    overflow: hidden;
+
     border-color: #ffd700;
     color: #ffd700;
+
     background:
         linear-gradient(
             120deg,
-            rgba(255, 215, 0, 0.05),
-            rgba(255, 255, 255, 0.12),
-            rgba(255, 215, 0, 0.05)
+            rgba(255, 215, 0, 0.04),
+            rgba(255, 255, 255, 0.15),
+            rgba(255, 215, 0, 0.04)
         );
-    background-size: 200% 100%;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.45);
+
+    background-size: 250% 100%;
+
+    box-shadow:
+        0 0 15px rgba(255, 215, 0, 0.45),
+        inset 0 0 15px rgba(255, 215, 0, 0.08);
+
     animation:
-        legendaryGlow 1.5s ease-in-out infinite,
+        legendaryFloat 1.5s ease-in-out infinite,
         legendaryShimmer 3s linear infinite;
 }
 
 .card.legendary .card-rarity {
     color: #ffd700;
+
+    font-weight: 900;
+    letter-spacing: 2px;
+
     text-shadow:
         0 0 5px #ffd700,
-        0 0 15px rgba(255, 215, 0, 0.8);
+        0 0 15px #ffd700,
+        0 0 30px rgba(255, 215, 0, 0.8);
+
+    animation: legendaryText 1.2s ease-in-out infinite;
 }
 
-@keyframes legendaryGlow {
+@keyframes legendaryFloat {
     0%, 100% {
-        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        transform: translateY(0) scale(1);
+        box-shadow:
+            0 0 10px rgba(255, 215, 0, 0.3),
+            inset 0 0 10px rgba(255, 215, 0, 0.05);
     }
 
     50% {
-        box-shadow: 0 0 35px rgba(255, 215, 0, 1);
+        transform: translateY(-5px) scale(1.015);
+        box-shadow:
+            0 0 35px rgba(255, 215, 0, 1),
+            inset 0 0 20px rgba(255, 215, 0, 0.12);
     }
 }
 
@@ -543,169 +613,124 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
     }
 }
 
-.card.jackpot {
-    border-color: #ffffff;
-    color: #ffffff;
-    animation:
-        jackpotGlow 0.8s ease-in-out infinite,
-        jackpotRainbow 3s linear infinite;
-}
-
-.card.jackpot .card-rarity {
-    font-weight: bold;
-    animation: jackpotText 1s linear infinite;
-}
-
-@keyframes jackpotGlow {
+@keyframes legendaryText {
     0%, 100% {
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        transform: scale(1);
     }
 
     50% {
-        box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+        transform: scale(1.08);
+    }
+}
+
+
+/* =========================
+   JACKPOT
+   ========================= */
+
+.card.jackpot {
+    position: relative;
+    overflow: hidden;
+
+    border-color: #ffffff;
+    color: #ffffff;
+
+    box-shadow:
+        0 0 15px rgba(255, 255, 255, 0.5);
+
+    animation:
+        jackpotFloat 0.9s ease-in-out infinite,
+        jackpotRainbow 3s linear infinite;
+}
+
+.card.jackpot::before {
+    content: "";
+
+    position: absolute;
+
+    top: -50%;
+    left: -100%;
+
+    width: 60%;
+    height: 200%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.35),
+        transparent
+    );
+
+    transform: rotate(20deg);
+
+    animation: jackpotSweep 1.8s linear infinite;
+
+    pointer-events: none;
+}
+
+.card.jackpot .card-rarity {
+    position: relative;
+    z-index: 1;
+
+    font-weight: 1000;
+    letter-spacing: 3px;
+
+    animation: jackpotText 0.7s linear infinite;
+}
+
+@keyframes jackpotFloat {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(-6px) scale(1.03);
+    }
+}
+
+@keyframes jackpotSweep {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 180%;
     }
 }
 
 @keyframes jackpotRainbow {
     0% {
         border-color: #ff0000;
+        box-shadow: 0 0 15px #ff0000;
     }
 
     20% {
         border-color: #ffff00;
+        box-shadow: 0 0 25px #ffff00;
     }
 
     40% {
         border-color: #00ff00;
+        box-shadow: 0 0 25px #00ff00;
     }
 
     60% {
         border-color: #00ffff;
+        box-shadow: 0 0 25px #00ffff;
     }
 
     80% {
         border-color: #0088ff;
+        box-shadow: 0 0 25px #0088ff;
     }
 
     100% {
         border-color: #ff00ff;
+        box-shadow: 0 0 25px #ff00ff;
     }
 }
 
 @keyframes jackpotText {
-    0% {
-        text-shadow: 0 0 5px #ff0000;
-    }
-
-    25% {
-        text-shadow: 0 0 10px #ffff00;
-    }
-
-    50% {
-        text-shadow: 0 0 10px #00ffff;
-    }
-
-    75% {
-        text-shadow: 0 0 10px #ff00ff;
-    }
-
-    100% {
-        text-shadow: 0 0 5px #ff0000;
-    }
-}
-
-
-/* =========================================================
-   RARITY EFFECTS — RESULT SCREEN
-   ========================================================= */
-
-.rarity-common {
-    color: #66ff66;
-}
-
-.rarity-uncommon {
-    color: #4da6ff;
-    text-shadow: 0 0 10px rgba(77, 166, 255, 0.7);
-    animation: resultUncommon 2s ease-in-out infinite;
-}
-
-.rarity-rare {
-    color: #b266ff;
-    text-shadow: 0 0 12px rgba(178, 102, 255, 0.8);
-    animation: resultRare 1.8s ease-in-out infinite;
-}
-
-.rarity-epic {
-    color: #ff66cc;
-    text-shadow:
-        0 0 8px #ff66cc,
-        0 0 20px rgba(255, 102, 204, 0.8);
-    animation: resultEpic 1.2s ease-in-out infinite;
-}
-
-.rarity-legendary {
-    color: #ffd700;
-    text-shadow:
-        0 0 5px #ffd700,
-        0 0 15px #ffd700,
-        0 0 30px rgba(255, 215, 0, 0.8);
-    animation:
-        resultLegendary 1s ease-in-out infinite;
-}
-
-.rarity-jackpot {
-    font-weight: bold;
-    animation:
-        resultJackpot 0.7s linear infinite;
-}
-
-@keyframes resultUncommon {
-    0%, 100% {
-        text-shadow: 0 0 5px rgba(77, 166, 255, 0.3);
-    }
-
-    50% {
-        text-shadow: 0 0 20px rgba(77, 166, 255, 1);
-    }
-}
-
-@keyframes resultRare {
-    0%, 100% {
-        transform: scale(1);
-        text-shadow: 0 0 8px rgba(178, 102, 255, 0.5);
-    }
-
-    50% {
-        transform: scale(1.04);
-        text-shadow: 0 0 25px rgba(178, 102, 255, 1);
-    }
-}
-
-@keyframes resultEpic {
-    0%, 100% {
-        transform: scale(1);
-        text-shadow: 0 0 8px #ff66cc;
-    }
-
-    50% {
-        transform: scale(1.08);
-        text-shadow:
-            0 0 15px #ff66cc,
-            0 0 30px #ff66cc;
-    }
-}
-
-@keyframes resultLegendary {
-    0%, 100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
-}
-
-@keyframes resultJackpot {
     0% {
         color: #ff0000;
         text-shadow: 0 0 10px #ff0000;
@@ -734,5 +759,165 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
     100% {
         color: #ff00ff;
         text-shadow: 0 0 15px #ff00ff;
+    }
+}
+
+
+/* =========================================================
+   RARITY EFFECTS — RESULT SCREEN
+   ========================================================= */
+
+.rarity-common {
+    color: #66ff66;
+    font-weight: 600;
+}
+
+.rarity-uncommon {
+    color: #4da6ff;
+    font-weight: 700;
+
+    text-shadow:
+        0 0 10px rgba(77, 166, 255, 0.7);
+
+    animation: resultUncommon 2s ease-in-out infinite;
+}
+
+.rarity-rare {
+    color: #b266ff;
+    font-weight: 800;
+    letter-spacing: 1px;
+
+    text-shadow:
+        0 0 12px rgba(178, 102, 255, 0.8);
+
+    animation: resultRare 1.8s ease-in-out infinite;
+}
+
+.rarity-epic {
+    color: #ff66cc;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+
+    text-shadow:
+        0 0 8px #ff66cc,
+        0 0 20px rgba(255, 102, 204, 0.8);
+
+    animation:
+        resultEpic 1.2s ease-in-out infinite;
+}
+
+.rarity-legendary {
+    color: #ffd700;
+    font-weight: 1000;
+    letter-spacing: 2px;
+
+    text-shadow:
+        0 0 5px #ffd700,
+        0 0 15px #ffd700,
+        0 0 30px rgba(255, 215, 0, 0.8);
+
+    animation:
+        resultLegendary 1s ease-in-out infinite;
+}
+
+.rarity-jackpot {
+    font-weight: 1000;
+    letter-spacing: 3px;
+
+    animation:
+        resultJackpot 0.7s linear infinite;
+}
+
+
+/* =========================================================
+   RESULT ANIMATIONS
+   ========================================================= */
+
+@keyframes resultUncommon {
+    0%, 100% {
+        text-shadow:
+            0 0 5px rgba(77, 166, 255, 0.3);
+    }
+
+    50% {
+        text-shadow:
+            0 0 20px rgba(77, 166, 255, 1);
+    }
+}
+
+@keyframes resultRare {
+    0%, 100% {
+        transform: scale(1);
+        text-shadow:
+            0 0 8px rgba(178, 102, 255, 0.5);
+    }
+
+    50% {
+        transform: scale(1.05);
+        text-shadow:
+            0 0 25px rgba(178, 102, 255, 1);
+    }
+}
+
+@keyframes resultEpic {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+        text-shadow:
+            0 0 8px #ff66cc;
+    }
+
+    50% {
+        transform: scale(1.08) rotate(-1deg);
+        text-shadow:
+            0 0 15px #ff66cc,
+            0 0 30px #ff66cc;
+    }
+}
+
+@keyframes resultLegendary {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+
+    50% {
+        transform: scale(1.1) translateY(-3px);
+    }
+}
+
+@keyframes resultJackpot {
+    0% {
+        color: #ff0000;
+        text-shadow: 0 0 10px #ff0000;
+        transform: scale(1);
+    }
+
+    20% {
+        color: #ffff00;
+        text-shadow: 0 0 15px #ffff00;
+        transform: scale(1.05);
+    }
+
+    40% {
+        color: #00ff00;
+        text-shadow: 0 0 15px #00ff00;
+        transform: scale(1);
+    }
+
+    60% {
+        color: #00ffff;
+        text-shadow: 0 0 15px #00ffff;
+        transform: scale(1.05);
+    }
+
+    80% {
+        color: #0088ff;
+        text-shadow: 0 0 15px #0088ff;
+        transform: scale(1);
+    }
+
+    100% {
+        color: #ff00ff;
+        text-shadow: 0 0 15px #ff00ff;
+        transform: scale(1.05);
     }
 }
