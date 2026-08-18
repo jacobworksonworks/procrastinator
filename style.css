@@ -976,69 +976,62 @@ footer{background:#07529e;color:#d8ebff;border-top:2px solid #fff;font-family:Ta
 
 
 /* =========================================================
-   BEAT SYNC
+   BEAT SYNC — FULL PAGE + ELEMENTS
    ========================================================= */
 
 :root {
     --beat-strength: 0;
 }
 
+/* The whole visible page reacts */
+body.beat-pulse .page.active {
+    animation: pageBeat 180ms ease-out;
+}
+
+/* Timer */
 body.beat-pulse #timerDisplay {
-    animation: beatTimerPulse 180ms ease-out;
+    animation: timerBeat 180ms ease-out;
+    transform-origin: center;
 }
 
 body.beat-pulse #timerBar {
-    animation: beatBarPulse 180ms ease-out;
+    animation: barBeat 180ms ease-out;
 }
 
-body.beat-heavy #timerDisplay {
-    animation: beatHeavy 180ms ease-out;
+/* Timer box */
+body.beat-pulse .timer-wrap {
+    animation: boxBeat 180ms ease-out;
+    transform-origin: center;
 }
 
-@keyframes beatTimerPulse {
-    0% {
-        transform: scale(1);
-        text-shadow: 0 0 5px currentColor;
-    }
-
-    45% {
-        transform:
-            scale(calc(1 + var(--beat-strength) * 0.08));
-
-        text-shadow:
-            0 0 12px currentColor,
-            0 0 30px currentColor;
-    }
-
-    100% {
-        transform: scale(1);
-    }
+/* Current excuse box */
+body.beat-pulse .current-excuse {
+    animation: elementBeat 180ms ease-out;
 }
 
-@keyframes beatBarPulse {
-    0% {
-        filter: brightness(1);
-    }
-
-    50% {
-        filter:
-            brightness(
-                calc(1 + var(--beat-strength) * 1.5)
-            );
-    }
-
-    100% {
-        filter: brightness(1);
-    }
+/* Music label */
+body.beat-pulse .music-label {
+    animation: elementBeat 180ms ease-out;
 }
 
-@keyframes beatHeavy {
+/* Buttons */
+body.beat-pulse .timer-buttons {
+    animation: elementBeat 180ms ease-out;
+}
+
+
+/* =========================================================
+   NORMAL BEAT
+   ========================================================= */
+
+@keyframes pageBeat {
+
     0% {
         transform: scale(1);
     }
 
     30% {
-        transform: scale(1.12);
+        transform: scale(1.012);
     }
 
     100% {
@@ -1047,78 +1040,131 @@ body.beat-heavy #timerDisplay {
 }
 
 
+@keyframes timerBeat {
+
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    25% {
+        transform: scale(
+            calc(1 + var(--beat-strength) * 0.13)
+        );
+        filter: brightness(1.35);
+    }
+
+    55% {
+        transform: scale(
+            calc(1 + var(--beat-strength) * 0.055)
+        );
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+
+@keyframes boxBeat {
+
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.008);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+@keyframes elementBeat {
+
+    0% {
+        transform: scale(1);
+    }
+
+    35% {
+        transform: scale(1.025);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+@keyframes barBeat {
+
+    0% {
+        transform: scaleY(1);
+        filter: brightness(1);
+    }
+
+    35% {
+        transform: scaleY(1.12);
+        filter: brightness(1.6);
+    }
+
+    100% {
+        transform: scaleY(1);
+        filter: brightness(1);
+    }
+}
+
+
 /* =========================================================
-   BEAT SYNC — TIMER PAGE
+   HEAVY BEAT
    ========================================================= */
 
-#timer {
-    --beat-strength: 0;
+body.beat-heavy .page.active {
+    animation: heavyPageBeat 220ms ease-out;
 }
 
-/* Whole page — subtle movement */
-#timer.beat-pulse {
-    filter: brightness(
-        calc(1 + (var(--beat-strength, 0) * 0.08))
-    );
-
-    transform:
-        scale(calc(1 + (var(--beat-strength, 0) * 0.004)));
+body.beat-heavy #timerDisplay {
+    animation: heavyTimerBeat 220ms ease-out;
 }
 
-/* Main timer area — stronger movement */
-#timer .timer-wrap {
-    transition:
-        transform 0.10s ease-out,
-        filter 0.10s ease-out;
-}
+@keyframes heavyPageBeat {
 
-body.beat-pulse #timer .timer-wrap {
-    transform:
-        scale(calc(1 + (var(--beat-strength, 0) * 0.02)));
+    0% {
+        transform: scale(1);
+    }
 
-    filter:
-        brightness(calc(1 + (var(--beat-strength, 0) * 0.15)));
-}
+    25% {
+        transform: scale(1.025);
+    }
 
-/* Strong beats */
-body.beat-heavy #timer .timer-wrap {
-    transform:
-        scale(1.035)
-        translateY(-4px);
+    50% {
+        transform: scale(.997);
+    }
 
-    filter: brightness(1.2);
+    100% {
+        transform: scale(1);
+    }
 }
 
 
-/* =========================================================
-   INDIVIDUAL ELEMENTS
-   ========================================================= */
+@keyframes heavyTimerBeat {
 
-/* Big timer numbers */
-body.beat-pulse #timerDisplay {
-    transform:
-        scale(calc(1 + (var(--beat-strength, 0) * 0.035)));
+    0% {
+        transform: scale(1);
+    }
 
-    text-shadow:
-        0 0 calc(8px + (var(--beat-strength, 0) * 20px))
-        currentColor;
-}
+    25% {
+        transform: scale(1.18);
+    }
 
-/* Timer progress bar */
-body.beat-pulse #timerBar {
-    box-shadow:
-        0 0 calc(6px + (var(--beat-strength, 0) * 18px))
-        currentColor;
-}
+    50% {
+        transform: scale(1.04);
+    }
 
-/* Music label */
-body.beat-pulse #musicLabel {
-    transform:
-        translateY(calc(var(--beat-strength, 0) * -2px));
-}
-
-/* Current excuse */
-body.beat-pulse #timerExcuse {
-    transform:
-        translateX(calc(var(--beat-strength, 0) * 3px));
+    100% {
+        transform: scale(1);
+    }
 }
