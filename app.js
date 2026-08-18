@@ -513,130 +513,214 @@ let lobbyAudio = null;
 let musicStarted = false;
 
 /* =========================================================
-   SMART BPM + AUDIO-REACTIVE BEAT SYNC
-   ========================================================= */
+   AUDIO VISUALIZER
+   =========================================================
+   
+   No BPM detection.
+   No drum detection.
+   No guessing where beats are.
+
+   The visualizer simply reacts directly to the music's
+   frequency spectrum, so it works with:
+   
+   - drums
+   - piano
+   - vocals
+   - synths
+   - orchestral music
+   - ambient music
+   - songs with NO drums whatsoever
+*/
+
 
 let beatAudioContext = null;
 let beatAnalyser = null;
 let beatSource = null;
 
 let beatData = null;
-let previousSpectrum = null;
+let waveformData = null;
 
 let beatFrame = null;
 
-/*
- * Current tempo estimate.
- */
-let currentBPM = 120;
-let targetBPM = 120;
+let visualizerCanvas = null;
+let visualizerCtx = null;
 
-let beatInterval = 500;
-let nextBeatTime = 0;
-
-/*
- * Detected transient timestamps.
- */
-let detectedPeaks = [];
-
-/*
- * Recent BPM estimates.
- */
-let bpmHistory = [];
-
-/*
- * Recent energy history.
- */
-let energyHistory = [];
-let fluxHistory = [];
-
-/*
- * Last actual/predicted beat.
- */
-let lastBeatTime = 0;
-let lastBeatStrength = 0;
-
-/*
- * Startup BPM analysis.
- */
-let bpmAnalysisStart = 0;
-
-/*
- * Prevent duplicate beats.
- */
-const MIN_BEAT_GAP = 220;
-
-/*
- * BPM limits.
- */
-const BPM_MIN = 65;
-const BPM_MAX = 180;
-
-/*
- * Analyze roughly this long before
- * trusting the first BPM estimate.
- */
-const INITIAL_ANALYSIS_TIME = 5000;
-
-/*
- * How often we allow the BPM estimate
- * to update.
- */
-const BPM_UPDATE_INTERVAL = 1200;
-
-let lastBPMUpdate = 0;
+let visualizerReady = false;
 
 
 /* =========================================================
-   TUNING
+   VISUALIZER SETTINGS
    ========================================================= */
 
+const VISUALIZER_FFT_SIZE = 2048;
+
 /*
- * Overall onset sensitivity.
+ * How much of the visualizer's motion is smoothed.
  *
- * LOWER = more sensitive
- * HIGHER = fewer detected transients
+ * Higher = smoother
+ * Lower = more reactive
  */
-const ONSET_SENSITIVITY = 1.15;
-
+const VISUALIZER_SMOOTHING = 0.82;
 
 /*
- * How strongly BPM corrections are applied.
- *
- * Small = very smooth
- * Large = reacts quickly
+ * Overall visualizer opacity.
  */
-const BPM_SMOOTHING = 0.08;
-
+const VISUALIZER_OPACITY = 0.28;
 
 /*
- * How quickly we react to a genuine
- * tempo change.
+ * How strongly bass influences the visualizer.
  */
-const BPM_CHANGE_SMOOTHING = 0.25;
-
+const BASS_BOOST = 1.35;
 
 /*
- * How close an audio transient needs
- * to be to the predicted beat.
+ * Minimum movement so quiet music doesn't look dead.
  */
-const BEAT_SEARCH_WINDOW = 120;
-
-
-/*
- * Minimum transient strength.
- */
-const MIN_FLUX = 4;
+const MIN_MOVEMENT = 0.035;
 
 
 /* =========================================================
-   SETUP
+   INTERNAL STATE
+   ========================================================= */
+
+let visualizerBars = [];
+let previousVisualizerBars = [];
+
+let visualizerEnergy = 0;
+let previousVisualizerEnergy = 0;
+
+let visualizerWidth = 0;
+let visualizerHeight = 0;
+
+
+/* =========================================================
+   CREATE CANVAS
+   ========================================================= */
+
+function createVisualizer() {
+
+  if (visualizerCanvas) {
+    return;
+  }
+
+  visualizerCanvas =
+    document.createElement("canvas");
+
+  visualizerCanvas.id =
+    "audioVisualizer";
+
+  /*
+   * The canvas is created entirely from JS,
+   * so you don't need to modify your HTML.
+   */
+  visualizerCanvas.style.position =
+    "fixed";
+
+  visualizerCanvas.style.left =
+    "0";
+
+  visualizerCanvas.style.bottom =
+    "0";
+
+  visualizerCanvas.style.width =
+    "100vw";
+
+  visualizerCanvas.style.height =
+    "32vh";
+
+  visualizerCanvas.style.pointerEvents =
+    "none";
+
+  visualizerCanvas.style.zIndex =
+    "0";
+
+  visualizerCanvas.style.opacity =
+    String(VISUALIZER_OPACITY);
+
+  visualizerCanvas.style.transition =
+    "opacity 0.3s ease";
+
+  /*
+   * Prevent it from accidentally interfering
+   * with your existing UI.
+   */
+  visualizerCanvas.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  document.body.appendChild(
+    visualizerCanvas
+  );
+
+  visualizerCtx =
+    visualizerCanvas.getContext("2d");
+
+  resizeVisualizer();
+
+}
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+function resizeVisualizer() {
+
+  if (!visualizerCanvas) {
+    return;
+  }
+
+  const dpr =
+    window.devicePixelRatio || 1;
+
+  visualizerWidth =
+    window.innerWidth;
+
+  visualizerHeight =
+    window.innerHeight *
+    0.32;
+
+  visualizerCanvas.width =
+    visualizerWidth * dpr;
+
+  visualizerCanvas.height =
+    visualizerHeight * dpr;
+
+  /*
+   * Draw using CSS-pixel coordinates.
+   */
+  visualizerCtx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+}
+
+
+/* =========================================================
+   SETUP AUDIO ANALYSER
    ========================================================= */
 
 function setupBeatSync() {
 
-  if (!audio || beatAnalyser) {
+  /*
+   * We only create the analyser/source once.
+   *
+   * This is important because calling
+   * createMediaElementSource() repeatedly on
+   * the same Audio element causes errors.
+   */
+  if (
+    !audio ||
+    beatAnalyser
+  ) {
+
     return;
+
   }
 
   try {
@@ -651,22 +735,23 @@ function setupBeatSync() {
       beatAudioContext.createAnalyser();
 
     /*
-     * 1024 gives us better timing resolution
-     * for beat/onset detection.
+     * Larger FFT = more frequency detail.
      */
-    beatAnalyser.fftSize = 1024;
+    beatAnalyser.fftSize =
+      VISUALIZER_FFT_SIZE;
 
     /*
-     * Low smoothing is important.
-     *
-     * Too much smoothing makes kicks disappear.
+     * Smoothing makes the bars flow rather
+     * than violently jumping every frame.
      */
-    beatAnalyser.smoothingTimeConstant = 0.08;
+    beatAnalyser.smoothingTimeConstant =
+      0.78;
 
     beatSource =
-      beatAudioContext.createMediaElementSource(
-        audio
-      );
+      beatAudioContext
+        .createMediaElementSource(
+          audio
+        );
 
     beatSource.connect(
       beatAnalyser
@@ -681,15 +766,18 @@ function setupBeatSync() {
         beatAnalyser.frequencyBinCount
       );
 
-    previousSpectrum =
-      new Float32Array(
-        beatAnalyser.frequencyBinCount
+    waveformData =
+      new Uint8Array(
+        beatAnalyser.fftSize
       );
+
+    visualizerReady =
+      true;
 
   } catch (err) {
 
     console.warn(
-      "Beat sync could not start:",
+      "Audio visualizer could not start:",
       err
     );
 
@@ -699,7 +787,7 @@ function setupBeatSync() {
 
 
 /* =========================================================
-   START
+   START VISUALIZER
    ========================================================= */
 
 function startBeatSync() {
@@ -715,6 +803,8 @@ function startBeatSync() {
     return;
 
   }
+
+  createVisualizer();
 
   setupBeatSync();
 
@@ -743,42 +833,33 @@ function startBeatSync() {
   );
 
   /*
-   * Reset analysis.
+   * Reset visualizer state.
    */
-  detectedPeaks = [];
+  visualizerBars = [];
 
-  bpmHistory = [];
+  previousVisualizerBars = [];
 
-  energyHistory = [];
+  visualizerEnergy = 0;
 
-  fluxHistory = [];
-
-  currentBPM = 120;
-  targetBPM = 120;
-
-  beatInterval = 60000 / currentBPM;
-
-  lastBeatTime = 0;
-  lastBeatStrength = 0;
-
-  lastBPMUpdate = 0;
-
-  bpmAnalysisStart =
-    performance.now();
+  previousVisualizerEnergy = 0;
 
   /*
-   * First predicted beat.
+   * Make visualizer visible.
    */
-  nextBeatTime =
-    performance.now() + 500;
+  if (visualizerCanvas) {
 
-  beatLoop();
+    visualizerCanvas.style.opacity =
+      String(VISUALIZER_OPACITY);
+
+  }
+
+  visualizerLoop();
 
 }
 
 
 /* =========================================================
-   STOP
+   STOP VISUALIZER
    ========================================================= */
 
 function stopBeatSync() {
@@ -789,14 +870,30 @@ function stopBeatSync() {
 
   beatFrame = null;
 
-  detectedPeaks = [];
+  visualizerBars = [];
 
-  bpmHistory = [];
+  previousVisualizerBars = [];
 
-  energyHistory = [];
+  visualizerEnergy = 0;
 
-  fluxHistory = [];
+  previousVisualizerEnergy = 0;
 
+  /*
+   * Keep the canvas alive, but hide it.
+   *
+   * This means we don't repeatedly create/destroy
+   * DOM elements during the session.
+   */
+  if (visualizerCanvas) {
+
+    visualizerCanvas.style.opacity =
+      "0";
+
+  }
+
+  /*
+   * Keep these existing CSS hooks working.
+   */
   document.body.classList.remove(
     "beat-pulse",
     "beat-heavy"
@@ -806,6 +903,408 @@ function stopBeatSync() {
     "--beat-strength",
     "0"
   );
+
+}
+
+
+/* =========================================================
+   GET AUDIO DATA
+   ========================================================= */
+
+function getVisualizerData() {
+
+  if (
+    !beatAnalyser ||
+    !beatData
+  ) {
+
+    return null;
+
+  }
+
+  beatAnalyser.getByteFrequencyData(
+    beatData
+  );
+
+  /*
+   * Also grab waveform data.
+   * This gives us information about the actual
+   * shape/intensity of the audio signal.
+   */
+  if (waveformData) {
+
+    beatAnalyser.getByteTimeDomainData(
+      waveformData
+    );
+
+  }
+
+  return beatData;
+
+}
+
+
+/* =========================================================
+   CALCULATE ENERGY
+   ========================================================= */
+
+function calculateAudioEnergy(data) {
+
+  if (!data || !data.length) {
+    return 0;
+  }
+
+  /*
+   * Don't treat every frequency equally.
+   *
+   * Human perception is heavily influenced by
+   * low frequencies, so bass gets extra weight.
+   */
+  let total = 0;
+  let weightTotal = 0;
+
+  const bassEnd =
+    Math.floor(data.length * 0.08);
+
+  const lowEnd =
+    Math.floor(data.length * 0.25);
+
+  for (
+    let i = 0;
+    i < data.length;
+    i++
+  ) {
+
+    let weight = 1;
+
+    if (i < bassEnd) {
+
+      weight =
+        BASS_BOOST;
+
+    } else if (
+      i < lowEnd
+    ) {
+
+      weight =
+        1.15;
+
+    }
+
+    total +=
+      data[i] * weight;
+
+    weightTotal +=
+      weight;
+
+  }
+
+  return (
+    total /
+    Math.max(weightTotal, 1)
+  ) / 255;
+
+}
+
+
+/* =========================================================
+   CREATE SMOOTH BAR DATA
+   ========================================================= */
+
+function calculateBars(data) {
+
+  if (!data) {
+    return [];
+  }
+
+  /*
+   * We don't need hundreds of bars.
+   *
+   * Around 80 gives a much cleaner visual.
+   */
+  const BAR_COUNT = 80;
+
+  const bars = [];
+
+  const samplesPerBar =
+    data.length /
+    BAR_COUNT;
+
+  for (
+    let i = 0;
+    i < BAR_COUNT;
+    i++
+  ) {
+
+    const start =
+      Math.floor(
+        i * samplesPerBar
+      );
+
+    const end =
+      Math.floor(
+        (i + 1) *
+        samplesPerBar
+      );
+
+    let total = 0;
+
+    let count = 0;
+
+    for (
+      let j = start;
+      j < end;
+      j++
+    ) {
+
+      /*
+       * Frequency data is already logarithmically
+       * useful, but averaging the bins makes it
+       * significantly smoother.
+       */
+      total += data[j];
+
+      count++;
+
+    }
+
+    let value =
+      count
+        ? total / count / 255
+        : 0;
+
+    /*
+     * Make the bass side more energetic.
+     */
+    if (i < BAR_COUNT * 0.12) {
+
+      value *=
+        BASS_BOOST;
+
+    }
+
+    /*
+     * Gentle minimum movement.
+     */
+    value =
+      Math.max(
+        MIN_MOVEMENT,
+        Math.min(1, value)
+      );
+
+    /*
+     * Smooth against previous frame.
+     */
+    const previous =
+      previousVisualizerBars[i] || 0;
+
+    value =
+      previous *
+        VISUALIZER_SMOOTHING +
+      value *
+        (1 - VISUALIZER_SMOOTHING);
+
+    bars.push(value);
+
+  }
+
+  previousVisualizerBars =
+    bars.slice();
+
+  return bars;
+
+}
+
+
+/* =========================================================
+   DRAW VISUALIZER
+   ========================================================= */
+
+function drawVisualizer(
+  data,
+  bars,
+  energy
+) {
+
+  if (
+    !visualizerCtx ||
+    !visualizerCanvas
+  ) {
+
+    return;
+
+  }
+
+  const ctx =
+    visualizerCtx;
+
+  const w =
+    visualizerWidth;
+
+  const h =
+    visualizerHeight;
+
+  /*
+   * Clear previous frame.
+   */
+  ctx.clearRect(
+    0,
+    0,
+    w,
+    h
+  );
+
+  if (!bars.length) {
+    return;
+  }
+
+  /*
+   * Center line.
+   */
+  const centerY =
+    h * 0.92;
+
+  const maxBarHeight =
+    h * 0.82;
+
+  const barWidth =
+    w /
+    bars.length;
+
+  /*
+   * Draw mirrored bars.
+   *
+   * This makes it feel more like an actual
+   * music visualizer rather than an equalizer.
+   */
+  for (
+    let i = 0;
+    i < bars.length;
+    i++
+  ) {
+
+    const value =
+      bars[i];
+
+    /*
+     * Exaggerate stronger frequencies.
+     */
+    const height =
+      Math.pow(
+        value,
+        0.72
+      ) *
+      maxBarHeight;
+
+    const x =
+      i * barWidth;
+
+    const width =
+      Math.max(
+        1,
+        barWidth - 2
+      );
+
+    /*
+     * Fade the outside edges.
+     */
+    const edgeFade =
+      Math.sin(
+        Math.PI *
+        (
+          i /
+          Math.max(
+            bars.length - 1,
+            1
+          )
+        )
+      );
+
+    const finalHeight =
+      height *
+      (
+        0.45 +
+        edgeFade * 0.55
+      );
+
+    /*
+     * Main upper bar.
+     */
+    ctx.fillStyle =
+      `rgba(102,255,0,${0.20 + value * 0.55})`;
+
+    ctx.fillRect(
+      x,
+      centerY -
+        finalHeight,
+      width,
+      finalHeight
+    );
+
+    /*
+     * Small mirrored reflection.
+     */
+    ctx.fillStyle =
+      `rgba(102,255,0,${0.06 + value * 0.14})`;
+
+    ctx.fillRect(
+      x,
+      centerY,
+      width,
+      finalHeight * 0.18
+    );
+
+  }
+
+  /*
+   * Draw a subtle glowing energy line.
+   */
+  ctx.beginPath();
+
+  ctx.lineWidth =
+    2;
+
+  ctx.strokeStyle =
+    `rgba(102,255,0,${0.15 + energy * 0.4})`;
+
+  for (
+    let i = 0;
+    i < bars.length;
+    i++
+  ) {
+
+    const x =
+      i * barWidth +
+      barWidth / 2;
+
+    const y =
+      centerY -
+      Math.pow(
+        bars[i],
+        0.8
+      ) *
+      maxBarHeight *
+      0.65;
+
+    if (i === 0) {
+
+      ctx.moveTo(
+        x,
+        y
+      );
+
+    } else {
+
+      ctx.lineTo(
+        x,
+        y
+      );
+
+    }
+
+  }
+
+  ctx.stroke();
 
 }
 
@@ -831,7 +1330,10 @@ function triggerBeat(strength) {
   );
 
   /*
-   * Restart animation.
+   * Keep your existing CSS beat effects working.
+   *
+   * These are now driven by overall audio energy
+   * instead of guessed BPM.
    */
   document.body.classList.remove(
     "beat-pulse",
@@ -860,662 +1362,10 @@ function triggerBeat(strength) {
 
 
 /* =========================================================
-   HELPERS
+   MAIN VISUALIZER LOOP
    ========================================================= */
 
-function average(arr) {
-
-  if (!arr.length) {
-    return 0;
-  }
-
-  return arr.reduce(
-    (a, b) => a + b,
-    0
-  ) / arr.length;
-
-}
-
-
-/*
- * Convert analyser bin into a rough
- * frequency.
- */
-function binFrequency(bin) {
-
-  if (!beatAudioContext) {
-    return 0;
-  }
-
-  return (
-    bin *
-    beatAudioContext.sampleRate /
-    beatAnalyser.fftSize
-  );
-
-}
-
-
-/* =========================================================
-   SPECTRAL ANALYSIS
-   ========================================================= */
-
-function analyzeSpectrum() {
-
-  beatAnalyser.getByteFrequencyData(
-    beatData
-  );
-
-  /*
-   * Frequency bands.
-   *
-   * These aren't meant to perfectly represent
-   * instruments. They simply make detection
-   * much more robust.
-   */
-
-  let bass = 0;
-  let lowMid = 0;
-  let mid = 0;
-  let high = 0;
-
-  let bassFlux = 0;
-  let lowMidFlux = 0;
-  let midFlux = 0;
-  let highFlux = 0;
-
-  for (
-    let i = 1;
-    i < beatData.length;
-    i++
-  ) {
-
-    const value =
-      beatData[i];
-
-    const previous =
-      previousSpectrum[i];
-
-    /*
-     * Spectral flux:
-     *
-     * Only count increases.
-     */
-    const flux =
-      Math.max(
-        0,
-        value - previous
-      );
-
-    const freq =
-      binFrequency(i);
-
-    if (freq < 140) {
-
-      bass += value;
-      bassFlux += flux;
-
-    } else if (
-      freq < 400
-    ) {
-
-      lowMid += value;
-      lowMidFlux += flux;
-
-    } else if (
-      freq < 2000
-    ) {
-
-      mid += value;
-      midFlux += flux;
-
-    } else if (
-      freq < 8000
-    ) {
-
-      high += value;
-      highFlux += flux;
-
-    }
-
-    previousSpectrum[i] =
-      value;
-
-  }
-
-  /*
-   * Normalize each band.
-   */
-  bass /= 12;
-  lowMid /= 20;
-  mid /= 40;
-  high /= 70;
-
-  bassFlux /= 12;
-  lowMidFlux /= 20;
-  midFlux /= 40;
-  highFlux /= 70;
-
-  /*
-   * Weighted onset score.
-   *
-   * Bass gets the most importance because
-   * kicks are usually our best beat indicator.
-   *
-   * Low-mid catches snares/body.
-   *
-   * Mid catches piano/synth/percussion attacks.
-   */
-  const onset =
-    bassFlux * 0.40 +
-    lowMidFlux * 0.30 +
-    midFlux * 0.20 +
-    highFlux * 0.10;
-
-  const energy =
-    bass * 0.40 +
-    lowMid * 0.30 +
-    mid * 0.20 +
-    high * 0.10;
-
-  return {
-    energy,
-    onset,
-    bass,
-    lowMid,
-    mid,
-    high
-  };
-
-}
-
-
-/* =========================================================
-   ONSET DETECTION
-   ========================================================= */
-
-function detectOnset(
-  analysis,
-  now
-) {
-
-  const onset =
-    analysis.onset;
-
-  fluxHistory.push(
-    onset
-  );
-
-  energyHistory.push(
-    analysis.energy
-  );
-
-  /*
-   * Roughly several seconds of history.
-   */
-  if (
-    fluxHistory.length > 220
-  ) {
-
-    fluxHistory.shift();
-
-  }
-
-  if (
-    energyHistory.length > 220
-  ) {
-
-    energyHistory.shift();
-
-  }
-
-  if (
-    fluxHistory.length < 15
-  ) {
-
-    return false;
-
-  }
-
-  const fluxAverage =
-    average(
-      fluxHistory
-    );
-
-  const fluxVariance =
-    average(
-      fluxHistory.map(
-        x =>
-          Math.pow(
-            x - fluxAverage,
-            2
-          )
-      )
-    );
-
-  const fluxStd =
-    Math.sqrt(
-      fluxVariance
-    );
-
-  /*
-   * Adaptive threshold.
-   */
-  const threshold =
-    fluxAverage +
-    fluxStd *
-    ONSET_SENSITIVITY;
-
-  /*
-   * Require this frame to be a local peak.
-   */
-  const len =
-    fluxHistory.length;
-
-  const current =
-    fluxHistory[len - 1];
-
-  const previous =
-    fluxHistory[len - 2] || 0;
-
-  const previousPrevious =
-    fluxHistory[len - 3] || 0;
-
-  const localPeak =
-    current >= previous &&
-    previous >= previousPrevious;
-
-  /*
-   * Don't let the same kick create
-   * several peaks.
-   */
-  const enoughTime =
-    now -
-    lastBeatTime >
-    MIN_BEAT_GAP;
-
-  if (
-    localPeak &&
-    current >
-      threshold &&
-    current >
-      MIN_FLUX &&
-    enoughTime
-  ) {
-
-    /*
-     * Save this as a real transient.
-     */
-    detectedPeaks.push(
-      now
-    );
-
-    /*
-     * Keep the last ~15 seconds.
-     */
-    const cutoff =
-      now - 15000;
-
-    detectedPeaks =
-      detectedPeaks.filter(
-        t => t >= cutoff
-      );
-
-    return true;
-
-  }
-
-  return false;
-
-}
-
-
-/* =========================================================
-   BPM ESTIMATION
-   ========================================================= */
-
-function estimateBPMFromPeaks() {
-
-  if (
-    detectedPeaks.length < 4
-  ) {
-
-    return null;
-
-  }
-
-  const candidates = [];
-
-  /*
-   * Compare peak-to-peak intervals.
-   */
-  for (
-    let i = 1;
-    i < detectedPeaks.length;
-    i++
-  ) {
-
-    const interval =
-      detectedPeaks[i] -
-      detectedPeaks[i - 1];
-
-    if (
-      interval < 250 ||
-      interval > 1500
-    ) {
-
-      continue;
-
-    }
-
-    let bpm =
-      60000 /
-      interval;
-
-    /*
-     * Try musically equivalent tempos.
-     *
-     * Example:
-     *
-     * 60 BPM
-     * 120 BPM
-     * 240 BPM
-     *
-     * can represent related subdivisions.
-     */
-    while (
-      bpm < BPM_MIN
-    ) {
-
-      bpm *= 2;
-
-    }
-
-    while (
-      bpm > BPM_MAX
-    ) {
-
-      bpm /= 2;
-
-    }
-
-    if (
-      bpm >= BPM_MIN &&
-      bpm <= BPM_MAX
-    ) {
-
-      candidates.push(
-        bpm
-      );
-
-    }
-
-  }
-
-  if (
-    candidates.length < 2
-  ) {
-
-    return null;
-
-  }
-
-  /*
-   * Cluster nearby BPM estimates.
-   *
-   * This prevents one weird transient
-   * from completely changing the BPM.
-   */
-  const clusters = [];
-
-  for (
-    const bpm of candidates
-  ) {
-
-    let cluster =
-      clusters.find(
-        c =>
-          Math.abs(
-            c.average -
-            bpm
-          ) < 3
-      );
-
-    if (!cluster) {
-
-      cluster = {
-        average: bpm,
-        count: 0,
-        total: 0
-      };
-
-      clusters.push(
-        cluster
-      );
-
-    }
-
-    cluster.total += bpm;
-    cluster.count++;
-
-    cluster.average =
-      cluster.total /
-      cluster.count;
-
-  }
-
-  clusters.sort(
-    (a, b) =>
-      b.count -
-      a.count
-  );
-
-  if (
-    !clusters.length
-  ) {
-
-    return null;
-
-  }
-
-  /*
-   * Require the winning cluster
-   * to have some consistency.
-   */
-  const winner =
-    clusters[0];
-
-  if (
-    winner.count < 2
-  ) {
-
-    return null;
-
-  }
-
-  return winner.average;
-
-}
-
-
-/* =========================================================
-   CONTINUOUS BPM TRACKING
-   ========================================================= */
-
-function updateBPM(now) {
-
-  /*
-   * Don't constantly recalculate every frame.
-   */
-  if (
-    now -
-    lastBPMUpdate <
-    BPM_UPDATE_INTERVAL
-  ) {
-
-    return;
-
-  }
-
-  lastBPMUpdate =
-    now;
-
-  const detected =
-    estimateBPMFromPeaks();
-
-  if (!detected) {
-    return;
-  }
-
-  targetBPM =
-    detected;
-
-  const difference =
-    Math.abs(
-      targetBPM -
-      currentBPM
-    );
-
-  /*
-   * Small changes:
-   *
-   * Slowly correct the clock.
-   */
-  if (
-    difference < 8
-  ) {
-
-    currentBPM +=
-      (
-        targetBPM -
-        currentBPM
-      ) *
-      BPM_SMOOTHING;
-
-  }
-
-  /*
-   * Large change:
-   *
-   * Could be a genuine tempo change.
-   *
-   * React faster, but still don't jump
-   * instantly.
-   */
-  else {
-
-    currentBPM +=
-      (
-        targetBPM -
-        currentBPM
-      ) *
-      BPM_CHANGE_SMOOTHING;
-
-  }
-
-  currentBPM =
-    Math.max(
-      BPM_MIN,
-      Math.min(
-        BPM_MAX,
-        currentBPM
-      )
-    );
-
-  beatInterval =
-    60000 /
-    currentBPM;
-
-}
-
-
-/* =========================================================
-   AUDIO-CONFIRMED BEAT
-   ========================================================= */
-
-function getBeatStrength(
-  analysis
-) {
-
-  if (
-    energyHistory.length < 10 ||
-    fluxHistory.length < 10
-  ) {
-
-    return 0.2;
-
-  }
-
-  const averageEnergy =
-    average(
-      energyHistory
-    );
-
-  const averageFlux =
-    average(
-      fluxHistory
-    );
-
-  const energyRatio =
-    analysis.energy /
-    Math.max(
-      averageEnergy,
-      1
-    );
-
-  const fluxRatio =
-    analysis.onset /
-    Math.max(
-      averageFlux,
-      1
-    );
-
-  /*
-   * Combine:
-   *
-   * overall musical energy
-   * +
-   * sudden spectral change
-   */
-  let strength =
-    (
-      (energyRatio - 1) *
-      0.40
-    ) +
-    (
-      (fluxRatio - 1) *
-      0.60
-    );
-
-  /*
-   * Normalize.
-   */
-  strength =
-    Math.max(
-      0,
-      Math.min(
-        1,
-        strength
-      )
-    );
-
-  /*
-   * Smooth consecutive pulses.
-   */
-  strength =
-    lastBeatStrength * 0.20 +
-    strength * 0.80;
-
-  return strength;
-
-}
-
-
-/* =========================================================
-   MAIN LOOP
-   ========================================================= */
-
-function beatLoop() {
+function visualizerLoop() {
 
   if (
     !$("#beatSyncToggle")?.checked ||
@@ -1531,188 +1381,129 @@ function beatLoop() {
 
   }
 
-  const now =
-    performance.now();
-
-  /*
-   * Analyze actual audio.
-   */
-  const analysis =
-    analyzeSpectrum();
-
-  /*
-   * Look for genuine audio transients.
-   */
-  const onsetDetected =
-    detectOnset(
-      analysis,
-      now
-    );
-
-  /*
-   * Continuously update BPM.
-   */
-  updateBPM(now);
-
-
-  /* =======================================================
-     PHASE LOCKING
-     ======================================================= */
-
-  /*
-   * If we found a real transient near the expected
-   * beat, use it to correct our beat clock.
-   */
   if (
-    onsetDetected
+    !beatAnalyser
   ) {
 
-    const distance =
-      now -
-      nextBeatTime;
-
-    /*
-     * If the transient is reasonably close
-     * to where the BPM clock expected a beat,
-     * treat it as the actual beat.
-     */
-    if (
-      Math.abs(distance) <=
-      BEAT_SEARCH_WINDOW
-    ) {
-
-      /*
-       * Pull the predicted beat toward
-       * the actual transient.
-       */
-      nextBeatTime =
-        now +
-        beatInterval;
-
-      /*
-       * Audio confirmed beat.
-       */
-      if (
-        now -
-        lastBeatTime >
-        MIN_BEAT_GAP
-      ) {
-
-        const strength =
-          getBeatStrength(
-            analysis
-          );
-
-        lastBeatTime =
-          now;
-
-        lastBeatStrength =
-          strength;
-
-        triggerBeat(
-          strength
-        );
-
-      }
-
-    }
-
-  }
-
-
-  /* =======================================================
-     PREDICTED BEAT
-     ======================================================= */
-
-  /*
-   * If the BPM clock reaches the expected beat
-   * but we didn't detect a transient exactly there,
-   * don't immediately create a giant pulse.
-   *
-   * Give the audio a chance to confirm it.
-   */
-
-  if (
-    now >=
-    nextBeatTime
-  ) {
-
-    /*
-     * Move forward without accumulating drift.
-     */
-    do {
-
-      nextBeatTime +=
-        beatInterval;
-
-    } while (
-      nextBeatTime <
-      now
-    );
-
-  }
-
-
-  /* =======================================================
-     STARTUP FALLBACK
-     ======================================================= */
-
-  /*
-   * During the first few seconds, BPM may not
-   * be reliable yet.
-   *
-   * Allow strong actual transients to create
-   * subtle pulses anyway.
-   */
-  const startupElapsed =
-    now -
-    bpmAnalysisStart;
-
-  if (
-    startupElapsed <
-    INITIAL_ANALYSIS_TIME
-  ) {
-
-    if (
-      onsetDetected &&
-      now -
-      lastBeatTime >
-      MIN_BEAT_GAP
-    ) {
-
-      const strength =
-        getBeatStrength(
-          analysis
-        );
-
-      /*
-       * Keep startup pulses weaker so the
-       * detector doesn't look chaotic.
-       */
-      const startupStrength =
-        strength * 0.55;
-
-      lastBeatTime =
-        now;
-
-      lastBeatStrength =
-        startupStrength;
-
-      triggerBeat(
-        startupStrength
+    beatFrame =
+      requestAnimationFrame(
+        visualizerLoop
       );
 
-    }
+    return;
 
   }
 
+  const data =
+    getVisualizerData();
+
+  if (!data) {
+
+    beatFrame =
+      requestAnimationFrame(
+        visualizerLoop
+      );
+
+    return;
+
+  }
+
+  /*
+   * Calculate overall audio energy.
+   */
+  const energy =
+    calculateAudioEnergy(
+      data
+    );
+
+  /*
+   * Smooth energy.
+   */
+  visualizerEnergy =
+    visualizerEnergy *
+      0.85 +
+    energy *
+      0.15;
+
+  /*
+   * Detect sudden energy increases.
+   *
+   * This isn't BPM detection.
+   *
+   * It simply lets the existing CSS pulse
+   * react naturally when the music suddenly
+   * gets louder.
+   */
+  const energyChange =
+    visualizerEnergy -
+    previousVisualizerEnergy;
+
+  previousVisualizerEnergy =
+    visualizerEnergy;
+
+  let strength =
+    energy * 0.45 +
+    Math.max(
+      0,
+      energyChange * 5
+    ) * 0.55;
+
+  strength =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        strength
+      )
+    );
+
+  /*
+   * Only trigger the CSS pulse when there's
+   * actually something happening.
+   */
+  if (
+    strength > 0.18
+  ) {
+
+    triggerBeat(
+      strength
+    );
+
+  }
+
+  /*
+   * Calculate frequency bars.
+   */
+  const bars =
+    calculateBars(
+      data
+    );
+
+  /*
+   * Draw.
+   */
+  drawVisualizer(
+    data,
+    bars,
+    visualizerEnergy
+  );
 
   beatFrame =
     requestAnimationFrame(
-      beatLoop
+      visualizerLoop
     );
 
 }
+
+
+/* =========================================================
+   RESIZE LISTENER
+   ========================================================= */
+
+window.addEventListener(
+  "resize",
+  resizeVisualizer
+);
 
 function getVolume() {
   const slider = $("#volume");
