@@ -619,7 +619,7 @@ function createVisualizer() {
     "0";
 
   visualizerCanvas.style.bottom =
-    "0";
+  "env(safe-area-inset-bottom, 0px)";
 
   visualizerCanvas.style.width =
     "100vw";
