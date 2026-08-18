@@ -512,6 +512,160 @@ let currentTrack = null;
 let lobbyAudio = null;
 let musicStarted = false;
 
+/* =========================================================
+   BEAT SYNC
+   ========================================================= */
+
+let beatAudioContext = null;
+let beatAnalyser = null;
+let beatSource = null;
+let beatData = null;
+let beatFrame = null;
+
+let beatLastTime = 0;
+let beatAverage = 0;
+
+function setupBeatSync() {
+  if (!audio || beatAnalyser) {
+    return;
+  }
+
+  try {
+    beatAudioContext =
+      new (window.AudioContext || window.webkitAudioContext)();
+
+    beatAnalyser =
+      beatAudioContext.createAnalyser();
+
+    beatAnalyser.fftSize = 1024;
+    beatAnalyser.smoothingTimeConstant = 0.65;
+
+    beatSource =
+      beatAudioContext.createMediaElementSource(audio);
+
+    beatSource.connect(beatAnalyser);
+    beatAnalyser.connect(beatAudioContext.destination);
+
+    beatData =
+      new Uint8Array(beatAnalyser.frequencyBinCount);
+
+  } catch (err) {
+    console.warn("Beat sync could not start:", err);
+  }
+}
+
+function startBeatSync() {
+  if (
+    !$("#beatSyncToggle")?.checked ||
+    !audio ||
+    !timer ||
+    paused
+  ) {
+    return;
+  }
+
+  setupBeatSync();
+
+  if (!beatAudioContext || !beatAnalyser) {
+    return;
+  }
+
+  if (beatAudioContext.state === "suspended") {
+    beatAudioContext.resume().catch(() => {});
+  }
+
+  cancelAnimationFrame(beatFrame);
+
+  beatLastTime = performance.now();
+  beatAverage = 0;
+
+  beatLoop();
+}
+
+function stopBeatSync() {
+  cancelAnimationFrame(beatFrame);
+  beatFrame = null;
+
+  document.body.classList.remove("beat-pulse");
+  document.body.classList.remove("beat-heavy");
+}
+
+function beatLoop() {
+  if (
+    !$("#beatSyncToggle")?.checked ||
+    !audio ||
+    !timer ||
+    paused ||
+    sessionEnded
+  ) {
+    stopBeatSync();
+    return;
+  }
+
+  beatAnalyser.getByteFrequencyData(beatData);
+
+  let energy = 0;
+
+  const start = 2;
+  const end = Math.min(45, beatData.length);
+
+  for (let i = start; i < end; i++) {
+    energy += beatData[i];
+  }
+
+  energy /= Math.max(1, end - start);
+
+  beatAverage =
+    beatAverage * 0.92 +
+    energy * 0.08;
+
+  const threshold =
+    Math.max(125, beatAverage * 1.55);
+
+  const now = performance.now();
+
+  if (
+    energy > threshold &&
+    now - beatLastTime > 220
+  ) {
+    beatLastTime = now;
+
+    const strength =
+      Math.min(
+        1,
+        Math.max(
+          0,
+          (energy - threshold) / 100
+        )
+      );
+
+    document.body.style.setProperty(
+      "--beat-strength",
+      strength.toFixed(2)
+    );
+
+    document.body.classList.remove("beat-pulse");
+
+    void document.body.offsetWidth;
+
+    document.body.classList.add("beat-pulse");
+
+    if (strength > 0.55) {
+      document.body.classList.add("beat-heavy");
+    } else {
+      document.body.classList.remove("beat-heavy");
+    }
+
+    setTimeout(() => {
+      document.body.classList.remove("beat-pulse");
+      document.body.classList.remove("beat-heavy");
+    }, 180);
+  }
+
+  beatFrame =
+    requestAnimationFrame(beatLoop);
+}
+
 function getVolume() {
   const slider = $("#volume");
 
@@ -630,7 +784,7 @@ function chooseMusic() {
     }
   };
 
-  audio.play()
+audio.play()
     .then(() => {
       const label = $("#musicLabel");
 
@@ -638,7 +792,19 @@ function chooseMusic() {
         label.textContent =
           `♪ ${currentTrack.name} // PLAYING`;
       }
+
+      if (timer && !paused) {
+        startBeatSync();
+      }
     })
+    .catch(() => {
+      const label = $("#musicLabel");
+
+      if (label) {
+        label.textContent =
+          "♪ CLICK ACCEPT FATE AGAIN TO START MUSIC";
+      }
+    });
     .catch(() => {
       const label = $("#musicLabel");
 
@@ -965,6 +1131,7 @@ function finishTimer(completed) {
   timer = null;
 
   stopMusic();
+  stopBeatSync();
 
 if (completed) {
   alarmSound.currentTime = 0;
@@ -1409,11 +1576,13 @@ function init() {
 
     paused = !paused;
 
-    if (paused) {
-      pauseMusic();
-    } else {
-      resumeMusic();
-    }
+if (paused) {
+  pauseMusic();
+  stopBeatSync();
+} else {
+  resumeMusic();
+  startBeatSync();
+}
 
     updateTimer();
 
@@ -1532,6 +1701,20 @@ $("#returnTimerBtn")?.addEventListener("click", () => {
       }
     }
   );
+
+$("#beatSyncToggle")?.addEventListener(
+  "change",
+  e => {
+    if (!e.target.checked) {
+      stopBeatSync();
+      return;
+    }
+
+    if (timer && !paused && audio) {
+      startBeatSync();
+    }
+  }
+);
 
   /*
    * Start lobby music only after a real click.
