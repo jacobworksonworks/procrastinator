@@ -2249,6 +2249,13 @@ const achievements = [
   ],
   
   [
+  "POOP",
+  'Set "poop" as your task.',
+  () => data.achievements?.poop === true,
+  true
+],
+  
+  [
   "I GUESS BRO",
   'Set "Ashley" as your task.',
   () => data.achievements?.ashley === true,
