@@ -3,8 +3,8 @@
   "short_name": "PROCRASTINATOR",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#07529e",
-  "theme_color": "#07529e",
+  "background_color": "#06457f",
+  "theme_color": "#06457f",
   "icons": [
     {
       "src": "icon.png",
