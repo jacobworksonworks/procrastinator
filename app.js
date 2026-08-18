@@ -16,6 +16,9 @@ const alarmSound = new Audio("alarm/alarm.mp3");
 alarmSound.volume = 0.8;
 alarmSound.preload = "auto";
 
+const poopSound = new Audio("extras/poop.mp3");
+poopSound.preload = "auto";
+
 /* =========================================================
    EXCUSES
    ========================================================= */
