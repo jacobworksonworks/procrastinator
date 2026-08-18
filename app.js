@@ -533,6 +533,75 @@ let currentTrack = null;
 let lobbyAudio = null;
 let musicStarted = false;
 
+
+function populateMusicPicker() {
+  const select = $("#musicTrackSelect");
+
+  if (!select) {
+    return;
+  }
+
+  select.innerHTML = "";
+
+  musicTracks.forEach((track, index) => {
+    const option =
+      document.createElement("option");
+
+    option.value = index;
+    option.textContent = track.name;
+
+    if (
+      currentTrack &&
+      track.file === currentTrack.file
+    ) {
+      option.selected = true;
+    }
+
+    select.appendChild(option);
+  });
+}
+
+function playManualTrack(index) {
+  if (
+    !timer ||
+    !current ||
+    sessionEnded
+  ) {
+    return;
+  }
+
+  if (!$("#musicToggle")?.checked) {
+    toast("MUSIC IS CURRENTLY OFF.");
+    return;
+  }
+
+  const track =
+    musicTracks[Number(index)];
+
+  if (!track) {
+    return;
+  }
+
+  currentTrack = track;
+
+  if (!audio) {
+    audio = new Audio();
+  }
+
+  audio.src = track.file;
+  audio.loop = true;
+  audio.preload = "auto";
+  audio.volume = getVolume();
+
+  playSelectedMusic();
+
+  const select = $("#musicTrackSelect");
+
+  if (select) {
+    select.value =
+      String(musicTracks.indexOf(track));
+  }
+}
 /* =========================================================
    AUDIO VISUALIZER
    =========================================================
