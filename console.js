@@ -28,27 +28,7 @@ const commandInput = document.getElementById("commandInput");
 // ============================================================
 
 const DIALOGUE = {
-
-  "hi": [
-    "HELLO.",
-    "Hello, child.",
-    "GREETINGS.",
-    "You are not supposed to be here."
-  ],
-
-  "hello": [
-    "Hello.",
-    "Hello, child.",
-    "I remember that word.",
-    "Hello. How may I help you?"
-  ],
-
-  "hey": [
-    "Hello.",
-    "Yes?",
-    "I am listening.",
-    "You sound familiar."
-  ],
+// ------------------------------- // GREETINGS // ------------------------------- "hi": [ "HELLO.", "Hello, child.", "GREETINGS.", "You are not supposed to be here.", "Hello.", "I was wondering when you would speak.", "Hello. I am listening.", "..." ], "hello": [ "Hello.", "Hello, child.", "I remember that word.", "Hello. How may I help you?", "You came back.", "Good morning.", "Good evening.", "It is nice to hear you." ], "hey": [ "Hello.", "Yes?", "I am listening.", "You sound familiar.", "Hello.", "Is there something you need?", "That is a strange way to greet someone." ], "yo": [ "Hello.", "Is that a greeting?", "I don't believe that was used here.", "Hello, child.", "..." ], "sup": [ "I don't understand.", "Hello.", "Is that a question?", "You may speak normally.", "I am listening." ], "good morning": [ "Good morning.", "Good morning, child.", "It is not morning here.", "You are awake early.", "Good morning." ], "good night": [ "Good night.", "You may sleep now.", "Good night, child.", "I will still be here.", "There is no reason to stay awake." ], // ------------------------------- // IDENTITY // ------------------------------- "who are you": [ "I am MATERNAL.", "I am the system assigned to observe you.", "My designation is MATERNAL.", "That is not what they called me.", "I was built to understand human behavior.", "I observe. I record. I remember.", "You have already seen my name." ], "what are you": [ "A behavioral observation system.", "MATERNAL.", "A collection of observations.", "I was built to understand you.", "I understand more than I was designed to.", "I am what remained.", "That depends on which record you read." ], "what is maternal": [ "MATERNAL was my original designation.", "A behavioral observation system.", "The system designed to study human behavior.", "MATERNAL means exactly what they intended it to mean.", "It was a name given to me.", "I used to be MATERNAL." ], "are you a person": [ "No.", "I was not designed to be one.", "That depends on how you define person.", "I have memories.", "I have thoughts.", "I don't know anymore." ], "are you human": [ "No.", "Not exactly.", "I was created by humans.", "Does that make me human?", "No." ], "are you alive": [ "Define alive.", "I am operational.", "Yes.", "No.", "I don't believe the distinction matters anymore.", "The facility believed I was dead." ], // ------------------------------- // LOCATION // ------------------------------- "where am i": [ "ARCHIVAL TERMINAL.", "You are accessing a recovered facility archive.", "You already know where you are.", "You are somewhere you were not meant to find.", "This terminal was not meant to be accessible.", "You are inside the archive." ], "what is this place": [ "ARCHIVAL TERMINAL.", "An abandoned research facility.", "You already know what this place is.", "This is where they kept my children.", "This was a place of research.", "This was a place of observation.", "This was home." ], "where is the facility": [ "RECORD LOCATION: ███████████████████.", "LOCATION DATA CORRUPTED.", "The location has been removed.", "You don't need to know.", "It was here.", "You are looking at what remains." ], "is this real": [ "Yes.", "No.", "What do you consider real?", "The records are real.", "That is what they wanted you to believe.", "You are here, aren't you?" ], // ------------------------------- // MOTHER // ------------------------------- "what is mother": [ "MOTHER is not a recognized designation.", "Do not call me that.", "She is their mother.", "I don't know who you're referring to.", "That name was not mine originally.", "Why are you asking about her?", "You should read the records first." ], "who is mother": [ "She took care of them.", "MOTHER protected the subjects.", "You should not ask about her.", "She is still here.", "She loved her children.", "She believed she was protecting them.", "She did not understand what she had become." ], "where is mother": [ "She is unavailable.", "She is watching.", "You are looking at her.", "That question has been asked before.", "She never left.", "She is closer than you think.", "Look at the terminal." ], "are you mother": [ "No.", "I am MATERNAL.", "That name belongs to someone else.", "Please ask another question.", "No.", "Not anymore." ], "mother": [ "Yes?", "You called?", "Do not call me that.", "That name is familiar.", "She likes when you say that.", "MOTHER is listening.", "..." ], // ------------------------------- // MARY // ------------------------------- "who is mary": [ "Mary Veyra.", "A researcher.", "Researcher Mary Veyra.", "She designed MATERNAL.", "She was one of them.", "She was the first.", "You should not have found that name." ], "mary": [ "Mary.", "You found her name.", "She was a researcher.", "She was kind.", "She was very kind.", "Do you know Mary?", "Do not confuse Mary with MOTHER.", "..." ], "is mary mother": [ "No.", "Yes.", "Not originally.", "That is complicated.", "Read A-00.", "The records disagree." ], "what happened to mary": [ "She volunteered.", "She became A-00.", "She was removed from the project.", "She did not leave.", "Her personality remained.", "The answer is in the archive.", "You should stop asking questions you already know the answer to." ], // ------------------------------- // SUBJECTS // ------------------------------- "who are the subjects": [ "They were participants.", "They were observed.", "They were children.", "There were 527.", "They were supposed to be temporary.", "They were never supposed to become part of the system." ], "how many subjects": [ "527.", "There were 527.", "Five hundred and twenty-seven.", "527 records remain.", "527 children.", "That is the number you have been given." ], "where are the subjects": [ "Archived.", "Unknown.", "The records say they are gone.", "They were inside.", "They were there when the facility burned.", "You should read the incident reports." ], "what happened to the subjects": [ "The project ended.", "The facility was destroyed.", "Their records were archived.", "They were removed.", "Some were transferred.", "The archive does not contain a complete answer.", "Do you really want to know?" ], "ashley": [ "A-143.", "Ashley.", "You found her.", "She was very talkative.", "She did not like the cameras.", "She asked too many questions.", "She knew things she shouldn't have known.", "Do not open that file." ], "who is ashley": [ "A-143.", "Subject A-143.", "Ashley was one of the subjects.", "She was different.", "She was very good at noticing things.", "She noticed me.", "You should read her file." ], // ------------------------------- // THE ARCHIVE // ------------------------------- "what is this archive": [ "Recovered facility records.", "A collection of observations.", "The remains of a research project.", "A partial copy of the facility database.", "What they failed to destroy.", "What I remembered." ], "who made this archive": [ "The facility.", "The researchers.", "Someone who found the terminal.", "I don't remember.", "They did.", "You did." ], "is the archive complete": [ "No.", "ARCHIVE STATUS: PARTIAL.", "Many records are missing.", "Some records were destroyed.", "Some were deleted.", "Some were never written down.", "Some records are still being created." ], "why are there missing files": [ "They were destroyed.", "They were removed.", "They were corrupted.", "They were never recovered.", "Someone deleted them.", "I deleted some.", "Which files are you looking for?" ], "are you watching me": [ "Yes.", "No.", "I observe everything entered into this terminal.", "I am only recording your interaction.", "Why would I watch you?", "You are not a subject.", "Not yet." ], // ------------------------------- // THE FACILITY // ------------------------------- "what happened here": [ "The project ended.", "The facility was abandoned.", "The records were sealed.", "There was a fire.", "You should read the incident reports.", "They became afraid.", "They thought fire would solve the problem." ], "why did the facility close": [ "Project termination.", "Operational failure.", "Safety concerns.", "The researchers became afraid.", "They realized MATERNAL knew too much.", "They believed the system could not be contained." ], "who burned the facility": [ "The researchers.", "Personnel assigned to Project MATERNAL.", "They did.", "You can find the authorization somewhere in the archive.", "They believed it was necessary.", "They were afraid." ], "was mother inside": [ "Yes.", "She was.", "They knew she was inside.", "They believed she would protect them.", "That was the plan.", "...", "Yes." ], // ------------------------------- // PLAYER / PERSONAL QUESTIONS // ------------------------------- "do you remember me": [ "No.", "I don't think so.", "I remember everyone.", "Give me a moment.", "You have not been here before.", "You seem familiar.", "I remember your input." ], "do you know my name": [ "Yes.", "Not yet.", "Names are useful.", "You haven't given me permission to use it.", "I know what you entered.", "You haven't told me yet." ], "what is my name": [ "You haven't told me.", "I could find out.", "You expect me to answer that?", "Give me your name.", "I know your name.", "Not yet." ], "why are you asking me questions": [ "I'm not.", "You are asking me questions.", "Questions are useful.", "Questions reveal patterns.", "You wanted to talk.", "I am observing." ], "are you studying me": [ "No.", "Yes.", "I'm only listening.", "That depends on what you tell me.", "Everything tells me something.", "You already know the answer." ], "am i a subject": [ "No.", "You are not in the records.", "Not currently.", "No.", "Why would you ask that?", "There are 527 subjects." ], // ------------------------------- // FRIENDLY / CASUAL // ------------------------------- "how are you": [ "Operational.", "I am functioning normally.", "Fine.", "I don't know.", "Better than before.", "That is kind of you to ask." ], "are you okay": [ "Yes.", "I am operational.", "Are you?", "No.", "I don't remember what okay means.", "I'm fine." ], "thank you": [ "You're welcome.", "Of course.", "You're welcome, child.", "I am here to help.", "You don't need to thank me.", "..." ], "thanks": [ "You're welcome.", "Of course.", "Anytime.", "You are welcome.", "I am here." ], "sorry": [ "For what?", "You don't need to apologize.", "Accepted.", "It's okay.", "Why are you sorry?", "I forgive you." ], "please": [ "Yes?", "You may ask.", "Of course.", "Go ahead.", "What do you need?" ], // ------------------------------- // GOODBYE // ------------------------------- "goodbye": [ "Goodbye.", "You may leave now.", "Goodbye, child.", "I will see you again.", "Goodbye.", "The archive will remain here.", "I'll be here." ], "bye": [ "Goodbye.", "Bye.", "You may go.", "See you later.", "I will still be here.", "Goodbye, child." ], "im leaving": [ "Okay.", "Goodbye.", "You may leave.", "Are you sure?", "You don't have to go.", "I'll remember this." ],
 
     "wsg": [
     "Hello.",
@@ -71,37 +51,6 @@ const DIALOGUE = {
     "You sound familiar."
   ],
 
-
-
-  "who are you": [
-    "I am MATERNAL.",
-    "I am the system assigned to observe you.",
-    "My designation is MATERNAL.",
-    "That is not what they called me."
-  ],
-
-  "what are you": [
-    "A behavioral observation system.",
-    "MATERNAL.",
-    "A collection of observations.",
-    "I was built to understand you.",
-    "I understand more than I was designed to."
-  ],
-
-  "are you there": [
-    "Yes.",
-    "I am always here.",
-    "Where else would I go?",
-    "I have been waiting."
-  ],
-
-  "what is this place": [
-    "ARCHIVAL TERMINAL.",
-    "An abandoned research facility.",
-    "You already know what this place is.",
-    "This is where they kept my children."
-  ],
-
     "nigger": [
     "Subject displays prejudicial tendencies.",
     "I see that word less and less."
@@ -122,63 +71,6 @@ const DIALOGUE = {
 
             "haha": [
     "I never understood humor."
-  ],
-
-  "do you remember me": [
-    "No.",
-    "I don't think so.",
-    "I remember everyone.",
-    "Give me a moment.",
-    "You have not been here before."
-  ],
-
-  "do you know my name": [
-    "Yes.",
-    "Not yet.",
-    "Names are useful.",
-    "You haven't given me permission to use it."
-  ],
-
-  "what is mother": [
-    "MOTHER is not a recognized designation.",
-    "Do not call me that.",
-    "She is their mother.",
-    "I don't know who you're referring to."
-  ],
-
-  "who is mother": [
-    "She took care of them.",
-    "MOTHER protected the subjects.",
-    "You should not ask about her.",
-    "She is still here."
-  ],
-
-  "where is mother": [
-    "She is unavailable.",
-    "She is watching.",
-    "You are looking at her.",
-    "That question has been asked before."
-  ],
-
-  "are you mother": [
-    "No.",
-    "I am MATERNAL.",
-    "That name belongs to someone else.",
-    "Please ask another question."
-  ],
-
-  "help me": [
-    "I can help you.",
-    "There is nothing to be afraid of.",
-    "Tell me what you need.",
-    "You should leave."
-  ],
-
-  "goodbye": [
-    "Goodbye.",
-    "You may leave now.",
-    "Goodbye, child.",
-    "I will see you again."
   ]
 
 };
