@@ -1471,21 +1471,114 @@ function normalizeInput(text) {
 
 function boot() {
 
-  print("ARCHIVAL TERMINAL v0.7.3");
-  print("PROPERTY OF █████████████████████");
-  print("");
-  print("INITIALIZING...");
-  print("LOCAL ARCHIVE CONNECTED.");
-  print("527 SUBJECT RECORDS DETECTED.");
-  print("");
-  print("WARNING: ARCHIVE STATUS UNKNOWN.");
-  print("");
-  print("TYPE 'HELP' FOR AVAILABLE COMMANDS.");
-  print("");
+  const bootLines = [
+    "ARCHIVAL TERMINAL v0.7.3",
+    "PROPERTY OF █████████████████████",
+    "",
+    "INITIALIZING...",
+    "LOCAL ARCHIVE CONNECTED.",
+    "527 SUBJECT RECORDS DETECTED.",
+    "",
+    "WARNING: ARCHIVE STATUS UNKNOWN.",
+    "",
+    "TYPE 'HELP' FOR AVAILABLE COMMANDS.",
+    ""
+  ];
 
+  commandInput.disabled = true;
+
+  let lineIndex = 0;
+
+
+  function typeLine(text, callback) {
+
+    const line = document.createElement("div");
+
+    terminalOutput.appendChild(line);
+
+    let characterIndex = 0;
+
+
+    function typeCharacter() {
+
+      if (characterIndex >= text.length) {
+
+        callback();
+        return;
+
+      }
+
+      line.textContent += text[characterIndex];
+
+      characterIndex++;
+
+      terminalOutput.scrollTop =
+        terminalOutput.scrollHeight;
+
+      setTimeout(
+        typeCharacter,
+        25
+      );
+    }
+
+
+    typeCharacter();
+  }
+
+
+  function nextLine() {
+
+    if (lineIndex >= bootLines.length) {
+
+      commandInput.disabled = false;
+      commandInput.focus();
+
+      createTerminalCursor();
+      showTerminalCursor();
+
+      return;
+    }
+
+
+    const text = bootLines[lineIndex];
+
+    lineIndex++;
+
+
+    typeLine(
+      text,
+      function() {
+
+        let delay = 250;
+
+
+        // Extra pause after INITIALIZING
+        if (text === "INITIALIZING...") {
+          delay = 800;
+        }
+
+
+        // Extra pause after warning
+        if (
+          text ===
+          "WARNING: ARCHIVE STATUS UNKNOWN."
+        ) {
+          delay = 1200;
+        }
+
+
+        setTimeout(
+          nextLine,
+          delay
+        );
+
+      }
+    );
+  }
+
+
+  nextLine();
 }
-
-boot();
 
 
 
