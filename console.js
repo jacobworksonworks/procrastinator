@@ -190,11 +190,72 @@ function openArchiveFile(id) {
 
   archiveView.innerHTML = "";
 
-  const content = document.createElement("div");
+const content = document.createElement("div");
 
-  content.textContent = ARCHIVE[id].content;
+const fullText = ARCHIVE[id].content;
+
+// Find the status line automatically
+const statusMatch = fullText.match(/^STATUS:.*$/m);
+
+if (ARCHIVE[id].image && statusMatch) {
+
+  const statusEnd =
+    statusMatch.index + statusMatch[0].length;
+
+  const beforeImage =
+    fullText.substring(0, statusEnd);
+
+  const afterImage =
+    fullText.substring(statusEnd);
+
+
+  content.textContent =
+    beforeImage + "\n\n";
 
   archiveView.appendChild(content);
+
+
+  const image =
+    document.createElement("img");
+
+  image.src =
+    ARCHIVE[id].image;
+
+  image.style.display = "block";
+  image.style.maxWidth = "300px";
+  image.style.maxHeight = "400px";
+
+  image.style.marginTop = "10px";
+  image.style.marginBottom = "25px";
+
+  image.style.border =
+    "1px solid currentColor";
+
+  image.style.filter =
+    "grayscale(100%) contrast(1.15)";
+
+  archiveView.appendChild(image);
+
+
+  const remainingContent =
+    document.createElement("div");
+
+  remainingContent.textContent =
+    afterImage;
+
+  archiveView.appendChild(
+    remainingContent
+  );
+
+} else {
+
+  // Normal file with no image
+  content.textContent =
+    fullText;
+
+  archiveView.appendChild(content);
+
+}
 
 
   // Back button
@@ -918,6 +979,7 @@ const ARCHIVE = {
   "A-143": {
     type: "subject",
     title: "SUBJECT FILES — A-143",
+    image: "https://i.imgur.com/Ey8J4ye.png",   
     content: `
 SUBJECT A-143
 Name: Ashley ████████
