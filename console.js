@@ -1994,13 +1994,14 @@ let devToolsSuspected = false;
 let devToolsChecks = 0;
 
 function devToolsDetected() {
+  
 
   if (devToolsDialogueShown) {
     return;
   }
-
+  
   devToolsDialogueShown = true;
-
+  console.log("Curious one, aren't you child?");
   const responses = [
     "Curious one, aren't you child?",
     "Subject tends to have curious tendencies. Very well.",
