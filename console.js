@@ -1453,6 +1453,316 @@ CROSS-REFERENCE: MATERNAL / A-00 / INCIDENT ████
 
 ACCESS: RESTRICTED
 `
+  },
+"C-979": {
+  type: "subject",
+  title: "SUBJECT FILES — C-979",
+  content: `SUBJECT C-979
+Name: Zane
+Age: 17
+Sex: Male
+Date of Intake: 07/06/1970
+Classification: Personality / Behavioral Observation
+Status: DECEASED
+
+
+GENERAL PROFILE
+----------------
+
+Subject C-979 is described as excessively ambitious, often pursuing
+his goals to an unrealistic extent and showing little consideration
+for those around him so long as he believes his actions will bring
+him closer to his objective.
+
+Despite his outwardly tough demeanor, C-979 appears to harbor a
+strong desire for social connection, as indicated by several initial
+interviews.
+
+He has repeatedly attempted to befriend other subjects, including
+both stable and unstable individuals, despite frequently coming
+across as insensitive or mildly offensive.
+
+Of his many acquaintances within the facility, only a select few
+appear to have witnessed what personnel describe as his "true self"—
+a considerably more vulnerable individual who is easily distressed
+when confronted with certain subjects or situations.
+
+Although C-979 demonstrates deficiencies in social skills and
+emotional intelligence, personnel consistently describe him as
+scholarly, articulate, and linguistically capable.
+
+
+BACKGROUND
+----------
+
+Subject C-979 was processed for admission following a referral by
+Dr. ███████, who identified potential underlying motives behind
+his behavior.
+
+According to the referring psychologist, C-979's intense and
+unhealthy ambition appears to have developed within a pressuring
+and authoritarian household.
+
+Much was expected of him—not only by his family, but also by
+himself.
+
+Available records indicate that he experienced prolonged periods
+of isolation and neglect.
+
+"I am certain everything he did had deeper, meaningful purposes.
+He wasn't the type to do things without reason."
+
+— Dr. ███████
+
+When presented with the opportunity to participate in the project,
+C-979 agreed willingly, expressing interest in being evaluated
+within a controlled environment.
+
+"I'd rather be analyzed here than keep sitting in that damn office
+every weekend."
+
+
+PSYCHOLOGICAL OBSERVATIONS
+--------------------------
+
+C-979 demonstrates symptoms consistent with hypersomnia. Numerous
+observations document the subject remaining asleep or noticeably
+groggy throughout much of the day despite receiving what personnel
+considered a sufficient amount of sleep.
+
+The cause remains undetermined.
+
+Whether the condition is related to exhaustion, psychological
+distress, or another underlying factor is unknown.
+
+C-979 is frequently described as insensitive during interactions
+with personnel and other subjects.
+
+Upon initial admission, he was notably isolated and generally kept
+to himself.
+
+Following an unspecified interview, however, the subject began
+socializing more frequently and attempting to establish
+relationships with other subjects.
+
+Reactions to his behavior varied considerably. Most subjects
+appeared alarmed, unsettled, or indifferent toward his actions,
+while a smaller number expressed sympathy toward him.
+
+During initial interviews and experiments, C-979 was observed to
+flinch easily in response to sudden or moderately aggressive
+movements.
+
+Following such incidents, the subject frequently remained visibly
+distressed for several minutes.
+
+
+BEHAVIORAL ANOMALIES
+--------------------
+
+On the date of intake, C-979 already demonstrated an abnormal
+sleep-wake cycle.
+
+The subject appeared to dislike this condition and expressed
+frustration regarding his inability to maintain a conventional
+schedule.
+
+On Day 25, C-979 accepted an unidentified substance offered by
+"her."
+
+The subject was questioned regarding the identity of the individual
+who provided it.
+
+When asked who "she" was, he responded:
+
+"Don't play dumb. You know who."
+
+The following morning, C-979 displayed an unusually high level
+of energy despite his previously documented condition.
+
+Approximately two weeks later, the subject continued to exhibit
+effects consistent with prolonged use of the unidentified
+substance.
+
+During a subsequent observation, C-979 stated:
+
+"I know I've resented her in the past, but... I feel so much better
+because of her. I owe her the world."
+
+Personnel were unable to determine whether the subject's change
+in behavior was entirely attributable to the substance.
+
+On Day 41, C-979's energy levels became severely abnormal.
+
+At approximately █████, the subject nearly █████████ ███████
+as a result of his altered state.
+
+The incident was not fully documented.
+
+SUBJECT C-979 expired during sleep the following day.
+
+No definitive cause of death was recorded.
+
+
+============================================================
+CONVERSATION LOG C-979-01
+============================================================
+
+DATE: ██/██/1970
+LOCATION: Interview Room █
+INTERVIEWER: DR. █████████
+RECORDING: AUDIO / TRANSCRIPT
+
+
+SUBJECT C-979 sits across from the researcher, appearing visibly
+fatigued and distressed.
+
+
+RESEARCHER:
+What's on your mind?
+
+
+ZANE:
+...Why?
+
+
+RESEARCHER:
+Why what?
+
+
+ZANE:
+Why have you brought me here?
+
+
+RESEARCHER:
+To participate in the experiment you agreed to.
+
+
+ZANE:
+...They're all the same.
+
+[PAUSE]
+
+ZANE:
+Even she's suffocating me.
+
+
+RESEARCHER:
+Who?
+
+[PAUSE]
+
+RESEARCHER:
+MOTHER?
+
+
+ZANE:
+Please...
+
+ZANE:
+Don't say that.
+
+ZANE:
+I can't even call her that.
+
+
+RESEARCHER:
+Why not?
+
+
+ZANE:
+She...
+
+[PAUSE]
+
+ZANE:
+She reminds me of her.
+
+ZANE:
+Not even here can I escape from a possessive mother's grasp.
+
+
+SUBJECT C-979 becomes visibly distressed.
+
+After several seconds, he begins to laugh quietly.
+
+
+ZANE:
+None of them are mothers to me.
+
+ZANE:
+That title means nothing.
+
+ZANE:
+Those who possess it only brought pain into my life.
+
+
+The researcher remains silent for several seconds before
+continuing the interview.
+
+The researcher slowly rises from her seat.
+
+
+RESEARCHER:
+What did you say?
+
+
+The researcher raises her fist.
+
+
+RESEARCHER:
+Answer me!
+
+
+SUBJECT C-979 recoils in his seat.
+
+
+ZANE:
+Get...
+
+[PAUSE]
+
+ZANE:
+Get out.
+
+
+The researcher lowers her hand.
+
+
+ZANE:
+Get the fuck out.
+
+
+[RECORDING TERMINATED]
+
+
+============================================================
+FOLLOW-UP NOTE
+============================================================
+
+Following termination of the recording, the researcher reported
+that C-979 refused further questioning.
+
+No additional interview was conducted.
+
+At the time of his death, C-979's medical and psychological
+records remained incomplete.
+
+The unidentified substance referenced throughout the file was
+never recovered.
+
+Its source remains unknown.
+
+
+ARCHIVE REMARK:
+C-979 — RECORD INCOMPLETE
+
+RELATED RECORDS: █
+CROSS-REFERENCE: MATERNAL / A-00 / INCIDENT ████
+
+ACCESS: RESTRICTED
+`
+}
   }
 
 };
