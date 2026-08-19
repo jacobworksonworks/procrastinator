@@ -85,3 +85,331 @@ body {
   background: #b7c1b3;
   color: #080908;
 }
+
+
+/* NORMAL */
+html, body {
+    cursor: url("cursors/default_arrow.cur"), auto;
+}
+
+/* LINKS / CLICKABLE THINGS */
+a,
+button,
+.btn,
+.clickable,
+[role="button"] {
+    cursor: url("cursors/default_link.cur"), pointer;
+}
+
+/* TEXT */
+input,
+textarea,
+[contenteditable="true"] {
+    cursor: url("cursors/default_ibeam.cur"), text;
+}
+
+/* WAITING */
+.waiting,
+.loading,
+.loading-screen {
+    cursor: url("cursors/default_wait.cur"), wait;
+}
+
+/* BUSY */
+.busy {
+    cursor: url("cursors/default_busy.cur"), wait;
+}
+
+/* CROSSHAIR */
+.crosshair,
+.target {
+    cursor: url("cursors/cross.cur"), crosshair;
+}
+
+/* PEN */
+.pen {
+    cursor: url("cursors/default_pen.cur"), crosshair;
+}
+
+/* CANNOT DROP / NOT ALLOWED */
+.no-drop,
+.disabled,
+button:disabled {
+    cursor: url("cursors/default_no.cur"), not-allowed;
+}
+
+/* MOVE */
+.move,
+[draggable="true"] {
+    cursor: url("cursors/default_move.cur"), move;
+}
+
+/* RESIZE — NORTHWEST/SOUTHEAST */
+.resize-nwse {
+    cursor: url("cursors/default_size1.cur"), nwse-resize;
+}
+
+/* RESIZE — NORTHEAST/SOUTHWEST */
+.resize-nesw {
+    cursor: url("cursors/default_size2.cur"), nesw-resize;
+}
+
+/* RESIZE — NORTH/SOUTH */
+.resize-ns {
+    cursor: url("cursors/default_size3.cur"), ns-resize;
+}
+
+/* RESIZE — EAST/WEST */
+.resize-ew {
+    cursor: url("cursors/default_size4.cur"), ew-resize;
+}
+
+/* SCROLLING */
+.scroll-ns {
+    cursor: url("cursors/default_scroll_ns.cur"), ns-resize;
+}
+
+.scroll-ew {
+    cursor: url("cursors/default_scroll_ew.cur"), ew-resize;
+}
+
+.scroll-move {
+    cursor: url("cursors/default_scroll_move.cur"), move;
+}
+
+/* UP */
+.up {
+    cursor: url("cursors/default_up.cur"), n-resize;
+}
+
+/* BOX */
+.box {
+    cursor: url("cursors/default_box.cur"), default;
+}
+
+/* DVD */
+.dvd {
+    cursor: url("cursors/default_dvd.cur"), default;
+}
+
+/* INDIVIDUAL SCROLL DIRECTIONS */
+.scroll-n {
+    cursor: url("cursors/default_scroll_n.cur"), n-resize;
+}
+
+.scroll-ne {
+    cursor: url("cursors/default_scroll_ne.cur"), ne-resize;
+}
+
+.scroll-e {
+    cursor: url("cursors/default_scroll_e.cur"), e-resize;
+}
+
+.scroll-se {
+    cursor: url("cursors/default_scroll_se.cur"), se-resize;
+}
+
+.scroll-s {
+    cursor: url("cursors/default_scroll_s.cur"), s-resize;
+}
+
+.scroll-sw {
+    cursor: url("cursors/default_scroll_sw.cur"), sw-resize;
+}
+
+.scroll-w {
+    cursor: url("cursors/default_scroll_w.cur"), w-resize;
+}
+
+.scroll-nw {
+    cursor: url("cursors/default_scroll_nw.cur"), nw-resize;
+}
+
+/* =========================================================
+   XP ALTERNATE CURSORS
+   Use these classes when you specifically want a variant.
+   ========================================================= */
+
+/* Arrow variants */
+.cursor-arrow-m {
+    cursor: url("cursors/arrow_m.cur"), auto;
+}
+
+.cursor-arrow-l {
+    cursor: url("cursors/arrow_l.cur"), auto;
+}
+
+.cursor-arrow-r {
+    cursor: url("cursors/arrow_r.cur"), auto;
+}
+
+.cursor-arrow-rm {
+    cursor: url("cursors/arrow_rm.cur"), auto;
+}
+
+.cursor-arrow-rl {
+    cursor: url("cursors/arrow_rl.cur"), auto;
+}
+
+.cursor-arrow-i {
+    cursor: url("cursors/arrow_i.cur"), auto;
+}
+
+.cursor-arrow-im {
+    cursor: url("cursors/arrow_im.cur"), auto;
+}
+
+.cursor-arrow-il {
+    cursor: url("cursors/arrow_il.cur"), auto;
+}
+
+/* Help */
+.cursor-help {
+    cursor: url("cursors/default_helpsel.cur"), help;
+}
+
+/* I-beam variants */
+.cursor-beam {
+    cursor: url("cursors/beam_m.cur"), text;
+}
+
+/* Pen variants */
+.cursor-pen {
+    cursor: url("cursors/pen_m.cur"), crosshair;
+}
+
+/* No-drop variants */
+.cursor-no {
+    cursor: url("cursors/no_m.cur"), not-allowed;
+}
+
+/* Move variants */
+.cursor-move {
+    cursor: url("cursors/move_m.cur"), move;
+}
+
+/* Link variants */
+.cursor-link {
+    cursor: url("cursors/link_m.cur"), pointer;
+}
+
+/* =========================================================
+   3D XP CURSORS
+   ========================================================= */
+
+.cursor-3d-arrow-white {
+    cursor: url("cursors/3dwarro.cur"), auto;
+}
+
+.cursor-3d-arrow-gray {
+    cursor: url("cursors/3dgarro.cur"), auto;
+}
+
+.cursor-3d-arrow-shadow {
+    cursor: url("cursors/3dsarro.cur"), auto;
+}
+
+.cursor-3d-help-white {
+    cursor: url("cursors/3dwhelpsel.cur"), help;
+}
+
+.cursor-3d-help-gray {
+    cursor: url("cursors/3dghelpsel.cur"), help;
+}
+
+.cursor-3d-help-shadow {
+    cursor: url("cursors/3dshelpsel.cur"), help;
+}
+
+.cursor-3d-cross-white {
+    cursor: url("cursors/3dwwcross.cur"), crosshair;
+}
+
+.cursor-3d-cross-gray {
+    cursor: url("cursors/3dgcross.cur"), crosshair;
+}
+
+.cursor-3d-cross-shadow {
+    cursor: url("cursors/3dscross.cur"), crosshair;
+}
+
+.cursor-3d-no-white {
+    cursor: url("cursors/3dwno.cur"), not-allowed;
+}
+
+.cursor-3d-no-gray {
+    cursor: url("cursors/3dgno.cur"), not-allowed;
+}
+
+.cursor-3d-no-shadow {
+    cursor: url("cursors/3dsno.cur"), not-allowed;
+}
+
+.cursor-3d-move-white {
+    cursor: url("cursors/3dwmove.cur"), move;
+}
+
+.cursor-3d-move-gray {
+    cursor: url("cursors/3dgmove.cur"), move;
+}
+
+.cursor-3d-move-shadow {
+    cursor: url("cursors/3dsmove.cur"), move;
+}
+
+.cursor-3d-link-white {
+    cursor: url("cursors/3dwlink.ani"), pointer;
+}
+
+.cursor-3d-link-gray {
+    cursor: url("cursors/3dglink.ani"), pointer;
+}
+
+.cursor-3d-link-shadow {
+    cursor: url("cursors/3dslink.ani"), pointer;
+}
+
+/* =========================================================
+   SPECIAL XP CURSORS
+   ========================================================= */
+
+/* These are static versions of the animated XP states */
+.cursor-starting {
+    cursor: url("cursors/appstar1_st.cur"), wait;
+}
+
+.cursor-starting-2 {
+    cursor: url("cursors/appstar2_st.cur"), wait;
+}
+
+.cursor-starting-3 {
+    cursor: url("cursors/appstar3_st.cur"), wait;
+}
+
+.cursor-hourglass {
+    cursor: url("cursors/hourglas_st.cur"), wait;
+}
+
+.cursor-hourglass-2 {
+    cursor: url("cursors/hourgla2_st.cur"), wait;
+}
+
+.cursor-hourglass-3 {
+    cursor: url("cursors/hourgla3_st.cur"), wait;
+}
+
+/* =========================================================
+   DRAG / DROP
+   ========================================================= */
+
+.drag {
+    cursor: url("cursors/default_move.cur"), move;
+}
+
+.drag-copy {
+    cursor: url("cursors/default_link.cur"), copy;
+}
+
+.drag-no {
+    cursor: url("cursors/default_no.cur"), not-allowed;
+}
