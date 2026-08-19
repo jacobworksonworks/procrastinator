@@ -24,7 +24,125 @@ document.addEventListener("click", function() {
   sound.play();
 }, { once: true });
 
+// ============================================================
+// ARCHIVE FILE VIEW
+// ============================================================
 
+let archiveView = null;
+let archiveOpen = false;
+
+
+// Create the file screen entirely through JavaScript
+function createArchiveView() {
+
+  archiveView = document.createElement("div");
+
+  archiveView.id = "archiveView";
+
+  archiveView.style.position = "fixed";
+  archiveView.style.top = "0";
+  archiveView.style.left = "0";
+  archiveView.style.width = "100%";
+  archiveView.style.height = "100%";
+  archiveView.style.overflowY = "auto";
+  archiveView.style.boxSizing = "border-box";
+
+  archiveView.style.display = "none";
+
+  // Match the terminal's general appearance
+  archiveView.style.background = "black";
+  archiveView.style.color = "white";
+  archiveView.style.padding = "30px";
+
+  archiveView.style.fontFamily =
+    getComputedStyle(document.body).fontFamily;
+
+  archiveView.style.whiteSpace = "pre-wrap";
+
+  document.body.appendChild(archiveView);
+}
+
+
+// Open an archive file
+function openArchiveFile(id) {
+
+  if (!ARCHIVE[id]) {
+    return;
+  }
+
+  if (!archiveView) {
+    createArchiveView();
+  }
+
+  archiveOpen = true;
+
+  // Hide normal terminal
+  terminalOutput.style.display = "none";
+  commandInput.style.display = "none";
+
+  // Show archive
+  archiveView.style.display = "block";
+
+  archiveView.innerHTML = "";
+
+  const content = document.createElement("div");
+
+  content.textContent = ARCHIVE[id].content;
+
+  archiveView.appendChild(content);
+
+
+  // Back button
+  const backButton = document.createElement("button");
+
+  backButton.textContent = "← BACK";
+
+  backButton.style.marginTop = "30px";
+  backButton.style.padding = "8px 16px";
+  backButton.style.cursor = "pointer";
+
+  backButton.addEventListener(
+    "click",
+    closeArchiveFile
+  );
+
+  archiveView.appendChild(backButton);
+}
+
+
+// Close archive file
+function closeArchiveFile() {
+
+  if (!archiveOpen) {
+    return;
+  }
+
+  archiveOpen = false;
+
+  archiveView.style.display = "none";
+
+  terminalOutput.style.display = "";
+  commandInput.style.display = "";
+
+  commandInput.focus();
+}
+
+
+// Create the archive view when the script loads
+createArchiveView();
+
+
+// ESC closes the archive
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Escape" && archiveOpen) {
+      closeArchiveFile();
+    }
+
+  }
+);
 
 // ============================================================
 // DIALOGUE DATABASE
@@ -55,6 +173,10 @@ const DIALOGUE = {
     "Good morning.",
     "Good evening.",
     "It is nice to hear you."
+  ],
+
+    "KANTOT": [
+    "I've had weirder subjects."
   ],
 
   "hey": [
@@ -1357,18 +1479,16 @@ if (command === "back") {
 
     if (ARCHIVE[id]) {
 
-      print("");
-      printLines(ARCHIVE[id].content);
-      print("");
+  openArchiveFile(id);
 
-    } else {
+} else {
 
-      print("");
-      print("ERROR: RECORD NOT FOUND.");
-      print("REQUESTED ID: " + id);
-      print("");
+  print("");
+  print("ERROR: RECORD NOT FOUND.");
+  print("REQUESTED ID: " + id);
+  print("");
 
-    }
+}
 
     return;
   }
