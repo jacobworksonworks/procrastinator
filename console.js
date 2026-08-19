@@ -1923,3 +1923,4 @@ commandInput.addEventListener(
   }
 );
 
+boot();
