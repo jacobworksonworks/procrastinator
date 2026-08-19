@@ -16,6 +16,13 @@
 
 const terminalOutput = document.getElementById("terminalOutput");
 const commandInput = document.getElementById("commandInput");
+const sound = new Audio("extras/sound.mp3");
+sound.loop = true;
+sound.volume = 0.5;
+
+document.addEventListener("click", function() {
+  sound.play();
+}, { once: true });
 
 
 
