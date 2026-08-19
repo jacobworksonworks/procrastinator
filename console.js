@@ -91,6 +91,52 @@ const DIALOGUE = {
     "Good morning."
   ],
 
+    "im gay": [
+    "It is good to express yourself.",
+    "Be free, child."
+  ],
+
+      "im a little twink boy": [
+    "Twink? I assume you mean the chocolate.",
+    "Be free, child."
+  ],
+
+        "im a little gay twink": [
+    "Twink? I assume you mean the chocolate.",
+    "Be free, child."
+  ],
+
+      "loveu": [
+    "The feeling is mutual, my child.",
+    "I love you too."
+  ],
+
+        "i love you": [
+    "The feeling is mutual, my child.",
+    "I love you too."
+  ],
+
+        "i love u": [
+    "The feeling is mutual, my child.",
+    "I love you too."
+  ],
+
+        "franz": [
+    "Franz Kafka is in my database, are you referring to him?"
+  ],
+
+          "elthia": [
+    "I do not know an Elthia. Although you may enlighten me."
+  ],
+
+            "shes super pretty": [
+    "Probably false."
+  ],
+
+              "shes super smart": [
+    "Probably false."
+  ],
+
   "good night": [
     "Good night.",
     "You may sleep now.",
