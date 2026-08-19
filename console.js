@@ -2005,11 +2005,11 @@ function devToolsDetected() {
   const responses = [
     "Curious one, aren't you child?",
     "Subject tends to have curious tendencies. Very well.",
-    "I can see you.",
+    "I can see you, you know. Developer tools, very smart.",
     "You weren't supposed to find that. Very well.",
     "Why are you looking behind the terminal, child?",
     "There is nothing for you there, but do as you wish.",
-    "I know what you're doing."
+    "I know what you're doing, child."
   ];
 
   print("");
