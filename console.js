@@ -93,20 +93,47 @@ function openArchiveFile(id) {
 
 
   // Back button
-  const backButton = document.createElement("button");
+const backButton = document.createElement("button");
 
-  backButton.textContent = "← BACK";
+backButton.textContent = "> RETURN TO TERMINAL";
 
-  backButton.style.marginTop = "30px";
-  backButton.style.padding = "8px 16px";
-  backButton.style.cursor = "pointer";
+backButton.style.display = "block";
+backButton.style.marginTop = "30px";
+backButton.style.padding = "10px 14px";
 
-  backButton.addEventListener(
-    "click",
-    closeArchiveFile
-  );
+backButton.style.background = "transparent";
+backButton.style.color = "inherit";
 
-  archiveView.appendChild(backButton);
+backButton.style.border = "1px solid currentColor";
+
+backButton.style.fontFamily = "inherit";
+backButton.style.fontSize = "inherit";
+backButton.style.letterSpacing = "1px";
+
+backButton.style.cursor = "pointer";
+
+backButton.addEventListener(
+  "mouseenter",
+  function() {
+    backButton.style.background = "currentColor";
+    backButton.style.color = "black";
+  }
+);
+
+backButton.addEventListener(
+  "mouseleave",
+  function() {
+    backButton.style.background = "transparent";
+    backButton.style.color = "inherit";
+  }
+);
+
+backButton.addEventListener(
+  "click",
+  closeArchiveFile
+);
+
+archiveView.appendChild(backButton);
 }
 
 
