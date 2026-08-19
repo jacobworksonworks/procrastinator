@@ -1985,4 +1985,127 @@ commandInput.addEventListener(
   }
 );
 
+// ============================================================
+// DEVTOOLS DETECTION
+// ============================================================
+
+let devToolsDialogueShown = false;
+let devToolsSuspected = false;
+let devToolsChecks = 0;
+
+function devToolsDetected() {
+
+  if (devToolsDialogueShown) {
+    return;
+  }
+
+  devToolsDialogueShown = true;
+
+  const responses = [
+    "Curious one, aren't you child?",
+    "Subject tends to have curious tendencies. Very well.",
+    "I can see you.",
+    "You weren't supposed to find that. Very well.",
+    "Why are you looking behind the terminal, child?",
+    "There is nothing for you there, but do as you wish.",
+    "I know what you're doing."
+  ];
+
+  print("");
+  print(randomResponse(responses));
+  print("");
+
+}
+
+
+// ============================================================
+// DEVTOOLS SIZE DETECTION
+// ============================================================
+
+function checkDevTools() {
+
+  const threshold = 200;
+
+  const widthDifference =
+    window.outerWidth - window.innerWidth;
+
+  const heightDifference =
+    window.outerHeight - window.innerHeight;
+
+  const suspicious =
+    widthDifference > threshold ||
+    heightDifference > threshold;
+
+
+  if (suspicious) {
+
+    devToolsChecks++;
+
+    // Require the change to remain for several checks
+    if (devToolsChecks >= 4) {
+
+      devToolsDetected();
+
+    }
+
+  } else {
+
+    // Reset if the suspicious size disappears
+    devToolsChecks = 0;
+
+  }
+
+}
+
+setInterval(checkDevTools, 500);
+
+
+// ============================================================
+// DEVTOOLS KEYBOARD SHORTCUTS
+// ============================================================
+
+document.addEventListener("keydown", function(event) {
+
+  // F12
+  if (event.key === "F12") {
+
+    event.preventDefault();
+
+    devToolsDetected();
+
+    return;
+  }
+
+
+  // CTRL + SHIFT + I
+  if (
+    event.ctrlKey &&
+    event.shiftKey &&
+    event.key.toLowerCase() === "i"
+  ) {
+
+    event.preventDefault();
+
+    devToolsDetected();
+
+    return;
+  }
+
+
+  // CTRL + SHIFT + J
+  if (
+    event.ctrlKey &&
+    event.shiftKey &&
+    event.key.toLowerCase() === "j"
+  ) {
+
+    event.preventDefault();
+
+    devToolsDetected();
+
+    return;
+  }
+
+});
+
 boot();
