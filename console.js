@@ -1,4 +1,4 @@
-```javascript
+javascript
 // ============================================================
 // ARCHIVAL TERMINAL
 // ============================================================
@@ -90,7 +90,7 @@ const ARCHIVE = {
   "A-143": {
     type: "subject",
     title: "SUBJECT FILES — A-143",
-    content: ``
+    content: `
 SUBJECT A-143
 Name: Ashley ████████
 Age: 15
