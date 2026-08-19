@@ -15,8 +15,7 @@
 
 
 const terminalOutput = document.getElementById("terminalOutput");
-const commandInput = document.getElementById("
-commandInput");
+const commandInput = document.getElementById("commandInput");
 
 
 
