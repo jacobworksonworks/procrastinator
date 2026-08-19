@@ -25,6 +25,111 @@ document.addEventListener("click", function() {
 }, { once: true });
 
 // ============================================================
+// TERMINAL ANIMATIONS
+// ============================================================
+
+// Add terminal animation styles
+const terminalStyle = document.createElement("style");
+
+terminalStyle.textContent = `
+  .terminal-cursor {
+    display: inline-block;
+    width: 9px;
+    height: 18px;
+    margin-left: 3px;
+    vertical-align: middle;
+    background: currentColor;
+    animation: terminalBlink 1s steps(1, start) infinite;
+  }
+
+  @keyframes terminalBlink {
+    0%, 50% {
+      opacity: 1;
+    }
+
+    51%, 100% {
+      opacity: 0;
+    }
+  }
+
+  .terminal-boot-line {
+    opacity: 0;
+    animation: bootLine 0.15s ease forwards;
+  }
+
+  @keyframes bootLine {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+`;
+
+document.head.appendChild(terminalStyle);
+
+
+// ============================================================
+// TERMINAL CURSOR
+// ============================================================
+
+let terminalCursor = null;
+let cursorTimeout = null;
+
+function createTerminalCursor() {
+
+  if (terminalCursor) {
+    return;
+  }
+
+  terminalCursor = document.createElement("span");
+
+  terminalCursor.className = "terminal-cursor";
+
+  commandInput.parentElement.appendChild(
+    terminalCursor
+  );
+}
+
+
+function hideTerminalCursor() {
+
+  if (!terminalCursor) {
+    return;
+  }
+
+  terminalCursor.style.display = "none";
+}
+
+
+function showTerminalCursor() {
+
+  if (!terminalCursor) {
+    return;
+  }
+
+  terminalCursor.style.display = "inline-block";
+}
+
+
+// Show cursor when the user stops typing
+function resetCursorTimer() {
+
+  hideTerminalCursor();
+
+  clearTimeout(cursorTimeout);
+
+  cursorTimeout = setTimeout(
+    function() {
+      showTerminalCursor();
+    },
+    700
+  );
+}
+
+// ============================================================
 // ARCHIVE FILE VIEW
 // ============================================================
 
