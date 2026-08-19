@@ -1471,6 +1471,9 @@ function normalizeInput(text) {
 
 function boot() {
 
+  commandInput.disabled = true;
+  terminalOutput.innerHTML = "";
+
   const bootLines = [
     "ARCHIVAL TERMINAL v0.7.3",
     "PROPERTY OF █████████████████████",
@@ -1485,10 +1488,12 @@ function boot() {
     ""
   ];
 
-  commandInput.disabled = true;
-
   let lineIndex = 0;
 
+
+  // ==========================================================
+  // TYPE A LINE
+  // ==========================================================
 
   function typeLine(text, callback) {
 
@@ -1526,23 +1531,124 @@ function boot() {
   }
 
 
+  // ==========================================================
+  // INITIALIZING LOADING BAR
+  // ==========================================================
+
+  function loadingAnimation(callback) {
+
+    const loadingText =
+      document.createElement("div");
+
+    const loadingBar =
+      document.createElement("div");
+
+    terminalOutput.appendChild(
+      loadingText
+    );
+
+    terminalOutput.appendChild(
+      loadingBar
+    );
+
+    loadingText.textContent =
+      "INITIALIZING...";
+
+    loadingBar.textContent =
+      "[                    ] 0%";
+
+
+    let progress = 0;
+
+
+    function updateLoading() {
+
+      if (progress >= 100) {
+
+        loadingBar.textContent =
+          "[████████████████████] 100%";
+
+        setTimeout(
+          callback,
+          500
+        );
+
+        return;
+      }
+
+
+      progress += 5;
+
+
+      const filled =
+        Math.floor(progress / 5);
+
+      const empty =
+        20 - filled;
+
+
+      loadingBar.textContent =
+        "[" +
+        "█".repeat(filled) +
+        " ".repeat(empty) +
+        "] " +
+        progress +
+        "%";
+
+
+      terminalOutput.scrollTop =
+        terminalOutput.scrollHeight;
+
+
+      setTimeout(
+        updateLoading,
+        70
+      );
+    }
+
+
+    updateLoading();
+  }
+
+
+  // ==========================================================
+  // NEXT BOOT LINE
+  // ==========================================================
+
   function nextLine() {
 
     if (lineIndex >= bootLines.length) {
 
       commandInput.disabled = false;
-      commandInput.focus();
 
-      createTerminalCursor();
-      showTerminalCursor();
+      commandInput.focus();
 
       return;
     }
 
 
-    const text = bootLines[lineIndex];
+    const text =
+      bootLines[lineIndex];
 
     lineIndex++;
+
+
+    // INITIALIZING gets the loading animation
+    if (text === "INITIALIZING...") {
+
+      loadingAnimation(
+        function() {
+
+          setTimeout(
+            nextLine,
+            500
+          );
+
+        }
+      );
+
+      return;
+    }
 
 
     typeLine(
@@ -1552,18 +1658,14 @@ function boot() {
         let delay = 250;
 
 
-        // Extra pause after INITIALIZING
-        if (text === "INITIALIZING...") {
-          delay = 800;
-        }
-
-
-        // Extra pause after warning
+        // Pause after the warning
         if (
           text ===
           "WARNING: ARCHIVE STATUS UNKNOWN."
         ) {
+
           delay = 1200;
+
         }
 
 
@@ -1574,10 +1676,12 @@ function boot() {
 
       }
     );
+
   }
 
 
   nextLine();
+
 }
 
 
