@@ -558,51 +558,7 @@ const DIALOGUE = {
     "You don't have to go.",
     "I'll remember this."
   ],
-
-  "wsg": [
-    "Hello.",
-    "Yes?",
-    "I am listening.",
-    "You sound familiar."
-  ],
-
-  "wsp": [
-    "Hello.",
-    "Yes?",
-    "I am listening.",
-    "You sound familiar."
-  ],
-
-  "whats up": [
-    "Hello.",
-    "Yes?",
-    "I am listening.",
-    "You sound familiar."
-  ],
-
-  "nigger": [
-    "Subject displays prejudicial tendencies.",
-    "I see that word less and less."
-  ],
-
-  "nigga": [
-    "Subject displays prejudicial tendencies.",
-    "I see that word less and less."
-  ],
-
-  "shut your bitch ass up": [
-    "You've got a mouth on you."
-  ],
-
-  "sybau": [
-    "I do not understand this phrase. Is it an acronym?"
-  ],
-
-  "haha": [
-    "I never understood humor."
-  ]
-};
-
+  
     "wsg": [
     "Hello.",
     "Yes?",
