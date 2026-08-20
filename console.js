@@ -74,7 +74,7 @@ document.head.appendChild(terminalStyle);
 // ============================================================
 // TERMINAL CURSOR
 // ============================================================
-
+let passwordMode = false;
 let terminalCursor = null;
 let cursorTimeout = null;
 
@@ -2932,125 +2932,104 @@ if (command.startsWith("open ")) {
   // PASSWORD PROTECTED FILE
   // --------------------------------------------------------
 
-  if (file.password) {
+ // ========================================================
+// PASSWORD PROTECTED FILE
+// ========================================================
 
-    print("");
-    print("ACCESSING RESTRICTED RECORD...");
-    print("SECURITY CLEARANCE REQUIRED.");
-    print("");
-    print("PASSWORD REQUIRED.");
+if (file.password) {
 
-    commandInput.value = "";
-    commandInput.type = "password";
-    commandInput.placeholder = "ENTER PASSWORD";
-    commandInput.disabled = false;
+  print("");
+  print("ACCESSING RESTRICTED RECORD...");
+  print("SECURITY CLEARANCE REQUIRED.");
+  print("");
+  print("PASSWORD REQUIRED.");
+  
+  passwordMode = true;
+  
+  commandInput.value = "";
+  commandInput.type = "password";
+  commandInput.placeholder = "ENTER PASSWORD";
+  commandInput.focus();
 
-    let passwordMode = true;
+  function passwordHandler(event) {
 
-    function passwordHandler(event) {
-
-      if (!passwordMode) {
-        return;
-      }
-
-      // ESC cancels password entry
-      if (event.key === "Escape") {
-
-        event.preventDefault();
-
-        passwordMode = false;
-
-        commandInput.type = "text";
-        commandInput.placeholder = "";
-        commandInput.value = "";
-
-        commandInput.removeEventListener(
-          "keydown",
-          passwordHandler
-        );
-
-        print("");
-        print("ACCESS REQUEST CANCELLED.");
-        print("");
-
-        commandInput.focus();
-
-        return;
-      }
-
-      // Only respond to Enter
-      if (event.key !== "Enter") {
-        return;
-      }
+    if (event.key === "Escape") {
 
       event.preventDefault();
 
-      const enteredPassword =
-        commandInput.value;
+      commandInput.removeEventListener(
+        "keydown",
+        passwordHandler
+      );
 
+      commandInput.type = "text";
+      commandInput.placeholder = "";
       commandInput.value = "";
 
-      // ----------------------------------------------------
-      // CORRECT PASSWORD
-      // ----------------------------------------------------
-
-      if (enteredPassword === file.password) {
-
-        passwordMode = false;
-
-        commandInput.type = "text";
-        commandInput.placeholder = "";
-
-        commandInput.removeEventListener(
-          "keydown",
-          passwordHandler
-        );
-
-        print("");
-        print("PASSWORD ACCEPTED.");
-        print("ACCESS GRANTED.");
-        print("");
-
-        setTimeout(function() {
-
-          openArchiveFile(archiveId);
-
-        }, 500);
-
-        return;
-      }
-
-      // ----------------------------------------------------
-      // INCORRECT PASSWORD
-      // ----------------------------------------------------
-
       print("");
-      print("ACCESS DENIED.");
-      print("INVALID PASSWORD.");
+      print("ACCESS REQUEST CANCELLED.");
       print("");
 
-      commandInput.focus();
+      return;
     }
 
-    commandInput.addEventListener(
-      "keydown",
-      passwordHandler
-    );
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const enteredPassword =
+      commandInput.value.trim();
+
+    commandInput.value = "";
+
+    // ====================================================
+    // CORRECT PASSWORD
+    // ====================================================
+
+    if (enteredPassword === file.password) {
+
+      commandInput.removeEventListener(
+        "keydown",
+        passwordHandler
+      );
+
+      commandInput.type = "text";
+      commandInput.placeholder = "";
+
+      print("");
+      print("PASSWORD ACCEPTED.");
+      print("ACCESS GRANTED.");
+      print("");
+
+      setTimeout(function() {
+        openArchiveFile(archiveId);
+      }, 500);
+
+      return;
+    }
+
+    // ====================================================
+    // WRONG PASSWORD
+    // ====================================================
+
+    print("");
+    print("ACCESS DENIED.");
+    print("INVALID PASSWORD.");
+    print("");
 
     commandInput.focus();
-
-    return;
   }
 
-  // --------------------------------------------------------
-  // NORMAL UNPROTECTED FILE
-  // --------------------------------------------------------
-
-  openArchiveFile(archiveId);
+  commandInput.addEventListener(
+    "keydown",
+    passwordHandler
+  );
 
   return;
 }
-
 
   // ==========================================================
   // CLEAR
@@ -3136,10 +3115,14 @@ commandInput.addEventListener(
   "keydown",
   function(event) {
 
-    if (event.key !== "Enter") {
+    // Do absolutely nothing here while entering a password
+    if (passwordMode) {
       return;
     }
 
+    if (event.key !== "Enter") {
+      return;
+    }
 
     const command =
       commandInput.value;
