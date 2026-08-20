@@ -1973,6 +1973,7 @@ STATUS: RESTRICTED
 },
 
   "mary veyra": {
+  type: "personnel",
   password: "maternalpj66",
 
   content: `
@@ -2753,6 +2754,8 @@ function handleCommand(rawCommand) {
     print("HELP");
     print("ARCHIVE");
     print("SUBJECTS");
+    print("PERSONNEL");
+    print("INCIDENTS");
     print("OPEN [ID]");
     print("CLEAR");
     print("EXIT");
@@ -2828,7 +2831,75 @@ if (command === "back") {
     return;
   }
 
+// ==========================================================
+// PERSONNEL LIST
+// ==========================================================
 
+if (command === "personnel") {
+
+  print("");
+  print("PERSONNEL INDEX");
+  print("----------------");
+
+  Object.keys(ARCHIVE).forEach(id => {
+
+    const file = ARCHIVE[id];
+
+    if (
+      file.type === "personnel" ||
+      id.toLowerCase() === "mary veyra"
+    ) {
+
+      print(
+        id +
+        "  —  " +
+        (file.title || "PERSONNEL RECORD")
+      );
+
+    }
+
+  });
+
+  print("");
+  print("NOTE: SOME PERSONNEL RECORDS MAY REQUIRE");
+  print("ADDITIONAL AUTHORIZATION.");
+  print("");
+
+  return;
+}
+
+  // ==========================================================
+  // INCIDENT INDEX
+  // ==========================================================
+
+  if (command === "incidents") {
+
+    print("");
+    print("INCIDENT INDEX");
+    print("----------------");
+
+    Object.keys(ARCHIVE).forEach(id => {
+
+      const file = ARCHIVE[id];
+
+      if (file.type === "incident") {
+
+        print(
+          id +
+          "  —  " +
+          (file.title || "INCIDENT REPORT")
+        );
+
+      }
+
+    });
+
+    print("");
+    print("NOTE: INCIDENT RECORDS MAY BE INCOMPLETE.");
+    print("");
+
+    return;
+  }
 
   // ==========================================================
 // OPEN DOCUMENT
