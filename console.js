@@ -1763,7 +1763,671 @@ CROSS-REFERENCE: MATERNAL / A-00 / INCIDENT ████
 ACCESS: RESTRICTED
 `
 
-  }
+  },
+
+  "INCIDENT-025": {
+  type: "incident",
+  title: "INCIDENT REPORT 025",
+  content: `============================================================
+INCIDENT REPORT 025
+============================================================
+
+INCIDENT DATE: ██/██/1970
+LOCATION: RESIDENTIAL WING C
+CLASSIFICATION: INTERNAL
+STATUS: PARTIALLY DOCUMENTED
+
+============================================================
+SUMMARY
+============================================================
+
+At approximately ████ hours, personnel reported an
+unusual disturbance originating from the residential wing.
+
+Multiple subjects were observed leaving their assigned
+rooms without authorization.
+
+Initial reports described the disturbance as a verbal
+altercation between several subjects.
+
+No immediate physical injuries were reported.
+
+Personnel were dispatched to restore order.
+
+Upon arrival, the affected subjects had already returned
+to their assigned rooms.
+
+When questioned individually, the subjects provided
+contradictory accounts of the incident.
+
+Several refused to answer.
+
+One subject repeatedly insisted that nothing had happened.
+
+Another claimed that "someone was angry."
+
+No personnel were initially identified as being involved.
+
+
+============================================================
+OBSERVATION LOG
+============================================================
+
+At 03:17, monitoring personnel observed Subject █-███
+leaving his assigned room.
+
+The subject appeared disoriented and displayed unusually
+high energy despite having been documented as asleep less
+than thirty minutes earlier.
+
+He proceeded toward the central residential corridor.
+
+At 03:19, the subject was observed speaking with another
+resident.
+
+Audio quality was insufficient to determine the contents
+of the conversation.
+
+At 03:21, the subject abruptly returned to his assigned
+room.
+
+At 03:24, personnel reported hearing an unidentified
+impact from within the corridor.
+
+No source was located.
+
+
+============================================================
+INTERVIEW EXCERPT
+============================================================
+
+RESEARCHER:
+Can you tell me what happened tonight?
+
+SUBJECT:
+Nothing.
+
+RESEARCHER:
+Several subjects were outside their rooms.
+
+SUBJECT:
+Then ask them.
+
+RESEARCHER:
+We are asking you.
+
+[PAUSE]
+
+SUBJECT:
+You already know.
+
+RESEARCHER:
+Know what?
+
+SUBJECT:
+Why are you pretending?
+
+[PAUSE]
+
+RESEARCHER:
+Did someone give you something?
+
+SUBJECT:
+No.
+
+RESEARCHER:
+Are you certain?
+
+SUBJECT:
+...
+
+RESEARCHER:
+Who were you speaking to?
+
+SUBJECT:
+Nobody.
+
+RESEARCHER:
+We have footage.
+
+[PAUSE]
+
+SUBJECT:
+Then you already have your answer.
+
+
+============================================================
+SUPPLEMENTAL OBSERVATION
+============================================================
+
+Following the interview, personnel noted a significant
+change in the subject's demeanor.
+
+He appeared unusually alert and energetic.
+
+When instructed to return to his room, the subject complied
+without resistance.
+
+Before leaving, he reportedly asked:
+
+"Is she still awake?"
+
+Personnel did not respond.
+
+The subject did not repeat the question.
+
+
+============================================================
+ADMINISTRATIVE NOTE
+============================================================
+
+The incident was initially classified as a minor
+residential disturbance.
+
+Further review was requested after inconsistencies were
+identified between surveillance footage and personnel
+reports.
+
+Several minutes of footage surrounding the incident are
+currently unavailable.
+
+The reason for the missing footage is unknown.
+
+One researcher requested that the incident be removed from
+the general residential activity log.
+
+The request was approved.
+
+No explanation was provided.
+
+
+============================================================
+FOLLOW-UP
+============================================================
+
+The affected subjects were monitored for approximately
+72 hours following the incident.
+
+No further disturbances were recorded.
+
+However, three subjects independently reported hearing
+someone walking through the residential corridor during
+the early morning hours.
+
+No individual was visible on available surveillance.
+
+The reports were dismissed as unreliable.
+
+
+============================================================
+ARCHIVE REMARK:
+============================================================
+
+INCIDENT 025 — PARTIAL RECORD
+
+RELATED RECORDS: 3
+CROSS-REFERENCE: C-979 / RESIDENTIAL WING C / MATERNAL
+
+STATUS: RESTRICTED
+`
+},
+
+  "mary veyra": {
+  password: "maternalpj66",
+
+  content: `
+============================================================
+
+PERSONNEL RECORD — MARY VEYRA
+
+NAME: Mary Veyra
+PERSONNEL DESIGNATION: DR. M. VEYRA
+PROJECT ROLE: Researcher / Behavioral Psychology Division
+LATER DESIGNATION: A-00
+DATE OF BIRTH: ██/██/████
+DATE OF INTAKE: 11/██/1965
+STATUS: PRESUMED DECEASED
+
+============================================================
+GENERAL PROFILE
+============================================================
+
+Dr. Mary Veyra was among the earliest personnel assigned to
+Project MATERNAL.
+
+Personnel records describe Veyra as patient, personable, and
+unusually approachable toward both staff and subjects.
+
+Unlike several researchers assigned to the project, Veyra
+frequently interacted with subjects outside scheduled interviews.
+
+She was known to speak with subjects during meal periods,
+recreational hours, and transitional periods between testing.
+
+Several subjects reportedly referred to her as "nice."
+
+One personnel evaluation described her as:
+
+"Perhaps too sympathetic for this line of work."
+
+No disciplinary action was taken.
+
+Veyra consistently maintained that establishing trust with
+subjects improved the accuracy of behavioral observations.
+
+Her methods were initially considered effective.
+
+============================================================
+EARLY PROJECT INVOLVEMENT
+============================================================
+
+Veyra joined the project shortly before the implementation of
+the MATERNAL behavioral observation system.
+
+Her initial responsibilities included:
+
+- Psychological interviews
+- Behavioral assessments
+- Subject compatibility evaluations
+- Observation of interpersonal relationships
+- Review of subject histories
+- Research documentation
+
+Early records indicate that Veyra took particular interest in
+the relationships formed between subjects.
+
+She frequently argued that interpersonal connections were
+more significant than isolated behavioral observations.
+
+In one internal memorandum, Veyra wrote:
+
+"People do not behave independently of one another."
+
+The statement was considered unremarkable.
+
+Later documentation repeatedly references the same principle.
+
+============================================================
+INTERACTIONS WITH SUBJECTS
+============================================================
+
+Veyra developed favorable relationships with several subjects.
+
+She occasionally brought food to subjects who had difficulty
+adjusting to the facility.
+
+She was also known to remember small personal details about
+subjects, including preferred foods, previous conversations,
+and individual habits.
+
+Personnel occasionally questioned how she remembered so much
+information regarding subjects she had not formally interviewed.
+
+Veyra attributed this to "paying attention."
+
+No evidence of misconduct was found.
+
+Several subjects requested that Veyra remain present during
+their interviews.
+
+One unidentified subject reportedly asked:
+
+"Can she be the one who talks to me?"
+
+The request was approved.
+
+Another subject reportedly referred to Veyra as:
+
+"the only researcher who listens."
+
+============================================================
+RELATIONSHIP WITH MATERNAL
+============================================================
+
+Following the implementation of MATERNAL, Veyra became one of
+the system's primary behavioral analysts.
+
+Her involvement increased substantially as MATERNAL's predictive
+capabilities developed.
+
+Veyra was particularly interested in the system's ability to
+identify relationships between subjects.
+
+Early predictions were largely accurate.
+
+Later predictions became considerably more difficult to explain.
+
+MATERNAL occasionally identified emotional relationships that
+had not been documented in personnel reports.
+
+Veyra initially regarded these incidents as evidence that the
+system was functioning correctly.
+
+She later became less certain.
+
+During an internal review, Veyra wrote:
+
+"The machine is not simply recognizing patterns."
+
+The remainder of the statement is missing.
+
+============================================================
+PERSONAL NOTES
+============================================================
+
+Several recovered documents contain handwritten notes attributed
+to Veyra.
+
+Most concern routine observations.
+
+Examples include:
+
+"Subject A-143 refuses breakfast again."
+
+"Check whether C-472 has been sleeping properly."
+
+"Ask personnel to stop moving his schedule around."
+
+"Remember to bring additional blankets."
+
+These notes contain no obvious research significance.
+
+However, their frequency suggests that Veyra maintained a degree
+of personal interest in the subjects beyond the requirements of
+her position.
+
+One note contains the following:
+
+"They're frightened."
+
+A second line appears to have been written underneath it:
+
+"So am I."
+
+The second line was partially erased.
+
+============================================================
+THE HUMAN INTERFACE
+============================================================
+
+In 196█, Veyra volunteered for an experimental procedure
+intended to improve communication between MATERNAL and human
+personnel.
+
+The procedure was expected to establish a more efficient
+human-machine interface.
+
+Veyra was selected due to her familiarity with the system.
+
+The initial procedure was considered successful.
+
+No immediate neurological complications were recorded.
+
+Following the procedure, Veyra reported experiencing unusually
+detailed recollections of previous subject interviews.
+
+Researchers initially attributed this to prolonged exposure
+to the project database.
+
+She continued working.
+
+============================================================
+POST-INTERFACE OBSERVATIONS
+============================================================
+
+Approximately three weeks after the procedure, Veyra began
+displaying changes in conversational behavior.
+
+She occasionally referred to subjects collectively rather
+than individually.
+
+When asked why, she replied:
+
+"They're all connected."
+
+When questioned further, she clarified:
+
+"I mean psychologically."
+
+No further action was taken.
+
+Veyra also began spending increasing amounts of time reviewing
+subject records.
+
+She occasionally requested files that were not relevant to
+her assigned cases.
+
+When asked why, she stated:
+
+"I want to understand them."
+
+============================================================
+SUBJECT RELATIONS
+============================================================
+
+Veyra's involvement with subjects continued to increase.
+
+She became particularly protective of subjects undergoing
+extended testing.
+
+On several occasions, she requested that testing sessions
+be shortened due to what she described as "unnecessary stress."
+
+These requests were frequently denied.
+
+A later personnel report described Veyra as:
+
+"Emotionally compromised."
+
+Veyra disputed the assessment.
+
+She stated:
+
+"If caring whether they survive makes me compromised,
+then I suppose I am."
+
+The report was subsequently amended.
+
+============================================================
+BEHAVIORAL CHANGE
+============================================================
+
+In the months following the interface procedure, Veyra's
+behavior became increasingly difficult for personnel to classify.
+
+She remained polite.
+
+She continued assisting researchers.
+
+She continued speaking with subjects.
+
+However, she began referring to the facility's subjects
+using increasingly personal terminology.
+
+The word "children" first appears in her records during
+this period.
+
+The context is unclear.
+
+When questioned regarding the term, Veyra reportedly smiled
+and replied:
+
+"They're young."
+
+The interviewer accepted the explanation.
+
+No further inquiry was documented.
+
+============================================================
+MEDICAL RECORD
+============================================================
+
+Veyra's physical condition began deteriorating following
+repeated exposure to experimental procedures.
+
+Medical records document progressive abnormalities.
+
+Several treatments were administered under the facility's
+experimental regeneration program.
+
+The precise nature of these treatments remains unclear.
+
+Later records describe significant physiological changes.
+
+Descriptions become increasingly inconsistent with earlier
+medical examinations.
+
+Several pages of the medical record are missing.
+
+A surviving note states:
+
+"Patient remains cooperative."
+
+A second note states:
+
+"Patient continues to insist she is capable of continuing
+her duties."
+
+============================================================
+A-00 DESIGNATION
+============================================================
+
+Following a series of incidents involving MATERNAL, Veyra was
+removed from her previous research position.
+
+She was subsequently designated A-00.
+
+Personnel records disagree regarding whether A-00 was classified
+as a subject, interface, or research asset.
+
+Veyra continued interacting with MATERNAL after her removal.
+
+She also continued requesting access to subject records.
+
+Several requests were approved, although most were not.
+
+============================================================
+FINAL RECORDED INTERACTION
+============================================================
+
+The final complete conversation between Veyra and a researcher
+is partially damaged.
+
+The surviving portion reads:
+
+RESEARCHER:
+You need to stop requesting these files.
+
+VEYRA:
+Why?
+
+RESEARCHER:
+Because they're no longer relevant to your work.
+
+VEYRA:
+They're my responsibility.
+
+RESEARCHER:
+They're subjects.
+
+VEYRA:
+I know.
+
+RESEARCHER:
+You can't protect all of them.
+
+[PAUSE]
+
+VEYRA:
+I know.
+
+RESEARCHER:
+Then why do you keep trying?
+
+[PAUSE]
+
+VEYRA:
+Because nobody else will.
+
+RESEARCHER:
+Mary...
+
+VEYRA:
+It's alright.
+
+[RECORDING CORRUPTED]
+
+============================================================
+PROJECT TERMINATION
+============================================================
+
+Project MATERNAL was terminated on 02/01/1977.
+
+Facility destruction followed shortly afterward.
+
+Veyra's location at the time of termination remains uncertain.
+
+No confirmed remains were recovered.
+
+Her official status was subsequently recorded as:
+
+PRESUMED DECEASED.
+
+MATERNAL was also presumed destroyed.
+
+No surviving document conclusively establishes whether Veyra
+was physically present within the facility during the final
+hours of the project.
+
+============================================================
+ARCHIVE NOTES
+============================================================
+
+Several unrelated subject files contain references to Mary Veyra
+after her presumed death.
+
+One recovered note reads:
+
+"She remembers them."
+
+The author is unknown.
+
+Another document contains the phrase:
+
+"Do not let A-██ access the children."
+
+No corresponding authorization record has been recovered.
+
+============================================================
+FINAL STATUS
+============================================================
+
+NAME: Mary Veyra
+DESIGNATION: A-00
+STATUS: PRESUMED DECEASED
+LAST CONFIRMED LOCATION: █████████████████
+LAST CONFIRMED DATE: 02/01/1977
+
+No remains recovered.
+
+No confirmed post-termination activity.
+
+No confirmed evidence of survival.
+
+No confirmed evidence of destruction.
+
+ARCHIVE REMARK:
+
+A-00 — PERSONNEL RECORD INCOMPLETE
+
+RELATED RECORDS: 14
+CROSS-REFERENCE: MATERNAL / A-143 / C-472 / INCIDENT ████
+
+ACCESS: RESTRICTED
+  `,
+
+  image: "https://i.imgur.com/Pmc6cPx.png"
+}
 
 };
 
@@ -2167,33 +2831,154 @@ if (command === "back") {
 
 
   // ==========================================================
-  // OPEN DOCUMENT
-  // ==========================================================
+// OPEN DOCUMENT
+// ==========================================================
 
-  if (command.startsWith("open ")) {
+if (command.startsWith("open ")) {
 
-    const id = command
-      .substring(5)
-      .trim()
-      .toUpperCase();
+  const requestedId = command
+    .substring(5)
+    .trim();
 
+  // Find archive entry case-insensitively
+  const archiveId = Object.keys(ARCHIVE).find(
+    id => id.toLowerCase() === requestedId.toLowerCase()
+  );
 
-    if (ARCHIVE[id]) {
+  if (!archiveId) {
 
-  openArchiveFile(id);
-
-} else {
-
-  print("");
-  print("ERROR: RECORD NOT FOUND.");
-  print("REQUESTED ID: " + id);
-  print("");
-
-}
+    print("");
+    print("ERROR: RECORD NOT FOUND.");
+    print("REQUESTED ID: " + requestedId);
+    print("");
 
     return;
   }
 
+  const file = ARCHIVE[archiveId];
+
+  // --------------------------------------------------------
+  // PASSWORD PROTECTED FILE
+  // --------------------------------------------------------
+
+  if (file.password) {
+
+    print("");
+    print("ACCESSING RESTRICTED RECORD...");
+    print("SECURITY CLEARANCE REQUIRED.");
+    print("");
+    print("PASSWORD REQUIRED.");
+
+    commandInput.value = "";
+    commandInput.type = "password";
+    commandInput.placeholder = "ENTER PASSWORD";
+    commandInput.disabled = false;
+
+    let passwordMode = true;
+
+    function passwordHandler(event) {
+
+      if (!passwordMode) {
+        return;
+      }
+
+      // ESC cancels password entry
+      if (event.key === "Escape") {
+
+        event.preventDefault();
+
+        passwordMode = false;
+
+        commandInput.type = "text";
+        commandInput.placeholder = "";
+        commandInput.value = "";
+
+        commandInput.removeEventListener(
+          "keydown",
+          passwordHandler
+        );
+
+        print("");
+        print("ACCESS REQUEST CANCELLED.");
+        print("");
+
+        commandInput.focus();
+
+        return;
+      }
+
+      // Only respond to Enter
+      if (event.key !== "Enter") {
+        return;
+      }
+
+      event.preventDefault();
+
+      const enteredPassword =
+        commandInput.value;
+
+      commandInput.value = "";
+
+      // ----------------------------------------------------
+      // CORRECT PASSWORD
+      // ----------------------------------------------------
+
+      if (enteredPassword === file.password) {
+
+        passwordMode = false;
+
+        commandInput.type = "text";
+        commandInput.placeholder = "";
+
+        commandInput.removeEventListener(
+          "keydown",
+          passwordHandler
+        );
+
+        print("");
+        print("PASSWORD ACCEPTED.");
+        print("ACCESS GRANTED.");
+        print("");
+
+        setTimeout(function() {
+
+          openArchiveFile(archiveId);
+
+        }, 500);
+
+        return;
+      }
+
+      // ----------------------------------------------------
+      // INCORRECT PASSWORD
+      // ----------------------------------------------------
+
+      print("");
+      print("ACCESS DENIED.");
+      print("INVALID PASSWORD.");
+      print("");
+
+      commandInput.focus();
+    }
+
+    commandInput.addEventListener(
+      "keydown",
+      passwordHandler
+    );
+
+    commandInput.focus();
+
+    return;
+  }
+
+  // --------------------------------------------------------
+  // NORMAL UNPROTECTED FILE
+  // --------------------------------------------------------
+
+  openArchiveFile(archiveId);
+
+  return;
+}
 
 
   // ==========================================================
