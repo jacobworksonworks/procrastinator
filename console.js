@@ -2962,6 +2962,9 @@ if (file.password) {
         passwordHandler
       );
 
+        passwordMode = false;
+
+
       commandInput.type = "text";
       commandInput.placeholder = "";
       commandInput.value = "";
@@ -2995,7 +2998,7 @@ if (file.password) {
         "keydown",
         passwordHandler
       );
-
+      passwordMode = false;
       commandInput.type = "text";
       commandInput.placeholder = "";
 
@@ -3029,6 +3032,8 @@ if (file.password) {
   );
 
   return;
+}
+
 }
 
   // ==========================================================
